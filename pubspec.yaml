@@ -27,3 +27,4 @@ flutter:
   uses-material-design: true
   assets:
     - lib/home_page/container/
+    - lib/splash_screen_page/

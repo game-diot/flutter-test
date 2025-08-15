@@ -19,10 +19,7 @@ class MyApp extends StatelessWidget {
      initialRoute: '/', // 设置初始路由
       routes: {
         '/': (context) => SplashScreen(), // 路由映射，加载启动页
-        '/home': (context) => AddPage(), // 路由映射，加载主页
-        '/forum': (context) => ForumPage(), // 路由映射，加载论坛页面
-        '/add': (context) => AddPage(), // 路由映射，加载添加页面
-        '/news': (context) => NewsPage(), // 路由映射，加载新闻页面
+
       },
     );
   }

@@ -1,16 +1,70 @@
-# flutter_test_project
+test项目
 
-A new Flutter project.
+组件复用，
+涉及到逻辑的部分
 
-## Getting Started
+复用组件button-navbar，state状态管理，变量设计一个index。点击不同的图标，改变index值，进而展示不同的页面，
 
-This project is a starting point for a Flutter application.
+001.行情页面
+左上角头像，点击跳转《设置页面》，
+地区按钮，点击下拉列表，切换地区
+右上角日月图标，点击切换主题状态，使用state状态管理，进而使用不同的css样式
+广告，静态
+全球指数，图片轮播图，静态
+查看最新资讯，点击跳转《新闻页面》
+四个文字按钮，点击对应下边框，且最下部分内容随之变，
+最下部分，主流币与交易所静态内容 =>
+主流币，th名称、价格、涨幅比，点击th切换升序降序
+交易所，th排名、成交额、综合评分，点击th切换升序降序
+tr、td为静态，有数字属性
 
-A few resources to get you started if this is your first Flutter project:
+002.新闻页面
+最上方搜索框
+五个文字按钮，点击对应下边框、且下部分内容随之变。 =>
+热搜，三个文章轮播框，点击跳转《详情页面》
+下面为文章map遍历，统一样式，点击跳转《详情页面》
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+003.发布页面
+左上角图标点击返回之前页面
+文章标题
+文章内容，post提交后端
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+004.论坛页面
+最上方搜索框
+五个文字按钮，点击对应
+四个icon主题按钮，目前静态即可
+下方为文章内容map遍历，统一样式，点击跳转《详情页面》
+
+005.详情页面
+左上角箭头图标返回之前页面
+标题
+内容
+回复部分
+发表评论-该文章（收藏-点赞-评论）
+
+006.设置页面-个人中心
+最上层。头像-网名，网名下账号，点击头像跳转《编辑资料页面》
+收藏数-获赞数-被评论数。  编辑资料按钮
+内容部分-上-两个按钮，我的帖子、我的点赞，点分别跳转《我的帖子、点赞页面》
+广告图、静态
+Column五个按钮，
+Icon-切换主题。 简体中文（当前设置量）
+主题、涨跌颜色、意见反馈、注销账号。
+
+007.我的帖子页面
+左上角icon箭头，点击返回上一页面
+内容为文章信息map遍历
+点击文章，弹出编辑、删除操作，编辑跳转《发布页面》，删除双重确认。
+
+008.我的点赞页面
+同我的帖子页面，只是点击文章不谈出编辑、删除，相反跳转到《文章详情页面》
+
+009.被点赞页面
+左上角返回上一页面
+遍历用户基本信息。点击用户跳转《对应用户个人中心页面》
+
+010.被评论页面
+同被点赞页面，多一个点赞评论功能。
+
+011.启动页面与登录页面
+登录注册按钮，点击出发动画，出现详细登录注册form表单。
