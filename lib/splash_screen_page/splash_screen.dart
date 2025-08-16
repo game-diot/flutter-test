@@ -1,39 +1,45 @@
 import 'package:flutter/material.dart';
-import 'login_form.dart';
+import '../forms/login_form.dart';
+import '../forms/register_form.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  bool _showButtons = true; // 控制按钮是否显示，默认显示
+enum FormType { none, login, register }
 
-  @override
-  void initState() {
-    super.initState();
-    // 可以在这里添加延迟显示逻辑，如果需要的话
-  }
+class _SplashScreenState extends State<SplashScreen> {
+  FormType _formType = FormType.none;
+
+  void _showLoginForm() => setState(() => _formType = FormType.login);
+  void _showRegisterForm() => setState(() => _formType = FormType.register);
+  void _hideForm() => setState(() => _formType = FormType.none);
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: Color(0xFFedb023), // 设置背景颜色
+      backgroundColor: Color(0xFFedb023),
       body: Stack(
         children: [
-          // Logo and text in the center
-          Center(
+          Align(
+            alignment: Alignment(0, -0.6),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  'lib/splash_screen_page/logo.png', // Logo图片路径
+                  'lib/splash_screen_page/logo.png',
                   width: 150,
                   height: 150,
                 ),
+
+                SizedBox(height: 12),
                 Text(
                   'dlb coin',
                   style: TextStyle(
-                    fontFamily: 'CustomFont', // 自定义字体
+                    fontFamily: 'CustomFont',
                     color: Colors.black,
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -42,60 +48,89 @@ class _SplashScreenState extends State<SplashScreen> {
               ],
             ),
           ),
-
-          // 动画的按钮
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            bottom: _showButtons ? 50 : -150, // 当按钮显示时从底部50像素的位置滑上来
-            left: 16,
-            right: 16,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+          // 登录/注册按钮
+          if (_formType == FormType.none)
+            Positioned(
+              bottom: 60,
+              left: 24,
+              right: 24,
               child: Column(
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      // 导航到登录页面
-                      Navigator.pushNamed(context, '/login');
-                    },
+                    onPressed: _showLoginForm,
                     child: Text('登录'),
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 70),
-                      backgroundColor: Color(0xFF292e38), // 登录按钮背景色
-                      foregroundColor: Colors.white, // 文本颜色
+                      minimumSize: Size(double.infinity, 65),
+                      backgroundColor: Color(0xFF292e38),
+                      foregroundColor: Colors.white,
                       textStyle: TextStyle(fontSize: 18),
-                    ).copyWith(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15), // 设置圆角
-                      )),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 14),
                   ElevatedButton(
-                    onPressed: () {
-                      // 导航到注册页面
-                      Navigator.pushNamed(context, '/register');
-                    },
+                    onPressed: _showRegisterForm,
                     child: Text('注册'),
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 70),
-                      backgroundColor: Color(0xFFedb023), // 注册按钮背景色
-                      foregroundColor: Colors.black, // 文本颜色
+                      minimumSize: Size(double.infinity, 65),
+                      backgroundColor: Color(0xFFedb023),
+                      foregroundColor: Colors.black,
                       textStyle: TextStyle(fontSize: 18),
-                    ).copyWith(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15), // 设置圆角
-                      )),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 16),
                 ],
               ),
             ),
+          // 弹出表单
+          AnimatedSlide(
+            offset: _formType != FormType.none ? Offset(0, 0) : Offset(0, 1),
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: Container(
+                  height: screenHeight * 0.75,
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(25),
+                    ),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black26, blurRadius: 10),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 40),
+                        child: _formType == FormType.login
+                            ? LoginForm(onSwitchToRegister: _showRegisterForm)
+                            : RegisterForm(onSwitchToLogin: _showLoginForm),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: IconButton(
+                          icon: Icon(Icons.close, size: 28),
+                          onPressed: _hideForm,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-          // 登录表单
-          LoginForm(),
         ],
       ),
     );

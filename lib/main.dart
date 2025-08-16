@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'home_page/home.dart'; // 引入 HomePage
-import 'splash_screen_page/splash_screen.dart'; // 引入 SplashScreen
-import 'news_page/news.dart'; // 引入 NewsPage
-import 'forum_page/forum.dart'; // 引入 ForumPage
-import 'add_page/add.dart';
+import 'splash_screen_page/splash_screen.dart';
+import 'forms/login_form.dart';
+import 'forms/register_form.dart';
+import 'home_page/home.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -13,13 +13,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-     initialRoute: '/', // 设置初始路由
+      theme: ThemeData(primarySwatch: Colors.blue),
+      initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreen(), // 路由映射，加载启动页
-
+        '/': (context) => SplashScreen(),
+        '/login': (context) => LoginForm(),
+        '/register': (context) => RegisterForm(),
+        '/home': (context) => HomePage(),
       },
     );
   }
