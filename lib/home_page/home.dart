@@ -22,14 +22,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Navbar Demo'),
-      ),
+      appBar: AppBar(title: Text('Flutter Navbar Demo')),
       body: Column(
         children: [
           Header(), // 引入 Header 组件
           Image.asset(
-            'lib/home_page/container/首页海报3.png', // 替换为你的图片路径
+            'lib/assert/行情页广告图.png', // 替换为你的图片路径
+
             fit: BoxFit.cover, // 确保图片适应容器
           ),
           // 文字描述部分
@@ -44,11 +43,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 10), // 添加间距
           RowSection(), // 引入 RowSection 组件
           DataSection(), // 引入 DataSection 组件
-          Expanded(
-            child: Center(
-              child: Text('首页内容'),
-            ),
-          ),
+          Expanded(child: Center(child: Text('首页内容'))),
         ],
       ),
       bottomNavigationBar: Navbar(

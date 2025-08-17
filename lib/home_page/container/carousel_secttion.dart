@@ -12,15 +12,15 @@ class CarouselSection extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Image.asset('lib/home_page/container/首页海报3.png', fit: BoxFit.cover),
+              child: Image.asset('lib/assert/行情页指数图.png', fit: BoxFit.cover),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Image.asset('lib/home_page/container/首页海报3.png', fit: BoxFit.cover),
+              child: Image.asset('lib/assert/行情页指数图.png', fit: BoxFit.cover),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Image.asset('lib/home_page/container/首页海报3.png', fit: BoxFit.cover),
+              child: Image.asset('lib/assert/行情页指数图.png', fit: BoxFit.cover),
             ),
           ],
         ),
