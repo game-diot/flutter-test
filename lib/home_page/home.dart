@@ -1,55 +1,105 @@
 import 'package:flutter/material.dart';
-import '../components/navbar.dart'; // 导入 Navbar
-import 'header/header.dart'; // 导入 Header
-import 'container/carousel_secttion.dart'; // 引入 CarouselSection
-import 'container/row_section.dart'; // 引入 RowSection
-import 'container/data_section.dart'; // 引入 DataSection
-
+import '../components/navbar.dart';
+import '../news_page/news.dart';
+import 'header/header.dart';
+import 'container/carousel_secttion.dart';
+import 'container/row_section.dart';
+import 'container/data_section.dart';
+import '../add_page/add.dart';
+import '../forum_page/forum.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0; // 当前选中的 tab
+  int _currentIndex = 0;
+
+  // 页面列表
+  final List<Widget> _pages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // 初始化页面列表
+    _pages.addAll([
+      _buildMarketPage(), // 行情页
+      NewsPage(),         // 新闻页
+      AddPage(),          // 新增页
+      ForumPage(),        // 论坛页
+      // settingpage（），
+    ]);
+  }
 
   void _onTabSelected(int index) {
     setState(() {
-      _currentIndex = index; // 更新选中的 tab
+      _currentIndex = index;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Flutter Navbar Demo')),
-      body: Column(
+  // 原行情首页布局
+  Widget _buildMarketPage() {
+    return SingleChildScrollView(
+      physics: ClampingScrollPhysics(),
+      child: Column(
         children: [
-          Header(), // 引入 Header 组件
-          Image.asset(
-            'lib/assert/行情页广告图.png', // 替换为你的图片路径
 
-            fit: BoxFit.cover, // 确保图片适应容器
-          ),
-          // 文字描述部分
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              '全球指数',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          Container(
+                     color: Color.fromRGBO(237, 176, 35, 1),
+            child: Column(
+              children:[
+                Header(),
+                SizedBox(height: 10,),
+              ],
             ),
           ),
-          CarouselSection(), // 引入 CarouselSection 组件
-          SizedBox(height: 10), // 添加间距
-          RowSection(), // 引入 RowSection 组件
-          DataSection(), // 引入 DataSection 组件
-          Expanded(child: Center(child: Text('首页内容'))),
+          SizedBox(height: 20),
+          SizedBox(
+            height: 150,
+            width: 350,
+            child: Image.asset(
+              'assets/images/行情页广告图.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '全球指数',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
+          Container(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            child: CarouselSection(),
+          ),
+          SizedBox(height: 10),
+          Container(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            child: RowSection(),
+          ),
+          SizedBox(height: 10),
+          DataSection(),
         ],
-      ),
-      bottomNavigationBar: Navbar(
-        onTabSelected: _onTabSelected, // 传递回调
-        currentIndex: _currentIndex, // 当前选中的 tab
       ),
     );
   }
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      toolbarHeight: 0, // 高度可调
+      backgroundColor: Color.fromARGB(255, 237, 176, 35), // 纯色
+      elevation: 0, // 去掉阴影
+    ),
+    body: _pages[_currentIndex], // 根据 currentIndex 显示页面
+    bottomNavigationBar: Navbar(
+      currentIndex: _currentIndex,
+      onTabSelected: _onTabSelected,
+    ),
+  );
+}
 }

@@ -185,7 +185,7 @@ class _RegisterFormState extends State<RegisterForm> {
         SizedBox(height: 20),
         TextButton(
           onPressed: widget.onSwitchToLogin,
-          child: Text('没有账号？去登录', style: TextStyle(color: Color(0xFFedb023))),
+          child: Text('没有账号？去登录', style: TextStyle(color: Color(0xFFedb023), fontSize: 18)),
         ),
       ],
     );

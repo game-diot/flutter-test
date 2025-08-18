@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
 class NewsHeader extends StatefulWidget {
+  const NewsHeader({Key? key}) : super(key: key);
+
   @override
-  _NewsHeaderState createState() => _NewsHeaderState();
+  State<NewsHeader> createState() => _NewsHeaderState();
 }
 
 class _NewsHeaderState extends State<NewsHeader> {
-  // 用于记录点击的文字，控制底部边框显示
-  int _selectedIndex = -1; // -1 表示没有选中
+  int _selectedIndex = 0; // 默认选中第一个
+
+  final List<String> _labels = ['热搜', '广场', '原创', 'NFT', '科普'];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue, // 背景色
+      color: Color.fromRGBO(237, 176, 35, 1), // 背景色
       padding: EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,45 +24,47 @@ class _NewsHeaderState extends State<NewsHeader> {
           Container(
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white, // 输入框背景色为白色
-              borderRadius: BorderRadius.circular(25),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
             ),
             child: TextField(
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search), // 放大镜图标
+                prefixIcon: Icon(Icons.search),
                 hintText: '搜索新闻',
-                border: InputBorder.none, // 取消默认边框
+                border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               ),
             ),
           ),
-          SizedBox(height: 20), // 搜索框和文字之间的间距
+          SizedBox(height: 20),
 
-          // 五个文字，点击后出现底部边框
+          // 五个文字按钮
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(5, (index) {
+            children: List.generate(_labels.length, (index) {
+              bool isSelected = _selectedIndex == index;
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    _selectedIndex = index; // 设置选中的文字
+                    _selectedIndex = index;
                   });
                 },
                 child: Column(
                   children: [
                     Text(
-                      '文字${index + 1}',
+                      _labels[index],
                       style: TextStyle(
-                        color: Colors.white, // 文字颜色
+                        color: Colors.black,
                         fontSize: 16,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
-                    // 底部边框
+                    SizedBox(height: 4),
                     AnimatedContainer(
                       duration: Duration(milliseconds: 300),
                       width: 40,
                       height: 2,
-                      color: _selectedIndex == index ? Colors.white : Colors.transparent,
+                      color: isSelected ? Colors.black : Colors.transparent,
                     ),
                   ],
                 ),

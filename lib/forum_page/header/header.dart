@@ -7,16 +7,17 @@ class ForumHeader extends StatefulWidget {
 }
 
 class _ForumHeaderState extends State<ForumHeader> {
-  int _selectedIndex = -1; // 初始没有选中任何文字
+  int _selectedIndex = 0; // 默认选中第一个文字
 
   void _onTabSelected(int index) {
     setState(() {
-      _selectedIndex = index; // 更新选中的文字
+      _selectedIndex = index; // 更新选中
     });
   }
 
   // 搜索框 + 5个文字，点击文字显示底部边框
   Widget buildTextWithBorder(int index, String title) {
+    bool isSelected = _selectedIndex == index;
     return GestureDetector(
       onTap: () {
         _onTabSelected(index); // 更新选中
@@ -26,15 +27,16 @@ class _ForumHeaderState extends State<ForumHeader> {
           Text(
             title,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 16,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
             width: 40,
             height: 2,
-            color: _selectedIndex == index ? Colors.white : Colors.transparent,
+            color: isSelected ? const Color.fromRGBO(237, 176, 35, 1) : Colors.transparent,
           ),
         ],
       ),
@@ -67,16 +69,16 @@ class _ForumHeaderState extends State<ForumHeader> {
         
         // 文字部分，点击后添加下边框
         Container(
-          color: Colors.blue, // 背景色为蓝色
+          color: Colors.white, // 背景色为白色
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buildTextWithBorder(0, '板块1'),
-              buildTextWithBorder(1, '板块2'),
-              buildTextWithBorder(2, '板块3'),
-              buildTextWithBorder(3, '板块4'),
-              buildTextWithBorder(4, '板块5'),
+              buildTextWithBorder(0, '热榜'),
+              buildTextWithBorder(1, '区块链'),
+              buildTextWithBorder(2, '心得'),
+              buildTextWithBorder(3, '吐槽大会'),
+              buildTextWithBorder(4, 'Tab'),
             ],
           ),
         ),

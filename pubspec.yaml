@@ -26,3 +26,7 @@ flutter:
     - lib/home_page/container/
     - lib/splash_screen_page/
     - lib/splash_screen_page/logo.png
+    - assets/images/行情页广告图.png
+    - assets/images/行情页指数图.png
+    - assets/images/news_red.png
+    - assets/images/news_blue.png

@@ -3,7 +3,8 @@ import 'splash_screen_page/splash_screen.dart';
 import 'forms/login_form.dart';
 import 'forms/register_form.dart';
 import 'home_page/home.dart';
-
+import 'add_page/add.dart';
+import 'forum_page/forum.dart';
 void main() {
   runApp(MyApp());
 }
@@ -20,6 +21,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginForm(),
         '/register': (context) => RegisterForm(),
         '/home': (context) => HomePage(),
+        '/add': (context) => AddPage(),
+        '/forum': (context) => ForumPage(),
       },
     );
   }

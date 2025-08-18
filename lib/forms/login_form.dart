@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'register_form.dart';
 import '../home_page/home.dart';
 
 class LoginForm extends StatefulWidget {
   final VoidCallback? onSwitchToRegister;
-
-  const LoginForm({this.onSwitchToRegister});
+  final VoidCallback? onLoginSuccess;
+  const LoginForm({this.onSwitchToRegister, this.onLoginSuccess});
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -28,6 +27,7 @@ class _LoginFormState extends State<LoginForm> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          SizedBox(height: 16),
           // 顶部切换按钮
           Row(
             children: [
@@ -66,7 +66,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 28),
           isPhoneSelected
               ? Row(
                   children: [
@@ -146,7 +146,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ],
                 ),
-          SizedBox(height: 20),
+          SizedBox(height: 22),
           TextField(
             controller: passwordController,
             obscureText: true,
@@ -161,33 +161,34 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
           ),
-          SizedBox(height: 24),
+          SizedBox(height: 28),
           SizedBox(
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: () {
-                // 登录逻辑完成后，跳转到 HomePage
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              },
-              child: Text('登录', style: TextStyle(fontSize: 18)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF292e38),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
+  onPressed: () {
+    // 登录成功后调用回调
+    if (widget.onLoginSuccess != null) {
+      widget.onLoginSuccess!();
+    }
+  },
+  child: Text('登录', style: TextStyle(fontSize: 18)),
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Color(0xFF292e38),
+    foregroundColor: Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+  ),
+),
+
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 18),
           TextButton(
             onPressed: widget.onSwitchToRegister,
-            child: Text('没有账号？去注册', style: TextStyle(color: Color(0xFFedb023))),
+            child: Text('没有账号？去注册', style: TextStyle(color: Color(0xFFedb023), fontSize: 18)),
           ),
+          SizedBox(height: 18),
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             alignment: WrapAlignment.center,

@@ -98,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
                 child: Container(
-                  height: screenHeight * 0.75,
+                  height: screenHeight * 0.60,
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -113,9 +113,17 @@ class _SplashScreenState extends State<SplashScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 40),
-                        child: _formType == FormType.login
-                            ? LoginForm(onSwitchToRegister: _showRegisterForm)
-                            : RegisterForm(onSwitchToLogin: _showLoginForm),
+                  child: _formType == FormType.login
+    ? LoginForm(
+        onSwitchToRegister: _showRegisterForm,
+        onLoginSuccess: () {
+          Navigator.pushReplacementNamed(context, '/home');
+        },
+      )
+    : RegisterForm(
+        onSwitchToLogin: _showLoginForm,
+    )
+
                       ),
                       Positioned(
                         top: 0,

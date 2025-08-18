@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'header/header.dart'; // 引入 NewsHeader 页面
-import '../components/navbar.dart'; // 引入 Navbar 组件
+import 'header/header.dart';
+import 'container/news_carousel.dart'; // ← 注意导入路径，和文件实际位置一致
+import 'container/article.dart';
+import 'container/article_model.dart';
 
 class NewsPage extends StatefulWidget {
   @override
@@ -8,42 +10,55 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  int _currentIndex = 1; // 初始选中的是 '新闻' 页面
+  // 示例文章列表
+  final List<ArticleOverviewItem> articles = [
+    ArticleOverviewItem(
+      title: 'Flutter 3.0 发布：性能提升与新特性',
+      publishDate: DateTime(2025, 8, 18),
+      imageUrl: 'assets/images/news_red.png',
+    ),
+    ArticleOverviewItem(
+      title: '人工智能在大数据分析中的应用',
+      publishDate: DateTime(2025, 8, 17),
+      imageUrl: 'assets/images/news_blue.png',
+    ),
+     ArticleOverviewItem(
+      title: '人工智能在大数据分析中的应用',
+      publishDate: DateTime(2025, 8, 17),
+      imageUrl: 'assets/images/news_blue.png',
+    ),
+     ArticleOverviewItem(
+      title: '人工智能在大数据分析中的应用',
+      publishDate: DateTime(2025, 8, 17),
+      imageUrl: 'assets/images/news_blue.png',
+    ),
+     ArticleOverviewItem(
+      title: '人工智能在大数据分析中的应用',
+      publishDate: DateTime(2025, 8, 17),
+      imageUrl: 'assets/images/news_blue.png',
+    ),
+     ArticleOverviewItem(
+      title: '人工智能在大数据分析中的应用',
+      publishDate: DateTime(2025, 8, 17),
+      imageUrl: 'assets/images/news_blue.png',
+    ),
+     ArticleOverviewItem(
+      title: '人工智能在大数据分析中的应用',
+      publishDate: DateTime(2025, 8, 17),
+      imageUrl: 'assets/images/news_blue.png',
+    ),
+  ];
 
-  void _onTabSelected(int index) {
-    setState(() {
-      _currentIndex = index; // 更新选中的 tab
-    });
-  }
-
-  // 文字块轮播图
-  Widget buildTextCarouselItem(String text) {
-    return Container(
-      alignment: Alignment.center,
-      color: Colors.blue[100], // 背景色
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  // 内容块
   Widget buildContentBlock(BuildContext context, String title) {
-    double screenWidth = MediaQuery.of(context).size.width; // 获取屏幕宽度
+    double screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      width: screenWidth, // 设置宽度为设备的宽度
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20), // 上下间距
-      padding: EdgeInsets.all(20), // 内边距
+      width: screenWidth,
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.blue[50], // 块背景色
-        borderRadius: BorderRadius.circular(10), // 圆角
-        boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)], // 阴影效果
+        color: Colors.blue[50],
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
       ),
       child: Text(
         title,
@@ -56,48 +71,33 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('新闻页面'),
-        backgroundColor: Colors.blue,
-      ),
       body: Column(
         children: [
-          // 引入 NewsHeader 组件
           NewsHeader(),
-          
-          // 文字块轮播图部分
-          Container(
-            height: 100, // 文字块轮播图的高度
-            child: PageView(
-              children: [
-                buildTextCarouselItem('最新新闻：第一条新闻内容'),
-                buildTextCarouselItem('热点新闻：第二条新闻内容'),
-                buildTextCarouselItem('今日头条：第三条新闻内容'),
-                buildTextCarouselItem('世界新闻：第四条新闻内容'),
-              ],
-            ),
+          SizedBox(height: 10),
+
+          // ✅ 新闻轮播
+          NewsCarousel(
+            items: [
+              NewsCarouselItem(title: "阿宋好嗲速度护额我电话iu啊是对我好对我好", hotValue: 173),
+              NewsCarouselItem(title: "阿佛塑科技打开手机打死宽度", hotValue: 150),
+              NewsCarouselItem(title: "在下面，刹那间啊睡觉哦i为i啊思考电话", hotValue: 98),
+            ],
           ),
 
-          // 下面是其他新闻页面的内容
+          SizedBox(height: 10),
+
+          // 下方滚动区域
           Expanded(
-            child: SingleChildScrollView( // 使内容可以滚动
+            child: SingleChildScrollView(
               child: Column(
                 children: [
-                  buildContentBlock(context, '区块1：最新新闻'),
-                  buildContentBlock(context, '区块2：热评新闻'),
-                  buildContentBlock(context, '区块3：国际新闻'),
-                  buildContentBlock(context, '区块4：科技新闻'),
-                  buildContentBlock(context, '区块5：财经新闻'),
+                  ...articles.map((a) => ArticleOverview(item: a)).toList(),
                 ],
               ),
             ),
           ),
         ],
-      ),
-      // 引入 Navbar 组件
-      bottomNavigationBar: Navbar(
-        onTabSelected: _onTabSelected, // 传递回调
-        currentIndex: _currentIndex, // 当前选中的 tab
       ),
     );
   }
