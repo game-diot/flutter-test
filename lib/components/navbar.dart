@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../add_page/add.dart'; // 引入添加页
-
+import '../add_page/add.dart';
 class Navbar extends StatelessWidget {
   final ValueChanged<int> onTabSelected;
   final int currentIndex;
@@ -14,13 +13,14 @@ class Navbar extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: (index) {
         if (index == 2) {
-          // 中间加号点击，跳转到 AddPage
+          // 中间加号还是新开页面
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddPage()),
           );
         } else {
-          onTabSelected(index); // 调用外部回调改变页面
+          // 其他索引直接切换页面，包括设置页
+          onTabSelected(index);
         }
       },
       items: [
@@ -38,7 +38,7 @@ class Navbar extends StatelessWidget {
             size: 50,
             color: Color.fromRGBO(237, 176, 35, 1),
           ),
-          label: '', // 保持中间按钮无文字
+          label: '',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.cloud, size: 30),

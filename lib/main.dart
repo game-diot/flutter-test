@@ -5,6 +5,7 @@ import 'forms/register_form.dart';
 import 'home_page/home.dart';
 import 'add_page/add.dart';
 import 'forum_page/forum.dart';
+import 'setting_page/setting.dart';
 void main() {
   runApp(MyApp());
 }
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomePage(),
         '/add': (context) => AddPage(),
         '/forum': (context) => ForumPage(),
+        '/setting': (context) => SettingPage(),
       },
     );
   }

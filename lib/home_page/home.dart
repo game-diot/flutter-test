@@ -7,6 +7,7 @@ import 'container/row_section.dart';
 import 'container/data_section.dart';
 import '../add_page/add.dart';
 import '../forum_page/forum.dart';
+import '../setting_page/setting.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       NewsPage(),         // 新闻页
       AddPage(),          // 新增页
       ForumPage(),        // 论坛页
-      // settingpage（），
+      SettingPage(),      // 设置页
     ]);
   }
 
