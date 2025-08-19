@@ -6,6 +6,7 @@ import 'home_page/home.dart';
 import 'add_page/add.dart';
 import 'forum_page/forum.dart';
 import 'setting_page/setting.dart';
+import 'detail_page/detail_page.dart';
 void main() {
   runApp(MyApp());
 }

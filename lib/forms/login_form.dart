@@ -6,6 +6,8 @@ import '../home_page/home.dart';
 import '../network/models/login_area.dart';
 import '../network/services/login_area.dart';
 
+import '../message_page/commons_page.dart';
+import '../message_page/likes_page.dart';
 //定义登录服务类
 class AuthService {
   static final Dio _dio = Dio();
@@ -266,38 +268,44 @@ class _LoginFormState extends State<LoginForm> {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: _isLoading
-                  ? null
-                  : () async {
-                      setState(() => _isLoading = true);
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LikedPage()),
+                );
+              },
+              // onPressed: _isLoading
+              //     ? null
+              //     : () async {
+              //         setState(() => _isLoading = true);
 
-                      String username = isPhoneSelected
-                          ? "+${selectedCountry?.areaCode ?? '1'}${phoneController.text}"
-                          : "${emailController.text}$selectedEmailSuffix";
-                      String password = passwordController.text;
+              //         String username = isPhoneSelected
+              //             ? "+${selectedCountry?.areaCode ?? '1'}${phoneController.text}"
+              //             : "${emailController.text}$selectedEmailSuffix";
+              //         String password = passwordController.text;
 
-                      bool success = await AuthService.login(
-                        username: username,
-                        password: password,
-                        areaCode: selectedCountry?.areaCode ?? '1',
-                      );
+              //         bool success = await AuthService.login(
+              //           username: username,
+              //           password: password,
+              //           areaCode: selectedCountry?.areaCode ?? '1',
+              //         );
 
-                      setState(() => _isLoading = false);
+              //         setState(() => _isLoading = false);
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(success ? "登录成功" : "登录失败，请检查用户名或密码"),
-                        ),
-                      );
+              //         ScaffoldMessenger.of(context).showSnackBar(
+              //           SnackBar(
+              //             content: Text(success ? "登录成功" : "登录失败，请检查用户名或密码"),
+              //           ),
+              //         );
 
-                      if (success) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => HomePage()),
-                        );
-                        widget.onLoginSuccess?.call();
-                      }
-                    },
+              //         if (success) {
+              //           Navigator.pushReplacement(
+              //             context,
+              //             MaterialPageRoute(builder: (_) => HomePage()),
+              //           );
+              //           widget.onLoginSuccess?.call();
+              //         }
+              //       },
               child: _isLoading
                   ? CircularProgressIndicator(color: Colors.white)
                   : Text('登录', style: TextStyle(fontSize: 18)),
