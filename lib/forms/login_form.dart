@@ -1,14 +1,11 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import '../home_page/home.dart';
-
 import '../network/models/login_area.dart';
 import '../network/services/login_area.dart';
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-import '../message_page/commons_page.dart';
-import '../message_page/likes_page.dart';
-//定义登录服务类
 class AuthService {
   static final Dio _dio = Dio();
 
@@ -21,7 +18,7 @@ class AuthService {
     String imgCaptcha = "",
   }) async {
     const String url =
-        "https://us12-h5.yanshi.lol/api/app-api/system/auth/login";
+        "https://us14-h5.yanshi.lol/api/app-api/system/auth/login";
 
     try {
       Response response = await _dio.post(
@@ -38,8 +35,8 @@ class AuthService {
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json, text/plain, */*",
-            "Origin": "https://us12-h5.yanshi.lol",
-            "Referer": "https://us12-h5.yanshi.lol/home",
+            "Origin": "https://us14-h5.yanshi.lol",
+            "Referer": "https://us14-h5.yanshi.lol/home",
             "User-Agent":
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                 "(KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
@@ -74,8 +71,8 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController passwordController = TextEditingController();
 
   bool _isLoading = false;
+  bool _isCountryLoading = true;
 
-  // 国家列表和选中国家
   List<Country> countryList = [];
   Country? selectedCountry;
 
@@ -85,7 +82,6 @@ class _LoginFormState extends State<LoginForm> {
     _loadCountries();
   }
 
-  // 获取国家列表
   void _loadCountries() async {
     try {
       final countries = await fetchCountries();
@@ -95,9 +91,11 @@ class _LoginFormState extends State<LoginForm> {
           (c) => c.isDefault,
           orElse: () => countries[0],
         );
+        _isCountryLoading = false;
       });
     } catch (e) {
       print("获取国家列表失败: $e");
+      setState(() => _isCountryLoading = false);
     }
   }
 
@@ -114,9 +112,8 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () => setState(() => isPhoneSelected = true),
                   child: Text('手机号'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isPhoneSelected
-                        ? Color(0xFFf4f4f5)
-                        : Colors.white,
+                    backgroundColor:
+                        isPhoneSelected ? Color(0xFFf4f4f5) : Colors.white,
                     foregroundColor: Colors.black,
                     minimumSize: Size(double.infinity, 38),
                     shape: RoundedRectangleBorder(
@@ -131,9 +128,8 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () => setState(() => isPhoneSelected = false),
                   child: Text('邮箱'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: !isPhoneSelected
-                        ? Color(0xFFf4f4f5)
-                        : Colors.white,
+                    backgroundColor:
+                        !isPhoneSelected ? Color(0xFFf4f4f5) : Colors.white,
                     foregroundColor: Colors.black,
                     minimumSize: Size(double.infinity, 38),
                     shape: RoundedRectangleBorder(
@@ -145,109 +141,110 @@ class _LoginFormState extends State<LoginForm> {
             ],
           ),
           SizedBox(height: 28),
-          isPhoneSelected
-              ? Row(
-                  children: [
-                    Container(
-                      width: 100,
-                      child: countryList.isEmpty
-                          ? Center(child: CircularProgressIndicator())
-                          : DropdownButton<Country>(
-                              value: selectedCountry,
-                              isExpanded: true,
-                              underline: SizedBox(),
-                              items: countryList.map((country) {
-                                return DropdownMenuItem<Country>(
-                                  value: country,
-                                  alignment: Alignment.center,
-   
-                                  child:
-                                  SizedBox(
-                                    width: 150,
-                                    child: Row(
-                                    children: [
-                                      Image.network(
-                                        country.iconUrl,
-                                        width: 40,
-                                        height: 20,
-                                      ),
-                                      SizedBox(width: 5),
-                                      Text(
-                                        '+${country.areaCode} ',
-                                         overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                                );
-                                },
-                              ).toList(),
-                              onChanged: (Country? value) {
-                                setState(() {
-                                  selectedCountry = value;
+          if (isPhoneSelected)
+            _isCountryLoading
+                ? Center(child: CircularProgressIndicator())
+                : Row(
+                    children: [
+                      Container(
+                        width: 100,
+                        child: DropdownButton<Country>(
+                          value: selectedCountry,
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          items: countryList.map((country) {
+                            return DropdownMenuItem<Country>(
+                              value: country,
+                              alignment: Alignment.center,
+                              child: SizedBox(
+                                width: 150,
+                                child: Row(
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: country.iconUrl,
+                                      width: 40,
+                                      height: 20,
+                                      placeholder: (context, url) => SizedBox(
+                                          width: 40,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                              strokeWidth: 1.5)),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error, size: 20),
+                                    ),
 
-                                });
-                              },
-                            ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: phoneController,
-                        decoration: InputDecoration(
-                          hintText: '请输入手机号',
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 14,
-                            horizontal: 12,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
-                    ),
-                  ],
-                )
-              : Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          hintText: '请输入邮箱',
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 14,
-                            horizontal: 12,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 120,
-                      child: DropdownButton<String>(
-                        value: selectedEmailSuffix,
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        items: ["@qq.com", "@163.com", "@gmail.com"]
-                            .map(
-                              (suffix) => DropdownMenuItem(
-                                value: suffix,
-                                child: Text(suffix),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      '+${country.areaCode} ',
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            )
-                            .toList(),
-                        onChanged: (value) =>
-                            setState(() => selectedEmailSuffix = value!),
+                            );
+                          }).toList(),
+                          onChanged: (Country? value) {
+                            setState(() => selectedCountry = value);
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: phoneController,
+                          decoration: InputDecoration(
+                            hintText: '请输入手机号',
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 14,
+                              horizontal: 12,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          keyboardType: TextInputType.phone,
+                        ),
+                      ),
+                    ],
+                  )
+          else
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      hintText: '请输入邮箱',
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 12,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ],
+                    keyboardType: TextInputType.emailAddress,
+                  ),
                 ),
+                SizedBox(width: 10),
+                Container(
+                  width: 120,
+                  child: DropdownButton<String>(
+                    value: selectedEmailSuffix,
+                    isExpanded: true,
+                    underline: SizedBox(),
+                    items: ["@qq.com", "@163.com", "@gmail.com"]
+                        .map((suffix) => DropdownMenuItem(
+                              value: suffix,
+                              child: Text(suffix),
+                            ))
+                        .toList(),
+                    onChanged: (value) =>
+                        setState(() => selectedEmailSuffix = value!),
+                  ),
+                ),
+              ],
+            ),
           SizedBox(height: 22),
           TextField(
             controller: passwordController,
@@ -268,44 +265,38 @@ class _LoginFormState extends State<LoginForm> {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LikedPage()),
-                );
-              },
-              // onPressed: _isLoading
-              //     ? null
-              //     : () async {
-              //         setState(() => _isLoading = true);
+              onPressed: _isLoading
+                  ? null
+                  : () async {
+                      setState(() => _isLoading = true);
 
-              //         String username = isPhoneSelected
-              //             ? "+${selectedCountry?.areaCode ?? '1'}${phoneController.text}"
-              //             : "${emailController.text}$selectedEmailSuffix";
-              //         String password = passwordController.text;
+                      String username = isPhoneSelected
+                          ? "${phoneController.text}"
+                          : "${emailController.text}";
+                      String password = passwordController.text;
 
-              //         bool success = await AuthService.login(
-              //           username: username,
-              //           password: password,
-              //           areaCode: selectedCountry?.areaCode ?? '1',
-              //         );
+                      bool success = await AuthService.login(
+                        username: username,
+                        password: password,
+                        areaCode: selectedCountry?.areaCode ?? '1',
+                      );
 
-              //         setState(() => _isLoading = false);
+                      setState(() => _isLoading = false);
 
-              //         ScaffoldMessenger.of(context).showSnackBar(
-              //           SnackBar(
-              //             content: Text(success ? "登录成功" : "登录失败，请检查用户名或密码"),
-              //           ),
-              //         );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(success ? "登录成功" : "登录失败，请检查用户名或密码"),
+                        ),
+                      );
 
-              //         if (success) {
-              //           Navigator.pushReplacement(
-              //             context,
-              //             MaterialPageRoute(builder: (_) => HomePage()),
-              //           );
-              //           widget.onLoginSuccess?.call();
-              //         }
-              //       },
+                      if (success) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => HomePage()),
+                        );
+                        widget.onLoginSuccess?.call();
+                      }
+                    },
               child: _isLoading
                   ? CircularProgressIndicator(color: Colors.white)
                   : Text('登录', style: TextStyle(fontSize: 18)),

@@ -20,7 +20,7 @@ class _DataSectionState extends State<DataSection> {
   @override
   void initState() {
     super.initState();
-    // _fetchData();
+    _fetchData();
   }
 
   Future<void> _fetchData() async {

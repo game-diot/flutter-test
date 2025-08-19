@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'header/header.dart';
+import '../my_article/my_likes_page.dart';
+import '../my_article/my_post_page.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -18,9 +20,33 @@ class SettingPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
           child: Row(
             children: [
-              Expanded(child: _buildStatButton('我的帖子', '12')),
+              Expanded(
+                child: _buildStatButton(
+                  context,
+                  '我的帖子',
+                  '12',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => MyPostsPage()),
+                    );
+                  },
+                ),
+              ),
               SizedBox(width: 16),
-              Expanded(child: _buildStatButton('我的点赞', '34')),
+              Expanded(
+                child: _buildStatButton(
+                  context,
+                  '我的点赞',
+                  '34',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => MyLikesPage()),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -35,7 +61,7 @@ class SettingPage extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
-                image: AssetImage('assets/images/ad_banner.png'), // 替换为你的广告图片
+                image: AssetImage('assets/images/ad_banner.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -55,47 +81,48 @@ class SettingPage extends StatelessWidget {
   }
 
   // 横向按钮：我的帖子 / 我的点赞
-Widget _buildStatButton(String title, String count) {
-  return ElevatedButton(
-    onPressed: () {},
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
-      padding: EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey[300]!),
+  Widget _buildStatButton(BuildContext context, String title, String count,
+      {VoidCallback? onTap}) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        padding: EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey[300]!),
+        ),
       ),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // 数字
-        Text(
-          count,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 4),
-        // 文字 + 箭头
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              title,
-              style: TextStyle(fontSize: 14),
-            ),
-            SizedBox(width: 4),
-            Icon(Icons.arrow_forward_ios, size: 14),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 数字
+          Text(
+            count,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 4),
+          // 文字 + 箭头
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(width: 4),
+              Icon(Icons.arrow_forward_ios, size: 14),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   // 单个设置项
-  Widget _buildSettingItem(IconData icon, String title, String value, {bool isArrow = true}) {
+  Widget _buildSettingItem(IconData icon, String title, String value,
+      {bool isArrow = true}) {
     return Column(
       children: [
         ListTile(

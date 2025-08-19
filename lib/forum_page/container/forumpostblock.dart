@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../detail_page/detail_page.dart';
 class ForumPostBlock extends StatelessWidget {
   final IconData tagIcon;
   final String title;
@@ -38,7 +38,26 @@ Color getRankColor(int rank) {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+     return GestureDetector(
+      onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DetailPage(
+          title: title,
+          avatarUrl: 'https://example.com/user.jpg', // 可动态
+          nickname: author,
+          time: DateTime.now().toString(), // 可动态
+          content: content,
+          starCount: likes, // 也可以自定义
+          likeCount: likes,
+          commentCount: comments,
+        ),
+      ),
+    );
+  },
+
+    child: Stack(
       children: [
         Container(
           margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -134,6 +153,7 @@ if (rank != null)
   ),
   // 其他子元素...
   ],
+    )
 );
 }
 }

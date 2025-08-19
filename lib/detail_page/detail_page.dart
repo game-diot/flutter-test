@@ -6,20 +6,37 @@ import 'components/detail_content.dart';
 import 'components/detail_divider_item.dart';
 import 'components/detail_bottom_bar.dart';
 import 'comment_section.dart';
-
 class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+  final String title;
+  final String avatarUrl;
+  final String nickname;
+  final String time;
+  final String content;
+  final int starCount;
+  final int likeCount;
+  final int commentCount;
+
+  const DetailPage({
+    super.key,
+    required this.title,
+    required this.avatarUrl,
+    required this.nickname,
+    required this.time,
+    required this.content,
+    this.starCount = 0,
+    this.likeCount = 0,
+    this.commentCount = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-       bottomNavigationBar: DetailBottomBar(
-        starCount: 12,
-        likeCount: 34,
-        commentCount: 56,
+      bottomNavigationBar: DetailBottomBar(
+        starCount: starCount,
+        likeCount: likeCount,
+        commentCount: commentCount,
         onCommentTap: () {
-          // 弹出底部输入框
           showModalBottomSheet(
             context: context,
             builder: (_) => Container(
@@ -34,21 +51,18 @@ class DetailPage extends StatelessWidget {
         child: Column(
           children: [
             DetailAppBar(onBack: () => Navigator.pop(context)),
-            const DetailTitle(title: '如何实现Flutter组件化'),
-            const DetailUserInfo(
-              avatarUrl: 'https://example.com/user.jpg',
-              nickname: '张三',
-              time: '2025-08-19',
+            DetailTitle(title: title),
+            DetailUserInfo(
+              avatarUrl: avatarUrl,
+              nickname: nickname,
+              time: time,
             ),
-            const Expanded(
+            Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    DetailContent(
-                      content:
-                          '本文将介绍如何在Flutter项目中进行组件化设计，提升代码复用性与可维护性...。。。。。。。。。。。。。。。。。',
-                    ),
-                    DetailDivider(),
+                    DetailContent(content: content),
+                    const DetailDivider(),
                     CommentSection(),
                   ],
                 ),
