@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'login_form.dart';
-import '../BackDataModel/home_data_model.dart';
 class RegisterForm extends StatefulWidget {
   final VoidCallback? onSwitchToLogin;
 
@@ -14,19 +13,7 @@ class _RegisterFormState extends State<RegisterForm> {
   bool isPhoneSelected = true;
   String selectedPhoneSuffix = "+86";
   String selectedEmailSuffix = "@qq.com";
- List<SymbolItem> symbolList = [];
 
-  void fetchData() async {
-  List<SymbolItem>? data = await GetTestData.getAllTestData();
-  if (data != null) {
-    setState(() {
-      symbolList = data;
-    });
-    for (var item in data) {
-      print('${item.symbolId} ${item.alias} ${item.symbol} ${item.baseSymbol} ${item.exchangeSymbol} ${item.icon1} ${item.icon2} ${item.volume24h} ${item.miniKlinePriceList} ${item.commission} ${item.priceAccuracy} ${item.transactionAccuracy}');
-    }
-  }
-}
 
   final List<String> phoneSuffixes = ["+86", "+99", "+66"];
   final List<String> emailSuffixes = ["@qq.com", "@163.com", "@gmail.com"];
@@ -40,6 +27,7 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+
         // 顶部切换
         Row(
           children: [
@@ -184,7 +172,7 @@ class _RegisterFormState extends State<RegisterForm> {
           width: double.infinity,
           height: 48,
           child: ElevatedButton(
-            onPressed: fetchData,
+            onPressed: widget.onSwitchToLogin,
             child: Text('注册', style: TextStyle(fontSize: 18)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF292e38),

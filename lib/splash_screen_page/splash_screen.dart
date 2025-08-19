@@ -116,9 +116,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: _formType == FormType.login
     ? LoginForm(
         onSwitchToRegister: _showRegisterForm,
-        onLoginSuccess: () {
-          Navigator.pushReplacementNamed(context, '/home');
-        },
+      
       )
     : RegisterForm(
         onSwitchToLogin: _showLoginForm,

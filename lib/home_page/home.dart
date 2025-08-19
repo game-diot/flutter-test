@@ -8,6 +8,8 @@ import 'container/data_section.dart';
 import '../add_page/add.dart';
 import '../forum_page/forum.dart';
 import '../setting_page/setting.dart';
+import 'models/symbol_item.dart';
+import 'services/api_service.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -16,12 +18,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
+
+  
   // 页面列表
   final List<Widget> _pages = [];
 
   @override
   void initState() {
     super.initState();
+
     // 初始化页面列表
     _pages.addAll([
       _buildMarketPage(), // 行情页

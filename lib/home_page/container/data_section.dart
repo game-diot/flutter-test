@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../models/symbol_item.dart';
+import '../services/api_service.dart'; // 假设这是获取数据的 service
 
 class DataSection extends StatefulWidget {
   @override
@@ -8,55 +10,27 @@ class DataSection extends StatefulWidget {
 class _DataSectionState extends State<DataSection> {
   int _selectedIndex = 0;
 
-  // 主流币数据
-  final List<Map<String, dynamic>> _coinData = [
-    {'logo': Icons.ac_unit, '名称': 'BTC', '货币': '¥', '价格': 100.0, '涨幅比': 3.86},
-    {'logo': Icons.ad_units, '名称': 'ETH', '货币': '¥', '价格': 200.0, '涨幅比': -5.21},
-    {'logo': Icons.airplanemode_active, '名称': 'LTC', '货币': '\$', '价格': 150.0, '涨幅比': 12.34},
-    {'logo': Icons.anchor, '名称': 'XRP', '货币': '\$', '价格': 120.0, '涨幅比': -8.75},
-    {'logo': Icons.android, '名称': 'DOGE', '货币': '¥', '价格': 220.0, '涨幅比': 20.0},
-        {'logo': Icons.ac_unit, '名称': 'BTC', '货币': '¥', '价格': 100.0, '涨幅比': 3.86},
-    {'logo': Icons.ad_units, '名称': 'ETH', '货币': '¥', '价格': 200.0, '涨幅比': -5.21},
-    {'logo': Icons.airplanemode_active, '名称': 'LTC', '货币': '\$', '价格': 150.0, '涨幅比': 12.34},
-    {'logo': Icons.anchor, '名称': 'XRP', '货币': '\$', '价格': 120.0, '涨幅比': -8.75},
-    {'logo': Icons.android, '名称': 'DOGE', '货币': '¥', '价格': 220.0, '涨幅比': 20.0},
-        {'logo': Icons.ac_unit, '名称': 'BTC', '货币': '¥', '价格': 100.0, '涨幅比': 3.86},
-    {'logo': Icons.ad_units, '名称': 'ETH', '货币': '¥', '价格': 200.0, '涨幅比': -5.21},
-    {'logo': Icons.airplanemode_active, '名称': 'LTC', '货币': '\$', '价格': 150.0, '涨幅比': 12.34},
-    {'logo': Icons.anchor, '名称': 'XRP', '货币': '\$', '价格': 120.0, '涨幅比': -8.75},
-    {'logo': Icons.android, '名称': 'DOGE', '货币': '¥', '价格': 220.0, '涨幅比': 20.0},
-  ];
+  List<SymbolItem> _coinList = [];
+  List<SymbolItem> _exchangeList = [];
 
-  // 交易所数据
-  final List<Map<String, dynamic>> _exchangeData = [
-    {'logo': Icons.star, '名称': 'Binance', '交易额': 5465.15, '评分': 0.7},
-    {'logo': Icons.star_border, '名称': 'Coinbase', '交易额': 3200.32, '评分': 0.6},
-    {'logo': Icons.star_half, '名称': 'Huobi', '交易额': 2100.88, '评分': 0.8},
-    {'logo': Icons.star, '名称': 'Kraken', '交易额': 1500.50, '评分': 0.75},
-    {'logo': Icons.star_border, '名称': 'OKX', '交易额': 980.21, '评分': 0.65},
-        {'logo': Icons.star, '名称': 'Binance', '交易额': 5465.15, '评分': 0.7},
-    {'logo': Icons.star_border, '名称': 'Coinbase', '交易额': 3200.32, '评分': 0.6},
-    {'logo': Icons.star_half, '名称': 'Huobi', '交易额': 2100.88, '评分': 0.8},
-    {'logo': Icons.star, '名称': 'Kraken', '交易额': 1500.50, '评分': 0.75},
-    {'logo': Icons.star_border, '名称': 'OKX', '交易额': 980.21, '评分': 0.65},
-        {'logo': Icons.star, '名称': 'Binance', '交易额': 5465.15, '评分': 0.7},
-    {'logo': Icons.star_border, '名称': 'Coinbase', '交易额': 3200.32, '评分': 0.6},
-    {'logo': Icons.star_half, '名称': 'Huobi', '交易额': 2100.88, '评分': 0.8},
-    {'logo': Icons.star, '名称': 'Kraken', '交易额': 1500.50, '评分': 0.75},
-    {'logo': Icons.star_border, '名称': 'OKX', '交易额': 980.21, '评分': 0.65},
-  ];
+  Map<String, bool> _sortAscCoin = {'名称': true, '价格': true, '涨幅比': true};
 
-  Map<String, bool> _sortAscCoin = {
-    '名称': true,
-    '价格': true,
-    '涨幅比': true,
-  };
+  Map<String, bool> _sortAscExchange = {'名称': true, '交易额': true, '评分': true};
 
-  Map<String, bool> _sortAscExchange = {
-    '名称': true,
-    '交易额': true,
-    '评分': true,
-  };
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    // 调用 Service 获取数据
+    List<SymbolItem> coins = await ApiService.fetchSymbols();
+
+    setState(() {
+      _coinList = coins;
+    });
+  }
 
   void _onTextClicked(int index) {
     setState(() {
@@ -67,15 +41,22 @@ class _DataSectionState extends State<DataSection> {
   void _onSortCoin(String key) {
     setState(() {
       bool asc = _sortAscCoin[key]!;
-      _coinData.sort((a, b) {
-        if (key == '名称') {
-          return asc
-              ? a[key].toString().compareTo(b[key].toString())
-              : b[key].toString().compareTo(a[key].toString());
-        } else {
-          double aValue = a[key] as double;
-          double bValue = b[key] as double;
-          return asc ? aValue.compareTo(bValue) : bValue.compareTo(aValue);
+      _coinList.sort((a, b) {
+        switch (key) {
+          case '名称':
+            return asc
+                ? a.alias.compareTo(b.alias)
+                : b.alias.compareTo(a.alias);
+          case '价格':
+            return asc
+                ? a.miniKlinePriceList[0].compareTo(b.miniKlinePriceList[0])
+                : b.miniKlinePriceList[0].compareTo(a.miniKlinePriceList[0]);
+          case '涨幅比':
+            return asc
+                ? a.miniKlinePriceList[1].compareTo(b.miniKlinePriceList[1])
+                : b.miniKlinePriceList[1].compareTo(a.miniKlinePriceList[1]);
+          default:
+            return 0;
         }
       });
       _sortAscCoin[key] = !asc;
@@ -85,15 +66,22 @@ class _DataSectionState extends State<DataSection> {
   void _onSortExchange(String key) {
     setState(() {
       bool asc = _sortAscExchange[key]!;
-      _exchangeData.sort((a, b) {
-        if (key == '名称') {
-          return asc
-              ? a[key].toString().compareTo(b[key].toString())
-              : b[key].toString().compareTo(a[key].toString());
-        } else {
-          double aValue = a[key] as double;
-          double bValue = b[key] as double;
-          return asc ? aValue.compareTo(bValue) : bValue.compareTo(aValue);
+      _exchangeList.sort((a, b) {
+        switch (key) {
+          case '名称':
+            return asc
+                ? a.alias.compareTo(b.alias)
+                : b.alias.compareTo(a.alias);
+          case '交易额':
+            return asc
+                ? a.volume24h.compareTo(b.volume24h)
+                : b.volume24h.compareTo(a.volume24h);
+          case '评分':
+            return asc
+                ? a.priceAccuracy.compareTo(b.priceAccuracy)
+                : b.priceAccuracy.compareTo(a.priceAccuracy);
+          default:
+            return 0;
         }
       });
       _sortAscExchange[key] = !asc;
@@ -102,8 +90,6 @@ class _DataSectionState extends State<DataSection> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Container(
       height: 400,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -125,7 +111,9 @@ class _DataSectionState extends State<DataSection> {
                       style: TextStyle(
                         fontSize: 16,
                         color: isSelected ? Colors.black : Colors.grey,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
                     if (isSelected)
@@ -143,128 +131,23 @@ class _DataSectionState extends State<DataSection> {
           SizedBox(height: 8),
 
           // 表格内容
-          _selectedIndex == 3
-              ? _buildExchangeTable()
-              : _buildCoinTable(),
-        ],
-      ),
-    );
-  }
-
-  // 主流币表格
-  Widget _buildCoinTable() {
-    return Expanded(
-      child: Column(
-        children: [
-          // 表头
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: GestureDetector(
-                    onTap: () => _onSortCoin('名称'),
-                    child: Row(
-                      children: [
-                        Text('名称', style: TextStyle(fontWeight: FontWeight.bold)),
-                        Icon(_sortAscCoin['名称']! ? Icons.arrow_upward : Icons.arrow_downward, size: 16),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: GestureDetector(
-                    onTap: () => _onSortCoin('价格'),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('价格', style: TextStyle(fontWeight: FontWeight.bold)),
-                        Icon(_sortAscCoin['价格']! ? Icons.arrow_upward : Icons.arrow_downward, size: 16),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  flex: 1,
-                  child: GestureDetector(
-                    onTap: () => _onSortCoin('涨幅比'),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('涨幅比', style: TextStyle(fontWeight: FontWeight.bold)),
-                        Icon(_sortAscCoin['涨幅比']! ? Icons.arrow_upward : Icons.arrow_downward, size: 16),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 1, color: Colors.grey),
-
           Expanded(
-            child: ListView.builder(
-              itemCount: _coinData.length,
-              itemBuilder: (context, index) {
-                final item = _coinData[index];
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Row(
-                          children: [
-                            Icon(item['logo'], size: 22),
-                            SizedBox(width: 8),
-                            Text(item['名称'], style: TextStyle(fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text('${item['货币']}${item['价格']}'),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        flex: 1,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              '${(item['涨幅比'] >= 0 ? '+' : '')}${item['涨幅比'].toStringAsFixed(2)}%',
-                              style: TextStyle(
-                                color: (item['涨幅比'] as double) >= 0 ? Colors.green : Colors.red,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+            child: _selectedIndex == 3
+                ? _buildExchangeTable()
+                : _buildCoinTable(),
           ),
         ],
       ),
     );
   }
 
-  // 交易所表格
-  Widget _buildExchangeTable() {
-  return Expanded(
-    child: Column(
+  Widget _buildCoinTable() {
+    if (_coinList.isEmpty) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    return Column(
       children: [
-        // 表头
         Container(
           padding: EdgeInsets.symmetric(vertical: 8),
           child: Row(
@@ -276,7 +159,12 @@ class _DataSectionState extends State<DataSection> {
                   child: Row(
                     children: [
                       Text('排名', style: TextStyle(fontWeight: FontWeight.bold)),
-                      Icon(_sortAscExchange['名称']! ? Icons.arrow_upward : Icons.arrow_downward, size: 16),
+                      Icon(
+                        _sortAscExchange['名称']!
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward,
+                        size: 16,
+                      ),
                     ],
                   ),
                 ),
@@ -288,8 +176,16 @@ class _DataSectionState extends State<DataSection> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('交易额', style: TextStyle(fontWeight: FontWeight.bold)),
-                      Icon(_sortAscExchange['交易额']! ? Icons.arrow_upward : Icons.arrow_downward, size: 16),
+                      Text(
+                        '交易额',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Icon(
+                        _sortAscExchange['交易额']!
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward,
+                        size: 16,
+                      ),
                     ],
                   ),
                 ),
@@ -302,8 +198,16 @@ class _DataSectionState extends State<DataSection> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('综合评分', style: TextStyle(fontWeight: FontWeight.bold)),
-                      Icon(_sortAscExchange['评分']! ? Icons.arrow_upward : Icons.arrow_downward, size: 16),
+                      Text(
+                        '综合评分',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Icon(
+                        _sortAscExchange['评分']!
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward,
+                        size: 16,
+                      ),
                     ],
                   ),
                 ),
@@ -312,72 +216,26 @@ class _DataSectionState extends State<DataSection> {
           ),
         ),
         Divider(height: 1, color: Colors.grey),
-
-        // 数据列表
         Expanded(
           child: ListView.builder(
-            itemCount: _exchangeData.length,
+            itemCount: _coinList.length,
             itemBuilder: (context, index) {
-              final item = _exchangeData[index]; // <-- 必须在这里定义 item
+              final item = _coinList[index];
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   children: [
-                    // 排名 + 名称
-                    Expanded(
-                      flex: 2,
-                      child: Row(
-                        children: [
-                          Icon(item['logo'], size: 22),
-                          SizedBox(width: 8),
-                          Text(item['名称'], style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ),
-                    // 交易额
+                    Image.network(item.icon1, width: 20, height: 20),
+                    SizedBox(width: 8),
+                    Expanded(flex: 2, child: Text(item.alias)),
+                    SizedBox(width: 48),
                     Expanded(
                       flex: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('\$${item['交易额'].toStringAsFixed(2)}亿'),
-                        ],
-                      ),
+                      child: Text('${item.miniKlinePriceList[0]}'),
                     ),
-                    SizedBox(width: 6),
-                    // 综合评分
                     Expanded(
                       flex: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                ),
-                                FractionallySizedBox(
-                                  widthFactor: item['评分'] as double,
-                                  child: Container(
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 4),
-                          Text('${(item['评分'] * 100).toInt()}%'),
-                        ],
-                      ),
+                      child: Text('${item.miniKlinePriceList[1]}%'),
                     ),
                   ],
                 ),
@@ -386,8 +244,32 @@ class _DataSectionState extends State<DataSection> {
           ),
         ),
       ],
-    ),
-  );
-}
-
+    );
   }
+
+  Widget _buildExchangeTable() {
+    if (_exchangeList.isEmpty) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    return ListView.builder(
+      itemCount: _exchangeList.length,
+      itemBuilder: (context, index) {
+        final item = _exchangeList[index];
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              Expanded(flex: 2, child: Text(item.alias)),
+              Expanded(flex: 1, child: Text('${item.volume24h}')),
+              Expanded(
+                flex: 1,
+                child: Text('${(item.priceAccuracy * 100).toInt()}%'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

@@ -1,9 +1,62 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import '../home_page/home.dart';
+
+import '../network/models/login_area.dart';
+import '../network/services/login_area.dart';
+
+//定义登录服务类
+class AuthService {
+  static final Dio _dio = Dio();
+
+  static Future<bool> login({
+    required String username,
+    required String password,
+    String type = "1",
+    String areaCode = "1",
+    bool authCaptcha = false,
+    String imgCaptcha = "",
+  }) async {
+    const String url =
+        "https://us12-h5.yanshi.lol/api/app-api/system/auth/login";
+
+    try {
+      Response response = await _dio.post(
+        url,
+        data: jsonEncode({
+          "username": username,
+          "password": password,
+          "type": type,
+          "AUTH_LOGIN_CAPTCHA": authCaptcha,
+          "areaCode": areaCode,
+          "imgCaptcha": imgCaptcha,
+        }),
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain, */*",
+            "Origin": "https://us12-h5.yanshi.lol",
+            "Referer": "https://us12-h5.yanshi.lol/home",
+            "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+          },
+        ),
+      );
+      print("登录返回: ${response.data}");
+      return response.statusCode == 200 && response.data['code'] == 0;
+    } catch (e) {
+      print("登录异常: $e");
+      return false;
+    }
+  }
+}
 
 class LoginForm extends StatefulWidget {
   final VoidCallback? onSwitchToRegister;
   final VoidCallback? onLoginSuccess;
+
   const LoginForm({this.onSwitchToRegister, this.onLoginSuccess});
 
   @override
@@ -12,15 +65,39 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   bool isPhoneSelected = true;
-  String selectedPhoneSuffix = "+86";
   String selectedEmailSuffix = "@qq.com";
-
-  final List<String> phoneSuffixes = ["+86", "+99", "+66"];
-  final List<String> emailSuffixes = ["@qq.com", "@163.com", "@gmail.com"];
 
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  bool _isLoading = false;
+
+  // 国家列表和选中国家
+  List<Country> countryList = [];
+  Country? selectedCountry;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCountries();
+  }
+
+  // 获取国家列表
+  void _loadCountries() async {
+    try {
+      final countries = await fetchCountries();
+      setState(() {
+        countryList = countries;
+        selectedCountry = countries.firstWhere(
+          (c) => c.isDefault,
+          orElse: () => countries[0],
+        );
+      });
+    } catch (e) {
+      print("获取国家列表失败: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +105,6 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         children: [
           SizedBox(height: 16),
-          // 顶部切换按钮
           Row(
             children: [
               Expanded(
@@ -71,22 +147,46 @@ class _LoginFormState extends State<LoginForm> {
               ? Row(
                   children: [
                     Container(
-                      width: 90,
-                      child: DropdownButton<String>(
-                        value: selectedPhoneSuffix,
-                        isExpanded: true,
-                        underline: SizedBox(),
-                        items: phoneSuffixes
-                            .map(
-                              (suffix) => DropdownMenuItem(
-                                value: suffix,
-                                child: Text(suffix),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) =>
-                            setState(() => selectedPhoneSuffix = value!),
-                      ),
+                      width: 100,
+                      child: countryList.isEmpty
+                          ? Center(child: CircularProgressIndicator())
+                          : DropdownButton<Country>(
+                              value: selectedCountry,
+                              isExpanded: true,
+                              underline: SizedBox(),
+                              items: countryList.map((country) {
+                                return DropdownMenuItem<Country>(
+                                  value: country,
+                                  alignment: Alignment.center,
+   
+                                  child:
+                                  SizedBox(
+                                    width: 150,
+                                    child: Row(
+                                    children: [
+                                      Image.network(
+                                        country.iconUrl,
+                                        width: 40,
+                                        height: 20,
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        '+${country.areaCode} ',
+                                         overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                );
+                                },
+                              ).toList(),
+                              onChanged: (Country? value) {
+                                setState(() {
+                                  selectedCountry = value;
+
+                                });
+                              },
+                            ),
                     ),
                     SizedBox(width: 10),
                     Expanded(
@@ -132,7 +232,7 @@ class _LoginFormState extends State<LoginForm> {
                         value: selectedEmailSuffix,
                         isExpanded: true,
                         underline: SizedBox(),
-                        items: emailSuffixes
+                        items: ["@qq.com", "@163.com", "@gmail.com"]
                             .map(
                               (suffix) => DropdownMenuItem(
                                 value: suffix,
@@ -166,27 +266,57 @@ class _LoginFormState extends State<LoginForm> {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-  onPressed: () {
-    // 登录成功后调用回调
-    if (widget.onLoginSuccess != null) {
-      widget.onLoginSuccess!();
-    }
-  },
-  child: Text('登录', style: TextStyle(fontSize: 18)),
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Color(0xFF292e38),
-    foregroundColor: Colors.white,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-  ),
-),
+              onPressed: _isLoading
+                  ? null
+                  : () async {
+                      setState(() => _isLoading = true);
 
+                      String username = isPhoneSelected
+                          ? "+${selectedCountry?.areaCode ?? '1'}${phoneController.text}"
+                          : "${emailController.text}$selectedEmailSuffix";
+                      String password = passwordController.text;
+
+                      bool success = await AuthService.login(
+                        username: username,
+                        password: password,
+                        areaCode: selectedCountry?.areaCode ?? '1',
+                      );
+
+                      setState(() => _isLoading = false);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(success ? "登录成功" : "登录失败，请检查用户名或密码"),
+                        ),
+                      );
+
+                      if (success) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => HomePage()),
+                        );
+                        widget.onLoginSuccess?.call();
+                      }
+                    },
+              child: _isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text('登录', style: TextStyle(fontSize: 18)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF292e38),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
           ),
           SizedBox(height: 18),
           TextButton(
             onPressed: widget.onSwitchToRegister,
-            child: Text('没有账号？去注册', style: TextStyle(color: Color(0xFFedb023), fontSize: 18)),
+            child: Text(
+              '没有账号？去注册',
+              style: TextStyle(color: Color(0xFFedb023), fontSize: 18),
+            ),
           ),
           SizedBox(height: 18),
           Wrap(
