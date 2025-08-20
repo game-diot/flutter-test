@@ -1,4 +1,3 @@
-// lib/components/forum_header.dart
 import 'package:flutter/material.dart';
 
 class ForumHeader extends StatefulWidget {
@@ -15,19 +14,24 @@ class _ForumHeaderState extends State<ForumHeader> {
     });
   }
 
-  // 搜索框 + 5个文字，点击文字显示底部边框
-  Widget buildTextWithBorder(int index, String title) {
+  // 搜索框 + 文字点击显示底部边框
+  Widget buildTextWithBorder(int index, String title, bool isDark) {
     bool isSelected = _selectedIndex == index;
+    Color textColor = isDark
+        ? Colors.white.withOpacity(isSelected ? 1.0 : 0.7)
+        : (isSelected ? Colors.black : Colors.grey);
+    Color borderColor =  const Color.fromRGBO(237, 176, 35, 1);
+
     return GestureDetector(
       onTap: () {
-        _onTabSelected(index); // 更新选中
+        _onTabSelected(index);
       },
       child: Column(
         children: [
           Text(
             title,
             style: TextStyle(
-              color: Colors.black,
+              color: textColor,
               fontSize: 16,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
@@ -36,7 +40,8 @@ class _ForumHeaderState extends State<ForumHeader> {
             duration: Duration(milliseconds: 300),
             width: 40,
             height: 2,
-            color: isSelected ? const Color.fromRGBO(237, 176, 35, 1) : Colors.transparent,
+            color: isSelected ? borderColor : Colors.transparent,
+            margin: EdgeInsets.only(top: 4),
           ),
         ],
       ),
@@ -45,6 +50,11 @@ class _ForumHeaderState extends State<ForumHeader> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? Colors.grey[900] : Colors.white;
+    final searchBg = Colors.white;
+    final searchIconColor =  Colors.grey;
+
     return Column(
       children: [
         // 搜索框
@@ -53,32 +63,36 @@ class _ForumHeaderState extends State<ForumHeader> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: searchBg,
               borderRadius: BorderRadius.circular(25),
             ),
             child: TextField(
+              style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: Icon(Icons.search, color: searchIconColor),
                 hintText: '搜索论坛',
+                hintStyle: TextStyle(color: searchIconColor),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               ),
             ),
           ),
         ),
-        
-        // 文字部分，点击后添加下边框
+
+        // 文字部分
         Container(
-          color: Colors.white, // 背景色为白色
+          color: bgColor,
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            spacing: 30,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              buildTextWithBorder(0, '热榜'),
-              buildTextWithBorder(1, '区块链'),
-              buildTextWithBorder(2, '心得'),
-              buildTextWithBorder(3, '吐槽大会'),
-              buildTextWithBorder(4, 'Tab'),
+              buildTextWithBorder(0, '热榜', isDark),
+              buildTextWithBorder(1, '区块链', isDark),
+              buildTextWithBorder(2, '心得', isDark),
+              buildTextWithBorder(3, '吐槽大会', isDark),
+              buildTextWithBorder(4, 'Tab', isDark),
             ],
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'header/header.dart';
-import 'container/news_carousel.dart'; // ← 注意导入路径，和文件实际位置一致
-import 'container/article.dart';
+import 'container/news_carousel.dart';
+import 'container/article_widget.dart';
 import 'container/article_model.dart';
 
 class NewsPage extends StatefulWidget {
@@ -22,51 +22,8 @@ class _NewsPageState extends State<NewsPage> {
       publishDate: DateTime(2025, 8, 17),
       imageUrl: 'assets/images/news_blue.png',
     ),
-     ArticleOverviewItem(
-      title: '人工智能在大数据分析中的应用',
-      publishDate: DateTime(2025, 8, 17),
-      imageUrl: 'assets/images/news_blue.png',
-    ),
-     ArticleOverviewItem(
-      title: '人工智能在大数据分析中的应用',
-      publishDate: DateTime(2025, 8, 17),
-      imageUrl: 'assets/images/news_blue.png',
-    ),
-     ArticleOverviewItem(
-      title: '人工智能在大数据分析中的应用',
-      publishDate: DateTime(2025, 8, 17),
-      imageUrl: 'assets/images/news_blue.png',
-    ),
-     ArticleOverviewItem(
-      title: '人工智能在大数据分析中的应用',
-      publishDate: DateTime(2025, 8, 17),
-      imageUrl: 'assets/images/news_blue.png',
-    ),
-     ArticleOverviewItem(
-      title: '人工智能在大数据分析中的应用',
-      publishDate: DateTime(2025, 8, 17),
-      imageUrl: 'assets/images/news_blue.png',
-    ),
+    // 可继续添加文章
   ];
-
-  Widget buildContentBlock(BuildContext context, String title) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      width: screenWidth,
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
-      ),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 18, color: Colors.blue[800]),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +33,7 @@ class _NewsPageState extends State<NewsPage> {
           NewsHeader(),
           SizedBox(height: 10),
 
-          // ✅ 新闻轮播
+          // 新闻轮播
           NewsCarousel(
             items: [
               NewsCarouselItem(title: "阿宋好嗲速度护额我电话iu啊是对我好对我好", hotValue: 173),
@@ -87,14 +44,10 @@ class _NewsPageState extends State<NewsPage> {
 
           SizedBox(height: 10),
 
-          // 下方滚动区域
+          // 文章列表滚动区域
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ...articles.map((a) => ArticleOverview(item: a)).toList(),
-                ],
-              ),
+              child: ArticleList(articles: articles),
             ),
           ),
         ],

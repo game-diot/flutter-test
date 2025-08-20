@@ -70,7 +70,7 @@ class SettingPageHeader extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
-                  child: Text('编辑资料'),
+                  child: Text('编辑资料',style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),

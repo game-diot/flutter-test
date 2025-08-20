@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_test_project/network/models/login_area.dart';
+import 'package:flutter_test_project/network/Get/models/login_area.dart';
 
 Future<List<Country>> fetchCountries() async {
   final dio = Dio();

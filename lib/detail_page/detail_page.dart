@@ -6,6 +6,7 @@ import 'components/detail_content.dart';
 import 'components/detail_divider_item.dart';
 import 'components/detail_bottom_bar.dart';
 import 'comment_section.dart';
+
 class DetailPage extends StatelessWidget {
   final String title;
   final String avatarUrl;
@@ -30,8 +31,10 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? Colors.grey[900] : Colors.white,
       bottomNavigationBar: DetailBottomBar(
         starCount: starCount,
         likeCount: likeCount,
@@ -42,7 +45,14 @@ class DetailPage extends StatelessWidget {
             builder: (_) => Container(
               height: 200,
               padding: const EdgeInsets.all(16),
-              child: const Center(child: Text('评论输入框...')),
+              color: isDark ? Colors.grey[850] : Colors.white,
+              child: Center(
+                child: Text(
+                  '评论输入框...',
+                  style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black),
+                ),
+              ),
             ),
           );
         },

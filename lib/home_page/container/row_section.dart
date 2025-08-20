@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RowSection extends StatelessWidget {
   @override
@@ -8,19 +9,34 @@ class RowSection extends StatelessWidget {
       color: Color.fromARGB(255, 63, 61, 51),
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 保证组件之间间隔均匀
+        crossAxisAlignment: CrossAxisAlignment.center, // 垂直居中
         children: [
           // 书本图标
-          Icon(Icons.book, size: 26, color: Color.fromRGBO(237, 176, 35, 1)),
-
-          // 文字描述
+          Padding(
+            padding: EdgeInsets.only(top: 2), // 向下偏移 1px
+            child: SvgPicture.asset(
+              'assets/images/book.svg',
+              width: 30,
+              height: 28,
+              color: Color.fromRGBO(237, 176, 35, 1),
+            ),
+          ),
+          SizedBox(width: 8),
           Text(
             '立即查看最新资讯',
-            style: TextStyle(color: Colors.white,fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
+          Spacer(),
 
-          // 右箭头
-          Icon(Icons.arrow_forward, size: 26, color: Color.fromRGBO(237, 176, 35, 1)),
+          Icon(
+            Icons.arrow_forward,
+            size: 18,
+            color: Color.fromRGBO(237, 176, 35, 1),
+          ),
         ],
       ),
     );

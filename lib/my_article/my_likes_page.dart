@@ -75,7 +75,7 @@ Widget _buildActionButton({
                       children: [
                         const Text(
                           "更多操作",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                         IconButton(
                           icon: const Icon(Icons.close),
@@ -92,7 +92,7 @@ Widget _buildActionButton({
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           _buildActionButton(
-                            icon: Icons.thumb_down_alt_outlined,
+                            icon: Icons.thumb_up_alt_outlined,
                             label: "取消点赞",
                             color: Colors.red,
                             onTap: () {

@@ -17,6 +17,9 @@ dependencies:
   json_annotation: ^4.9.0
   dio: ^5.9.0           # 改为兼容版本
   dio_http2_adapter: ^2.1.1  # 新增 Dio HTTP/2 适配器
+  adaptive_theme: ^3.7.1+2
+  fl_chart: ^1.0.0
+  flutter_svg: ^2.2.0
 
 dev_dependencies:
   build_runner: ^2.3.3
@@ -35,3 +38,5 @@ flutter:
     - assets/images/行情页指数图.png
     - assets/images/news_red.png
     - assets/images/news_blue.png
+    - assets/images/ad_banner.png
+    - assets/images/book.svg

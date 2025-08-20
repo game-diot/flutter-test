@@ -12,13 +12,26 @@ class ArticleOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 判断主题
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // 根据主题设置颜色
+    final backgroundColor = isDark ? Colors.grey[850] : Colors.white;
+    final titleColor = isDark ? Colors.white : Colors.black;
+    final dateColor = isDark ? Colors.white70 : Colors.grey[600];
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 4)],
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? Colors.black54 : Colors.grey.shade300,
+            blurRadius: 4,
+          )
+        ],
       ),
       child: Row(
         children: [
@@ -34,12 +47,13 @@ class ArticleOverview extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: titleColor,
                   ),
                 ),
                 SizedBox(height: 16),
                 Text(
                   _formatDate(item.publishDate),
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 12, color: dateColor),
                 ),
               ],
             ),

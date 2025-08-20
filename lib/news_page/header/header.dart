@@ -21,21 +21,24 @@ class _NewsHeaderState extends State<NewsHeader> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 搜索框
-          Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                hintText: '搜索新闻',
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
-            ),
-          ),
+         Container(
+  height: 50,
+  decoration: BoxDecoration(
+    color: Colors.white, // 固定背景色
+    borderRadius: BorderRadius.circular(10),
+  ),
+  child: TextField(
+    style: TextStyle(color: Colors.black87), // 固定文字颜色
+    decoration: InputDecoration(
+      prefixIcon: Icon(Icons.search, color: Colors.grey), // 固定图标颜色
+      hintText: '搜索新闻',
+      hintStyle: TextStyle(color: Colors.grey), // 固定提示文字颜色
+      border: InputBorder.none,
+      contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+    ),
+  ),
+),
+
           SizedBox(height: 20),
 
           // 五个文字按钮

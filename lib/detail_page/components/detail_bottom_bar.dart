@@ -14,15 +14,15 @@ class DetailBottomBar extends StatelessWidget {
     this.commentCount = 0,
   });
 
-  Widget _buildIconWithText(IconData icon, int count) {
+  Widget _buildIconWithText(IconData icon, int count, Color color) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 20, color: Colors.grey),
+        Icon(icon, size: 20, color: color),
         const SizedBox(height: 2),
         Text(
           '$count',
-          style: const TextStyle(fontSize: 10, color: Colors.grey),
+          style: TextStyle(fontSize: 10, color: color),
         ),
       ],
     );
@@ -30,14 +30,18 @@ class DetailBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? Colors.grey[900] : Colors.white;
+    final inputBgColor = isDark ? Colors.grey[800] : Color(0xFFF0F0F0);
+    final textColor = isDark ? Colors.white70 : Colors.grey;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
-        color: Colors.white,
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: isDark ? Colors.grey[700]! : Color(0xFFEEEEEE))),
+        color: bgColor,
       ),
       height: 100,
-      child: Container(
       child: Row(
         children: [
           // 左侧输入框点击区域
@@ -47,12 +51,12 @@ class DetailBottomBar extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF0F0F0),
+                  color: inputBgColor,
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: const Text(
+                child: Text(
                   '我来评论',
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: textColor),
                 ),
               ),
             ),
@@ -60,14 +64,13 @@ class DetailBottomBar extends StatelessWidget {
           const SizedBox(width: 12),
 
           // 右侧图标栏
-          _buildIconWithText(Icons.star_border, starCount),
+          _buildIconWithText(Icons.star_border, starCount, textColor),
           const SizedBox(width: 16),
-          _buildIconWithText(Icons.thumb_up_off_alt, likeCount),
+          _buildIconWithText(Icons.thumb_up_off_alt, likeCount, textColor),
           const SizedBox(width: 16),
-          _buildIconWithText(Icons.chat_bubble_outline, commentCount),
+          _buildIconWithText(Icons.chat_bubble_outline, commentCount, textColor),
         ],
       ),
-    ),
     );
   }
 }

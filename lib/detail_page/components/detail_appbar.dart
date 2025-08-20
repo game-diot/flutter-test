@@ -7,15 +7,21 @@ class DetailAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? Colors.grey[900] : Colors.white;
+    final fgColor = isDark ? Colors.white : Colors.black;
+
     return AppBar(
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
+        icon: Icon(Icons.arrow_back, color: fgColor),
         onPressed: onBack,
       ),
-      title: const Text('详情'),
+      title: Text(
+        '详情',
+        style: TextStyle(color: fgColor),
+      ),
       centerTitle: true,
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
+      backgroundColor: bgColor,
       elevation: 0,
     );
   }

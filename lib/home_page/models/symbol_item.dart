@@ -1,4 +1,5 @@
 class SymbolItem {
+  
   final String symbolId;
   final String alias;
   final String symbol;
