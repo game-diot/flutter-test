@@ -8,36 +8,45 @@ class NewsHeader extends StatefulWidget {
 }
 
 class _NewsHeaderState extends State<NewsHeader> {
-  int _selectedIndex = 0; // 默认选中第一个
-
+  int _selectedIndex = 0;
   final List<String> _labels = ['热搜', '广场', '原创', 'NFT', '科普'];
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    // 根据主题设置颜色
+    final bgColor = isDark ? Colors.grey[900] : Color.fromRGBO(237, 176, 35, 1);
+    final textColor = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black;
+    final searchBgColor = isDark ? Color(0xFFF2F2F2) : Colors.white; // 修改点
+    final searchTextColor = isDark ? Colors.black87 : Colors.black87;
+    final iconColor = isDark ? Colors.black54 : Colors.grey;
+
     return Container(
-      color: Color.fromRGBO(237, 176, 35, 1), // 背景色
+      color: bgColor,
       padding: EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 搜索框
-         Container(
-  height: 50,
-  decoration: BoxDecoration(
-    color: Colors.white, // 固定背景色
-    borderRadius: BorderRadius.circular(10),
-  ),
-  child: TextField(
-    style: TextStyle(color: Colors.black87), // 固定文字颜色
-    decoration: InputDecoration(
-      prefixIcon: Icon(Icons.search, color: Colors.grey), // 固定图标颜色
-      hintText: '搜索新闻',
-      hintStyle: TextStyle(color: Colors.grey), // 固定提示文字颜色
-      border: InputBorder.none,
-      contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-    ),
-  ),
-),
+          Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: searchBgColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextField(
+              style: TextStyle(color: searchTextColor),
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search, color: iconColor),
+                hintText: '搜索新闻',
+                hintStyle: TextStyle(color: iconColor),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              ),
+            ),
+          ),
 
           SizedBox(height: 20),
 
@@ -57,7 +66,7 @@ class _NewsHeaderState extends State<NewsHeader> {
                     Text(
                       _labels[index],
                       style: TextStyle(
-                        color: Colors.black,
+                        color: textColor,
                         fontSize: 16,
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
@@ -67,7 +76,7 @@ class _NewsHeaderState extends State<NewsHeader> {
                       duration: Duration(milliseconds: 300),
                       width: 40,
                       height: 2,
-                      color: isSelected ? Colors.black : Colors.transparent,
+                      color: isSelected ? textColor : Colors.transparent,
                     ),
                   ],
                 ),

@@ -29,9 +29,10 @@ class CommentedPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: const CommonHeader(title: "被评论"),
+      appBar: AppBar(
+        title: Text('被评论',style: TextStyle(color: Colors.black),),
+        backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+        // 使用系统默认的AppBar替代自定义的CommonHeader以解决类型不匹配问题
       ),
       body: ListView.builder(
         itemCount: commentList.length,

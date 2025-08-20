@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import '../add_page/add.dart';
 
 class Navbar extends StatelessWidget {
@@ -9,17 +10,23 @@ class Navbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
+
+    final backgroundColor = isLight ? Colors.white : Color(0xFF1E1E1E);
+    final selectedColor = isLight ? Color.fromRGBO(41, 46, 56, 1) : Colors.white;
+    final unselectedColor = isLight ? Color.fromRGBO(134, 144, 156, 1) : Colors.grey[400];
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: Color.fromRGBO(134, 144, 156, 0.4), width: 1), 
+          top: BorderSide(color: isLight ? Color.fromRGBO(134, 144, 156, 0.4) : Colors.grey[700]!, width: 1),
         ),
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color.fromRGBO(255, 255, 255, 1),
-        selectedItemColor: const Color.fromRGBO(41, 46, 56, 1),
-        unselectedItemColor: const Color.fromRGBO(134, 144, 156, 1),
+        backgroundColor: backgroundColor,
+        selectedItemColor: selectedColor,
+        unselectedItemColor: unselectedColor,
         currentIndex: currentIndex,
         onTap: (index) {
           if (index == 2) {
@@ -44,7 +51,7 @@ class Navbar extends StatelessWidget {
             icon: Icon(
               Icons.add_circle,
               size: 50,
-              color: Color.fromRGBO(237, 176, 35, 1),
+              color: Color.fromRGBO(237, 176, 35, 1), // 中间按钮固定色
             ),
             label: '',
           ),

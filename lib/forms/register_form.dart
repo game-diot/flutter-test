@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'login_form.dart';
 import 'dart:async';
+import 'login_form_widget/login_form_country_widget.dart';
 import '../network/Get/services/register_send_verification_code.dart';
 import '../network/Get/models/register_send_verification_code.dart';
-import 'login_form_widget/login_form_country_widget.dart';
+
 class RegisterForm extends StatefulWidget {
   final VoidCallback? onSwitchToLogin;
 
@@ -18,19 +18,19 @@ class _RegisterFormState extends State<RegisterForm> {
   String selectedPhoneSuffix = "+86";
   String selectedEmailSuffix = "@qq.com";
   TextEditingController captchaController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
   int _countdown = 0;
   Timer? _timer;
   bool _isSending = false;
-  // 定义国家数据类型
   Map<String, dynamic>? selectedCountry;
 
   final List<String> phoneSuffixes = ["+86", "+99", "+66"];
   final List<String> emailSuffixes = ["@qq.com", "@163.com", "@gmail.com"];
 
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
   @override
   void dispose() {
     _timer?.cancel();
@@ -57,42 +57,69 @@ class _RegisterFormState extends State<RegisterForm> {
   void _sendCaptcha() async {
     final phone = phoneController.text.trim();
     if (phone.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('请输入手机号', style: TextStyle(color: Colors.black),)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('请输入手机号', style: TextStyle(color: Colors.black))),
+      );
       return;
     }
+
     try {
-      // 调用你的服务函数
       final response = await RegisterSendVerificationCodeService.sendCaptcha(
         to: phone,
-        type: '1', // 根据接口定义，默认是 '1'
-        sendType: '1', // 默认 '1'
-        areaCode: selectedPhoneSuffix.replaceAll("+", ""), // 去掉加号
+        type: '1',
+        sendType: '1',
+        areaCode: selectedPhoneSuffix.replaceAll("+", ""),
       );
 
       if (response != null && response.code == 0) {
-        // 成功，开始倒计时
         _startCountdown();
-
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('验证码发送成功')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('验证码发送成功')),
+        );
       } else {
-        // 后端返回失败
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(response?.msg ?? '发送失败')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response?.msg ?? '发送失败')),
+        );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('网络请求失败：$e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('网络请求失败：$e')),
+      );
     }
   }
-  // TODO: 这里调用你的 AuthService.sendCaptcha()
-  // 示例：
-  // AuthService.sendCaptcha(...)
+
+  // 封装固定样式的输入框
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hint,
+    bool obscureText = false,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return TextField(
+      controller: controller,
+      style: TextStyle(color: Colors.black),
+      cursorColor: Colors.black,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(color: Colors.black),
+        contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.black),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.black),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.black),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +133,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () => setState(() => isPhoneSelected = true),
                 child: Text('手机号'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isPhoneSelected
-                      ? Color(0xFFf4f4f5)
-                      : Colors.white,
+                  backgroundColor: isPhoneSelected ? Colors.white : Color(0xFFf4f4f5),
                   foregroundColor: Colors.black,
                   minimumSize: Size(double.infinity, 38),
                   shape: RoundedRectangleBorder(
@@ -123,9 +148,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () => setState(() => isPhoneSelected = false),
                 child: Text('邮箱'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: !isPhoneSelected
-                      ? Color(0xFFf4f4f5)
-                      : Colors.white,
+                  backgroundColor: !isPhoneSelected ? Colors.white : Color(0xFFf4f4f5),
                   foregroundColor: Colors.black,
                   minimumSize: Size(double.infinity, 38),
                   shape: RoundedRectangleBorder(
@@ -137,97 +160,67 @@ class _RegisterFormState extends State<RegisterForm> {
           ],
         ),
         SizedBox(height: 20),
-        // 输入区域
-        isPhoneSelected
-            ? Row(
-  children: [
-    Container(
-      width: 100,
-      child: CountrySelectWidget(
-        onSelected: (country) {
-          setState(() => selectedCountry = country.toJson());
-        },
-      ),
-    ),
-    SizedBox(width: 10),
-    Expanded(
-      child: TextField(
-        controller: phoneController,
-    
-        decoration: InputDecoration(
-          hintText: '请输入手机号',
-          hintStyle: TextStyle(color: Colors.black),
-          contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        keyboardType: TextInputType.phone,
-      ),
-    ),
-  ],
-)
 
-            : Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: emailController,
-                      style: TextStyle(color: Colors.black), 
-                      decoration: InputDecoration(
-                        hintText: '请输入邮箱',
-                        hintStyle: TextStyle(color: Colors.black),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 14,
-                          horizontal: 12,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 120,
-                    child: DropdownButton<String>(
-                       dropdownColor: Colors.white, // ✅ 固定下拉背景色为白色
-                      value: selectedEmailSuffix,
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      items: emailSuffixes
-                          .map(
-                            (suffix) => DropdownMenuItem(
-                              value: suffix,
-                              child: Text(suffix, style: TextStyle(color: Colors.black),),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) =>
-                          setState(() => selectedEmailSuffix = value!),
-                    ),
-                  ),
-                ],
+        // 输入区域
+        if (isPhoneSelected)
+          Row(
+            children: [
+              Container(
+                width: 100,
+                child: CountrySelectWidget(
+                  onSelected: (country) {
+                    setState(() => selectedCountry = country.toJson());
+                  },
+                ),
               ),
+              SizedBox(width: 10),
+              Expanded(
+                child: _buildTextField(
+                  controller: phoneController,
+                  hint: '请输入手机号',
+                  keyboardType: TextInputType.phone,
+                ),
+              ),
+            ],
+          )
+        else
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  controller: emailController,
+                  hint: '请输入邮箱',
+                  keyboardType: TextInputType.emailAddress,
+                ),
+              ),
+              SizedBox(width: 10),
+              Container(
+                width: 120,
+                child: DropdownButton<String>(
+                  dropdownColor: Colors.white,
+                  value: selectedEmailSuffix,
+                  isExpanded: true,
+                  underline: SizedBox(),
+                  items: emailSuffixes
+                      .map((suffix) => DropdownMenuItem(
+                            value: suffix,
+                            child: Text(suffix, style: TextStyle(color: Colors.black)),
+                          ))
+                      .toList(),
+                  onChanged: (value) => setState(() => selectedEmailSuffix = value!),
+                ),
+              ),
+            ],
+          ),
+
         SizedBox(height: 12),
+        // 验证码
         Row(
           children: [
             Expanded(
-              child: TextField(
+              child: _buildTextField(
                 controller: captchaController,
-                style: TextStyle(color: Colors.black), 
-                decoration: InputDecoration(
-                  hintText: '请输入验证码',
-                  hintStyle: TextStyle(color: Colors.black),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 12,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
+                hint: '请输入验证码',
                 keyboardType: TextInputType.number,
               ),
             ),
@@ -248,30 +241,20 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
           ],
         ),
+
         SizedBox(height: 12),
-        TextField(
+        _buildTextField(
           controller: passwordController,
-          style: TextStyle(color: Colors.black), 
+          hint: '请输入密码',
           obscureText: true,
-          decoration: InputDecoration(
-            hintText: '请输入密码',
-            hintStyle: TextStyle(color: Colors.black),
-            contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          ),
         ),
         SizedBox(height: 12),
-        TextField(
+        _buildTextField(
           controller: confirmPasswordController,
-          style: TextStyle(color: Colors.black), 
+          hint: '请再次输入密码',
           obscureText: true,
-          decoration: InputDecoration(
-            hintText: '请再次输入密码',
-            hintStyle: TextStyle(color: Colors.black),
-            contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          ),
         ),
+
         SizedBox(height: 24),
         SizedBox(
           width: double.infinity,

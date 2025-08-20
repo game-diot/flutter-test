@@ -29,7 +29,7 @@ class MyPostsPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: Text('我的帖子')),
+      appBar: AppBar(title: Text('我的帖子'),backgroundColor: const Color.fromARGB(0, 255, 255, 255),),
       body: ListView.builder(
         itemCount: postList.length,
         itemBuilder: (context, index) {

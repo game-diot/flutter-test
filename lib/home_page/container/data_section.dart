@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/symbol_item.dart';
 import '../services/api_service.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 
 class DataSection extends StatefulWidget {
   final List<SymbolItem> coinList;
@@ -23,10 +24,7 @@ class _DataSectionState extends State<DataSection> {
   @override
   void initState() {
     super.initState();
-    // 直接使用传入的 coinList，不再重复请求
     _coinList = widget.coinList;
-    // 如果需要交易所数据，可以在这里单独请求
-    // _fetchExchangeData();
   }
 
   void _onTextClicked(int index) {
@@ -81,81 +79,73 @@ class _DataSectionState extends State<DataSection> {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
+
+    final textColor = isLight ? Colors.black : Colors.white;
+    final subTextColor = isLight ? Colors.grey[700] : Colors.grey[400];
+    final dividerColor = isLight ? Colors.grey.withOpacity(0.3) : Colors.grey[700];
+
     return Container(
       height: 400,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      color: isLight ? Colors.white : Color(0xFF1E1E1E),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// 切换栏
-          /// 切换栏 + 分割线
-Column(
-  children: [
-    Row(
-  mainAxisAlignment: MainAxisAlignment.start, // 从左排列
-  children: List.generate(4, (index) {
-    final labels = ['主流币', '热门榜', '涨幅榜', '交易所'];
-    final isSelected = _selectedIndex == index;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: List.generate(4, (index) {
+                  final labels = ['主流币', '热门榜', '涨幅榜', '交易所'];
+                  final isSelected = _selectedIndex == index;
+                  final labelColor = isSelected ? textColor : subTextColor;
 
-    Color textColor = isDark
-        ? Colors.white.withOpacity(isSelected ? 1.0 : 0.7)
-        : (isSelected ? Colors.black : Colors.grey);
-    Color borderColor = Color.fromRGBO(237, 176, 35, 1);
-
-    return SizedBox(
-      width: 80, // 固定宽度
-      child: GestureDetector(
-        onTap: () => _onTextClicked(index),
-        child: Column(
-          children: [
-            Text(
-              labels[index],
-              style: TextStyle(
-                fontSize: 16,
-                color: textColor,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  return SizedBox(
+                    width: 80,
+                    child: GestureDetector(
+                      onTap: () => _onTextClicked(index),
+                      child: Column(
+                        children: [
+                          Text(
+                            labels[index],
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: labelColor,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
+                          if (isSelected)
+                            Container(
+                              height: 2,
+                              width: 40,
+                              color: Color.fromRGBO(237, 176, 35, 1),
+                              margin: EdgeInsets.only(top: 4),
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
               ),
-            ),
-            if (isSelected)
-              Container(
-                height: 2,
-                width: 40,
-                color: borderColor,
-                margin: EdgeInsets.only(top: 4),
-              ),
-          ],
-        ),
-      ),
-    );
-  }),
-),
-
-    SizedBox(height: 8),
-    
-    // 分割线
-    Container(
-      height: 1,
-      color: Colors.grey.withOpacity(0.3),
-    ),
-  ],
-),
-
+              SizedBox(height: 8),
+              Container(height: 1, color: dividerColor),
+            ],
+          ),
 
           SizedBox(height: 8),
 
           /// 表格内容
           Expanded(
-            child: _selectedIndex == 3
-                ? _buildExchangeTable()
-                : _buildCoinTable(),
+            child: _selectedIndex == 3 ? _buildExchangeTable(textColor, subTextColor) : _buildCoinTable(textColor, subTextColor),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCoinTable() {
+  Widget _buildCoinTable(Color textColor, Color? subTextColor) {
     if (_coinList.isEmpty) {
       return Center(child: CircularProgressIndicator());
     }
@@ -172,12 +162,11 @@ Column(
                   onTap: () => _onSortCoin('名称'),
                   child: Row(
                     children: [
-                      Text('名称', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('名称', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
                       Icon(
-                        _sortAscCoin['名称']!
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
+                        _sortAscCoin['名称']! ? Icons.arrow_upward : Icons.arrow_downward,
                         size: 16,
+                        color: subTextColor,
                       ),
                     ],
                   ),
@@ -190,12 +179,11 @@ Column(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('价格', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('价格', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
                       Icon(
-                        _sortAscCoin['价格']!
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
+                        _sortAscCoin['价格']! ? Icons.arrow_upward : Icons.arrow_downward,
                         size: 16,
+                        color: subTextColor,
                       ),
                     ],
                   ),
@@ -208,12 +196,11 @@ Column(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('涨幅比', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('涨幅比', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
                       Icon(
-                        _sortAscCoin['涨幅比']!
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
+                        _sortAscCoin['涨幅比']! ? Icons.arrow_upward : Icons.arrow_downward,
                         size: 16,
+                        color: subTextColor,
                       ),
                     ],
                   ),
@@ -228,6 +215,8 @@ Column(
             itemCount: _coinList.length,
             itemBuilder: (context, index) {
               final item = _coinList[index];
+              final change = item.miniKlinePriceList.length > 1 ? item.miniKlinePriceList[1] : 0.0;
+
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: Row(
@@ -246,24 +235,21 @@ Column(
                       },
                     ),
                     SizedBox(width: 8),
-                    Expanded(flex: 2, child: Text(item.alias)),
+                    Expanded(flex: 2, child: Text(item.alias, style: TextStyle(color: textColor))),
                     Expanded(
                       flex: 1,
                       child: Text(
                         '¥${item.miniKlinePriceList.isNotEmpty ? item.miniKlinePriceList[0].toStringAsFixed(2) : "0.00"}',
                         textAlign: TextAlign.right,
+                        style: TextStyle(color: textColor),
                       ),
                     ),
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '${item.miniKlinePriceList.length > 1 ? item.miniKlinePriceList[1].toStringAsFixed(2) : "0.00"}%',
+                        '${change.toStringAsFixed(2)}%',
                         textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: item.miniKlinePriceList.length > 1 && item.miniKlinePriceList[1] >= 0
-                              ? Colors.green
-                              : Colors.red,
-                        ),
+                        style: TextStyle(color: change >= 0 ? Colors.green : Colors.red),
                       ),
                     ),
                   ],
@@ -276,15 +262,15 @@ Column(
     );
   }
 
-  Widget _buildExchangeTable() {
+  Widget _buildExchangeTable(Color textColor, Color? subTextColor) {
     if (_exchangeList.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('暂无交易所数据'),
+            Text('暂无交易所数据', style: TextStyle(color: textColor)),
             SizedBox(height: 10),
-            Text('请切换到其他选项卡', style: TextStyle(color: Colors.grey)),
+            Text('请切换到其他选项卡', style: TextStyle(color: subTextColor)),
           ],
         ),
       );
@@ -302,12 +288,11 @@ Column(
                   onTap: () => _onSortExchange('名称'),
                   child: Row(
                     children: [
-                      Text('名称', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('名称', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
                       Icon(
-                        _sortAscExchange['名称']!
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
+                        _sortAscExchange['名称']! ? Icons.arrow_upward : Icons.arrow_downward,
                         size: 16,
+                        color: subTextColor,
                       ),
                     ],
                   ),
@@ -320,12 +305,11 @@ Column(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('交易额', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('交易额', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
                       Icon(
-                        _sortAscExchange['交易额']!
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
+                        _sortAscExchange['交易额']! ? Icons.arrow_upward : Icons.arrow_downward,
                         size: 16,
+                        color: subTextColor,
                       ),
                     ],
                   ),
@@ -338,12 +322,11 @@ Column(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('评分', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('评分', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
                       Icon(
-                        _sortAscExchange['评分']!
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
+                        _sortAscExchange['评分']! ? Icons.arrow_upward : Icons.arrow_downward,
                         size: 16,
+                        color: subTextColor,
                       ),
                     ],
                   ),
@@ -362,12 +345,13 @@ Column(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   children: [
-                    Expanded(flex: 2, child: Text(item.alias)),
+                    Expanded(flex: 2, child: Text(item.alias, style: TextStyle(color: textColor))),
                     Expanded(
-                      flex: 1, 
+                      flex: 1,
                       child: Text(
                         '${item.volume24h.toStringAsFixed(2)}',
                         textAlign: TextAlign.right,
+                        style: TextStyle(color: textColor),
                       ),
                     ),
                     Expanded(
@@ -375,6 +359,7 @@ Column(
                       child: Text(
                         '${(item.priceAccuracy * 100).toInt()}%',
                         textAlign: TextAlign.right,
+                        style: TextStyle(color: textColor),
                       ),
                     ),
                   ],

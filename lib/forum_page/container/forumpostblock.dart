@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../detail_page/detail_page.dart';
 
 class ForumPostBlock extends StatelessWidget {
-  final IconData tagIcon;
   final String title;
   final String author;
   final String content;
@@ -12,7 +11,6 @@ class ForumPostBlock extends StatelessWidget {
 
   const ForumPostBlock({
     Key? key,
-    required this.tagIcon,
     required this.title,
     required this.author,
     required this.content,
@@ -77,12 +75,7 @@ class ForumPostBlock extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 左侧标签
-                Column(
-                  children: [
-                    Icon(tagIcon, size: 24, color: iconColor),
-                  ],
-                ),
+                // 左侧标
                 SizedBox(width: 12),
                 // 右侧内容
                 Expanded(
@@ -104,9 +97,19 @@ class ForumPostBlock extends StatelessWidget {
                       // 作者信息
                       Row(
                         children: [
-                          Icon(Icons.account_circle, size: 16, color: iconColor),
+                          Icon(
+                            Icons.account_circle,
+                            size: 20,
+                            color: iconColor,
+                          ),
                           SizedBox(width: 4),
-                          Text(author, style: TextStyle(fontSize: 12, color: subtitleColor)),
+                          Text(
+                            author,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: subtitleColor,
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(height: 6),
@@ -122,13 +125,29 @@ class ForumPostBlock extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Icon(Icons.favorite_border, size: 16, color: subtitleColor),
+                          Icon(
+                            Icons.favorite_border,
+                            size: 16,
+                            color: subtitleColor,
+                          ),
                           SizedBox(width: 4),
-                          Text('$likes', style: TextStyle(fontSize: 12, color: subtitleColor)),
+                          Text(
+                            '$likes',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: subtitleColor,
+                            ),
+                          ),
                           SizedBox(width: 16),
                           Icon(Icons.comment, size: 16, color: subtitleColor),
                           SizedBox(width: 4),
-                          Text('$comments', style: TextStyle(fontSize: 12, color: subtitleColor)),
+                          Text(
+                            '$comments',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: subtitleColor,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -138,10 +157,11 @@ class ForumPostBlock extends StatelessWidget {
             ),
           ),
           // 排行榜徽章
+          // 排行榜徽章
           if (rank != null)
             Positioned(
-              right: 6,
-              top: 1,
+              left: 16, // 左侧内边距，紧贴帖子左边缘
+              top: 4, // 上方间距
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(

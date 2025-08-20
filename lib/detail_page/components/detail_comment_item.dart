@@ -34,7 +34,7 @@ class DetailCommentItem extends StatelessWidget {
               children: [
                 Text(
                   username,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Color.fromRGBO(134, 144, 156, 1)),
                 ),
                 const SizedBox(height: 4),
                 Text(content),
@@ -66,7 +66,7 @@ class DetailCommentItem extends StatelessWidget {
                           },
                           child: const Text(
                             '点击展开评论',
-                            style: TextStyle(fontSize: 12, color: Colors.blue),
+                            style: TextStyle(fontSize: 12, color: Color.fromRGBO(237, 176, 35, 1)),
                           ),
                         ),
                       ),

@@ -23,15 +23,35 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
+      // 亮色主题
       light: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.white, // 设置背景为白色
+        scaffoldBackgroundColor: Colors.white, // 页面背景白色
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue, // 顶部栏亮色
+          foregroundColor: Colors.white,
+        ),
+        cardColor: Colors.white, // 卡片背景
+        textTheme: TextTheme(
+          bodyMedium: TextStyle(color: Colors.black87), // 文字颜色
+        ),
+        iconTheme: IconThemeData(color: Colors.black87),
       ),
+      // 暗色主题
       dark: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Colors.white, // 暗黑模式也设置为白色
+        scaffoldBackgroundColor: Color(0xFF121212), // 暗黑背景
+        appBarTheme: AppBarTheme(
+          backgroundColor: Color(0xFF1F1F1F),
+          foregroundColor: Colors.white,
+        ),
+        cardColor: Color(0xFF1E1E1E), // 卡片背景
+        textTheme: TextTheme(
+          bodyMedium: TextStyle(color: Colors.white70),
+        ),
+        iconTheme: IconThemeData(color: Colors.white70),
       ),
       initial: savedThemeMode ?? AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => MaterialApp(

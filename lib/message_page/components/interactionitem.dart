@@ -24,6 +24,7 @@ class InteractionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -50,7 +51,7 @@ class InteractionItem extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: const Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(content),

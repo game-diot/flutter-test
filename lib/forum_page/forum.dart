@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'header/header.dart';
 import '../components/navbar.dart';
 import 'container/forumpostblock.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ForumPage extends StatefulWidget {
   @override
@@ -31,14 +32,16 @@ class _ForumPageState extends State<ForumPage> {
   }
 
   // 功能按钮组件
-  Widget buildFunctionButton(int index, IconData icon, String label) {
+  Widget buildFunctionButton(
+    int index,
+    String svgPath,
+    String label,
+  ) {
     bool isSelected = _selectedFunctionIndex == index;
     bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     Color backgroundColor = isDark ? Colors.grey[850]! : Colors.white;
-    Color borderColor = isSelected
-        ? Color.fromRGBO(237, 176, 35, 1)
-        : (isDark ? Colors.grey[700]! : Colors.grey);
+    Color borderColor = Color.fromRGBO(134, 144, 156, 0.4);
     Color iconColor = isSelected
         ? Color.fromRGBO(237, 176, 35, 1)
         : (isDark ? Colors.white : Colors.black);
@@ -53,30 +56,35 @@ class _ForumPageState extends State<ForumPage> {
           _selectedFunctionIndex = index;
         });
       },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          border: Border.all(color: borderColor, width: 1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 30, color: iconColor),
-            SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: textColor,
-              ),
+      child: Column(
+        children: [
+          // 图标部分
+          Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              border: Border.all(color: borderColor, width: 1),
+              borderRadius: BorderRadius.circular(8),
             ),
-            SizedBox(height: 4),
-            Container(width: 40, height: 2, color: bottomBarColor),
-          ],
-        ),
+            child: SvgPicture.asset(
+              svgPath,
+              width: 30,
+              height: 28,
+              color: iconColor,
+            ),
+          ),
+          SizedBox(height: 6),
+          // 文本部分
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: isDark ? Color.fromRGBO(223, 229, 236,1) : Colors.black,
+            ),
+          ),
+          SizedBox(height: 2),
+          // 数字/计数
+        ],
       ),
     );
   }
@@ -100,10 +108,26 @@ class _ForumPageState extends State<ForumPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  buildFunctionButton(0, Icons.people, '今日热门'),
-                  buildFunctionButton(1, Icons.lightbulb, '每周必看'),
-                  buildFunctionButton(2, Icons.thumb_up, '热议话题'),
-                  buildFunctionButton(3, Icons.chat, '辟谣专区'),
+                  buildFunctionButton(
+                    0,
+                    'assets/images/hot.svg',
+                    '今日热门',
+                  ),
+                  buildFunctionButton(
+                    1,
+                    'assets/images/week.svg',
+                    '每周必看',
+                  ),
+                  buildFunctionButton(
+                    2,
+                    'assets/images/topic.svg',
+                    '热议话题',
+                  ),
+                  buildFunctionButton(
+                    3,
+                    'assets/images/fake.svg',
+                    '辟谣专区',
+                  ),
                 ],
               ),
             ),
@@ -115,7 +139,7 @@ class _ForumPageState extends State<ForumPage> {
                 child: Column(
                   children: [
                     ForumPostBlock(
-                      tagIcon: Icons.whatshot,
+
                       title: '区块链最新动态',
                       author: '张三',
                       content: '今天区块链又有新的发展趋势，需要关注市场变化...',
@@ -124,7 +148,7 @@ class _ForumPageState extends State<ForumPage> {
                       rank: 1,
                     ),
                     ForumPostBlock(
-                      tagIcon: Icons.whatshot,
+
                       title: '区块链最新动态',
                       author: '张三',
                       content: '今天区块链又有新的发展趋势，需要关注市场变化...',
@@ -133,7 +157,7 @@ class _ForumPageState extends State<ForumPage> {
                       rank: 2,
                     ),
                     ForumPostBlock(
-                      tagIcon: Icons.whatshot,
+
                       title: '区块链最新动态',
                       author: '张三',
                       content: '今天区块链又有新的发展趋势，需要关注市场变化...',
@@ -142,7 +166,7 @@ class _ForumPageState extends State<ForumPage> {
                       rank: 3,
                     ),
                     ForumPostBlock(
-                      tagIcon: Icons.whatshot,
+
                       title: '区块链最新动态',
                       author: '张三',
                       content: '今天区块链又有新的发展趋势，需要关注市场变化...',
@@ -151,7 +175,7 @@ class _ForumPageState extends State<ForumPage> {
                       rank: 4,
                     ),
                     ForumPostBlock(
-                      tagIcon: Icons.lightbulb,
+
                       title: '心得分享：Flutter布局经验',
                       author: '李四',
                       content: '在实际开发中，使用Row+Column可以更好地处理复杂布局...',

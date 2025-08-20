@@ -20,7 +20,9 @@ class _ForumHeaderState extends State<ForumHeader> {
     Color textColor = isDark
         ? Colors.white.withOpacity(isSelected ? 1.0 : 0.7)
         : (isSelected ? Colors.black : Colors.grey);
-    Color borderColor =  const Color.fromRGBO(237, 176, 35, 1);
+    Color borderColor = isDark
+        ? Colors.transparent
+        : Color.fromRGBO(237, 176, 35, 1);
 
     return GestureDetector(
       onTap: () {
@@ -52,8 +54,8 @@ class _ForumHeaderState extends State<ForumHeader> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? Colors.grey[900] : Colors.white;
-    final searchBg = Colors.white;
-    final searchIconColor =  Colors.grey;
+    final searchBg = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.white;
+    final searchIconColor = Colors.grey;
 
     return Column(
       children: [
@@ -63,8 +65,8 @@ class _ForumHeaderState extends State<ForumHeader> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: searchBg,
-              borderRadius: BorderRadius.circular(25),
+              color: Color.fromRGBO(223, 229, 236, 1),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: TextField(
               style: TextStyle(color: Colors.black),
@@ -73,8 +75,10 @@ class _ForumHeaderState extends State<ForumHeader> {
                 hintText: '搜索论坛',
                 hintStyle: TextStyle(color: searchIconColor),
                 border: InputBorder.none,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 20,
+                ),
               ),
             ),
           ),

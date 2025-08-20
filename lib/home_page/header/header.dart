@@ -9,7 +9,7 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
-  AdaptiveThemeMode? _themeMode;
+  late AdaptiveThemeMode _themeMode;
 
   @override
   void didChangeDependencies() {
@@ -35,6 +35,7 @@ class _HeaderState extends State<Header> {
     return Row(
       children: [
         const SizedBox(width: 16),
+        // 固定头像
         const CircleAvatar(
           radius: 20,
           backgroundColor: Colors.white,
@@ -45,18 +46,18 @@ class _HeaderState extends State<Header> {
           ),
         ),
         const SizedBox(width: 20),
-        // 固定颜色输入框
+        // 固定颜色搜索框
         Container(
           width: 200,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: const Color(0xfff2f2f2), // 固定背景色
+            color: const Color(0xfff2f2f2),
           ),
           child: Row(
             children: const [
               Padding(
-                padding: EdgeInsets.only(top: 5), // 向下偏移 2px
+                padding: EdgeInsets.only(top: 5),
                 child: Icon(Icons.search, color: Colors.grey, size: 26),
               ),
               Expanded(
@@ -73,12 +74,15 @@ class _HeaderState extends State<Header> {
           ),
         ),
         const SizedBox(width: 20),
-        const Icon(Icons.public, size: 36),
+        // 公共图标，可随主题改变
+        Icon(Icons.public, size: 36, color: isLight ? Colors.black : Colors.white),
         const SizedBox(width: 16),
+        // 主题切换按钮
         IconButton(
           icon: Icon(
-            isLight ? Icons.dark_mode : Icons.light_mode, // 切换图标
+            isLight ? Icons.dark_mode : Icons.light_mode,
             size: 36,
+            color: isLight ? Colors.black : Colors.white,
           ),
           onPressed: _toggleTheme,
         ),

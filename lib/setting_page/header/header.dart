@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../my_article/my_post_page.dart';
+import '../../message_page/commons_page.dart';
+import '../../message_page/likes_page.dart';
 
 class SettingPageHeader extends StatelessWidget {
   const SettingPageHeader({Key? key}) : super(key: key);
@@ -6,7 +9,7 @@ class SettingPageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromRGBO(237, 176, 35,1), // 统一背景色（深蓝色），可以改成你需要的颜色
+      color: Color.fromRGBO(81, 63, 41, 1), // 背景色
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         children: [
@@ -30,7 +33,7 @@ class SettingPageHeader extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white70, // 文本改成白色，更清晰
+                        color: Colors.white70,
                       ),
                     ),
                     Text(
@@ -54,23 +57,54 @@ class SettingPageHeader extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: [
-                _infoItem('收藏', '12'),
+                // 收藏
+                _infoItem(
+                  context,
+                  '收藏',
+                  '12',
+                 
+                ),
                 SizedBox(width: 24),
-                _infoItem('被点赞', '34'),
+                // 被点赞
+                _infoItem(
+                  context,
+                  '被点赞',
+                  '34',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => LikedPage()),
+                    );
+                  },
+                ),
                 SizedBox(width: 24),
-                _infoItem('被评论', '56'),
+                // 被评论
+                _infoItem(
+                  context,
+                  '被评论',
+                  '56',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => CommentedPage()),
+                    );
+                  },
+                ),
                 Spacer(),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(237, 176, 35, 1),
+                    backgroundColor: Color.fromRGBO(81, 63, 41, 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                       side: BorderSide(color: Colors.white, width: 1),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
-                  child: Text('编辑资料',style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    '编辑资料',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -80,26 +114,29 @@ class SettingPageHeader extends StatelessWidget {
     );
   }
 
-  Widget _infoItem(String title, String count) {
-    return Column(
-      children: [
-        Text(
-          count,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: Colors.white, // 数字文字也改成白色
+  Widget _infoItem(BuildContext context, String title, String count, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Text(
+            count,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.white,
+            ),
           ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          title,
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
+          SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 12,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

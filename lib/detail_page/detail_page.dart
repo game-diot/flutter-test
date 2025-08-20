@@ -50,7 +50,7 @@ class DetailPage extends StatelessWidget {
                 child: Text(
                   '评论输入框...',
                   style: TextStyle(
-                      color: isDark ? Colors.white : Colors.black),
+                      color: isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black),
                 ),
               ),
             ),

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import '../my_article/components/article_card.dart';
 import 'components/interactionitem.dart';
-
+import '../my_article/components/common_header.dart';
 class LikedPage extends StatelessWidget {
   const LikedPage({Key? key}) : super(key: key);
 
@@ -29,7 +29,11 @@ class LikedPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("被点赞")),
+      appBar: AppBar(
+        title: Text('被点赞',style: TextStyle(color: Colors.black),),
+        backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+        // 使用系统默认的AppBar替代自定义的CommonHeader以解决类型不匹配问题
+      ),
       body: ListView.builder(
         itemCount: likedList.length,
         itemBuilder: (context, index) {

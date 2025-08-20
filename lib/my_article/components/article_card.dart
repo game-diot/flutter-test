@@ -26,62 +26,93 @@ class ArticleCard extends StatelessWidget {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 文章标题
-            Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      child: Container(
+        color: Color.fromRGBO(255, 255, 255, 1),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 文章标题
+              Text(
+                title,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
 
-            SizedBox(height: 8),
+              SizedBox(height: 8),
 
-            // 用户信息
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(avatarUrl),
-                  radius: 14,
-                ),
-                SizedBox(width: 8),
-                Text(username, style: TextStyle(fontSize: 14)),
-              ],
-            ),
+              // 用户信息
+              Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(avatarUrl),
+                    radius: 14,
+                  ),
+                  SizedBox(width: 8),
+                  Text(username, style: TextStyle(fontSize: 14)),
+                ],
+              ),
 
-            SizedBox(height: 8),
+              SizedBox(height: 8),
 
-            // 内容概览
-            Text(
-              content,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.grey[700]),
-            ),
+              // 内容概览
+              Text(
+                content,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.grey[700]),
+              ),
 
-            SizedBox(height: 12),
+              SizedBox(height: 12),
 
-            // 底部操作栏
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.thumb_up_off_alt, size: 16, color: Colors.grey),
-                    SizedBox(width: 4),
-                    Text('$likes'),
-                    SizedBox(width: 12),
-                    Icon(Icons.comment, size: 16, color: Colors.grey),
-                    SizedBox(width: 4),
-                    Text('$comments'),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: onMore,
-                  child: Text("更多操作", style: TextStyle(color: Colors.blue)),
-                )
-              ],
-            )
-          ],
+              // 底部操作栏
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        '$likes',
+                        style: TextStyle(
+                          color: Color.fromRGBO(134, 144, 156, 1),
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '点赞数',
+                        style: TextStyle(
+                          color: Color.fromRGBO(134, 144, 156, 1),
+                        ),
+                      ),
+
+                      SizedBox(width: 12),
+                      Text(
+                        '$comments',
+                        style: TextStyle(
+                          color: Color.fromRGBO(134, 144, 156, 1),
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '评论数',
+                        style: TextStyle(
+                          color: Color.fromRGBO(134, 144, 156, 1),
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: onMore,
+                    child: Text(
+                      "更多操作",
+                      style: TextStyle(color: Color.fromRGBO(134, 144, 156, 1)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

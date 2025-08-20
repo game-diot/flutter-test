@@ -3,6 +3,7 @@ import 'header/header.dart';
 import '../my_article/my_likes_page.dart';
 import '../my_article/my_post_page.dart';
 import 'components/Setting_item.dart';
+
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
 
@@ -80,7 +81,13 @@ class SettingPage extends StatelessWidget {
           '简体中文',
           isArrow: true,
         ),
-        _buildSettingItem(context, Icons.light_mode, '主题', '${isDark ? '暗黑' : '明亮'}', isArrow: true),
+        _buildSettingItem(
+          context,
+          Icons.light_mode,
+          '主题',
+          '${isDark ? '暗黑' : '明亮'}',
+          isArrow: true,
+        ),
         _buildSettingItem(context, Icons.show_chart, '涨跌颜色', '', isArrow: true),
         _buildSettingItem(context, Icons.feedback, '意见反馈', '', isArrow: true),
         _buildSettingItem(context, Icons.logout, '注销账号', ''),
@@ -97,48 +104,48 @@ class SettingPage extends StatelessWidget {
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.grey[300]!),
-        ),
+    return Material(
+      color: Colors.white, // 背景白色
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: Color.fromRGBO(134, 144, 156, 0.4),
+          width: 0.4,
+        ), // 黑色边框
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // 数字
-          Text(
-            count,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white : Colors.black,
-            ),
-          ),
-          SizedBox(height: 4),
-          // 文字 + 箭头
-          Row(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12), // 水波纹圆角
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // 数字
               Text(
-                title,
+                count,
                 style: TextStyle(
-                  fontSize: 14,
-                  color: isDark ? Colors.white : Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
-              SizedBox(width: 4),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 14,
-                color: isDark ? Colors.white : Colors.black,
+              const SizedBox(height: 4),
+              // 文字 + 箭头
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 14, color: Colors.black),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(Icons.arrow_forward_ios, size: 14, color: Colors.black),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -185,7 +192,9 @@ class SettingPage extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 16,
-                color: isDark ? Colors.white : Colors.grey[700],
+                color: isDark
+                    ? Colors.white
+                    : Color.fromRGBO(134, 144, 156, 0.4),
               ),
           ],
         ),

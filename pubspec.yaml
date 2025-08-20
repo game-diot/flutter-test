@@ -40,3 +40,7 @@ flutter:
     - assets/images/news_blue.png
     - assets/images/ad_banner.png
     - assets/images/book.svg
+    - assets/images/hot.svg
+    - assets/images/week.svg
+    - assets/images/topic.svg
+    - assets/images/fake.svg

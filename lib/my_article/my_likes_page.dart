@@ -32,7 +32,8 @@ Widget _buildActionButton({
     // 示例数据与上面类似
     return Scaffold(
       appBar: AppBar(
-        title: Text('我的点赞'),
+        title: Text('我的点赞',style: TextStyle(color: Colors.black),),
+        backgroundColor: const Color.fromARGB(0, 255, 255, 255),
         // 使用系统默认的AppBar替代自定义的CommonHeader以解决类型不匹配问题
       ),
       body: ListView(

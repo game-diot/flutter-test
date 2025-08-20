@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/symbol_item.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 
 class SymbolCarousel extends StatelessWidget {
   final List<SymbolItem> coinList;
@@ -8,6 +9,8 @@ class SymbolCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
+
     if (coinList.isEmpty) {
       return Center(child: CircularProgressIndicator());
     }
@@ -16,8 +19,10 @@ class SymbolCarousel extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: Color.fromRGBO(134, 144, 156, 0.4), // 上边框颜色
-            width: 0.4, // 上边框宽度
+            color: isLight
+                ? Color.fromRGBO(134, 144, 156, 0.4)
+                : Colors.grey.withOpacity(0.4),
+            width: 0.4,
           ),
         ),
       ),
@@ -30,29 +35,31 @@ class SymbolCarousel extends StatelessWidget {
           final item = coinList[index];
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: _buildCard(context, item),
+            child: _buildCard(context, item, isLight),
           );
         },
       ),
     );
   }
 
-  Widget _buildCard(BuildContext context, SymbolItem item) {
+  Widget _buildCard(BuildContext context, SymbolItem item, bool isLight) {
     final price = item.miniKlinePriceList.isNotEmpty
         ? item.miniKlinePriceList[0]
         : 0.0;
     final change = item.miniKlinePriceList.length > 1
         ? item.miniKlinePriceList[1]
         : 0.0;
-    final lineData = item.miniKlinePriceList.take(10).toList(); // 只取前10个价格画图
+    final lineData = item.miniKlinePriceList.take(10).toList();
 
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 255, 255, 255),
+        color: isLight ? Colors.white : Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: isLight
+                ? Colors.black.withOpacity(0.05)
+                : Colors.black.withOpacity(0.3),
             blurRadius: 4,
             offset: Offset(2, 2),
           ),
@@ -64,15 +71,25 @@ class SymbolCarousel extends StatelessWidget {
         children: [
           Text(
             item.alias,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: isLight ? Colors.black : Colors.white,
+            ),
           ),
           SizedBox(height: 4),
-          Text('价格：¥${price.toStringAsFixed(2)}'),
-          Text('涨幅：${change.toStringAsFixed(2)}%'),
+          Text(
+            '价格：¥${price.toStringAsFixed(2)}',
+            style: TextStyle(color: isLight ? Colors.black : Colors.white),
+          ),
+          Text(
+            '涨幅：${change.toStringAsFixed(2)}%',
+            style: TextStyle(color: change >= 0 ? Colors.green : Colors.red),
+          ),
           SizedBox(height: 8),
           Expanded(
             child: CustomPaint(
-              painter: LineChartPainter(lineData),
+              painter: LineChartPainter(lineData, isLight),
               size: Size(double.infinity, 60),
             ),
           ),
@@ -84,13 +101,14 @@ class SymbolCarousel extends StatelessWidget {
 
 class LineChartPainter extends CustomPainter {
   final List<double> data;
+  final bool isLight;
 
-  LineChartPainter(this.data);
+  LineChartPainter(this.data, this.isLight);
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.orange
+      ..color = isLight ? Colors.orange : Colors.yellowAccent
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
