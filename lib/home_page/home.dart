@@ -12,9 +12,12 @@ import 'models/symbol_item.dart';
 import 'services/api_service.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   List<SymbolItem> _coinList = [];
@@ -23,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchCoinList(); // 数据请求在 initState 中
+    _fetchCoinList();
   }
 
   Future<void> _fetchCoinList() async {
@@ -44,14 +47,32 @@ class _HomePageState extends State<HomePage> {
     setState(() => _currentIndex = index);
   }
 
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    // 根据页面和主题动态设置 AppBar 背景
+    if (_currentIndex == 4) {
+      // Setting 页面固定深色
+      return AppBar(toolbarHeight: 0, backgroundColor: const Color.fromRGBO(81, 63, 41, 1), elevation: 0);
+    } else {
+      return AppBar(
+        toolbarHeight: 0,
+        backgroundColor: isDark
+            ? const Color.fromRGBO(18, 18, 18, 1) // 暗色背景
+            : const Color.fromRGBO(237, 176, 35, 1), // 明亮背景
+        elevation: 0,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // 页面列表，这里延迟调用 _buildMarketPage，保证 Theme 可用
-    final List<Widget> pages = [
-      _buildMarketPage(theme, isDark),
+    final pages = [
+      _buildMarketPage(theme),
       NewsPage(),
       AddPage(),
       ForumPage(),
@@ -59,29 +80,33 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-        backgroundColor: theme.primaryColor,
-        elevation: 0,
-      ),
+      appBar: _buildAppBar(context),
       body: _isLoading && _currentIndex == 0
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(color: theme.colorScheme.primary),
+            )
           : pages[_currentIndex],
       bottomNavigationBar: Navbar(
         currentIndex: _currentIndex,
         onTabSelected: _onTabSelected,
       ),
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: theme.colorScheme.background,
     );
   }
 
-  Widget _buildMarketPage(ThemeData theme, bool isDark) {
+  Widget _buildMarketPage(ThemeData theme) {
+    final isDark = theme.brightness == Brightness.dark;
+
     return SingleChildScrollView(
-      physics: ClampingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       child: Column(
         children: [
           // Header 区域
-          Container(color: theme.primaryColor, child: Column(children: [Header(), SizedBox(height: 10)])),
+          Container(
+            color: isDark ? Colors.black : const Color.fromRGBO(237, 176, 35, 1),
+            child: const Column(children: [Header(), SizedBox(height: 10)]),
+          ),
+          const SizedBox(height: 10),
 
           // 广告图
           Padding(
@@ -89,7 +114,7 @@ class _HomePageState extends State<HomePage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: SizedBox(
-                width: 380,
+                width: double.infinity,
                 height: 150,
                 child: Image.asset(
                   'assets/images/行情页广告图.png',
@@ -107,10 +132,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          const SizedBox(height: 10),
 
-          SizedBox(height: 10),
+          // 全球指数标题
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -118,28 +144,37 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: theme.textTheme.bodyMedium?.color,
+                  color: theme.colorScheme.onBackground,
                 ),
               ),
             ),
           ),
+          const SizedBox(height: 10),
 
-          SizedBox(height: 10),
+          // Carousel 区块
           Container(
             color: theme.cardColor,
             child: _isLoading
-                ? Container(height: 150, child: Center(child: CircularProgressIndicator()))
+                ? SizedBox(
+                    height: 150,
+                    child: Center(child: CircularProgressIndicator(color: theme.colorScheme.primary)),
+                  )
                 : SymbolCarousel(coinList: _coinList),
           ),
+          const SizedBox(height: 10),
 
-          SizedBox(height: 10),
+          // RowSection 区块
           Container(color: theme.cardColor, child: RowSection()),
+          const SizedBox(height: 10),
 
-          SizedBox(height: 10),
+          // DataSection 区块
           Container(
             color: theme.cardColor,
             child: _isLoading
-                ? Container(height: 400, child: Center(child: CircularProgressIndicator()))
+                ? SizedBox(
+                    height: 400,
+                    child: Center(child: CircularProgressIndicator(color: theme.colorScheme.primary)),
+                  )
                 : DataSection(coinList: _coinList),
           ),
         ],

@@ -5,7 +5,7 @@ class ApiService {
   static final Dio _dio = Dio();
 
   static const String _baseUrl =
-      'https://us14-h5.yanshi.lol/api/app-api/pay/symbol/search?pageNo=1&pageSize=10&plate=&type=1&priceSort=0&upDownRangSort=0&fuzzy=';
+      'https://us12-h5.yanshi.lol/api/app-api/pay/symbol/search?pageNo=1&pageSize=10&plate=&type=1&priceSort=0&upDownRangSort=0&fuzzy=';
 
   static Future<List<SymbolItem>> fetchSymbols() async {
     try {

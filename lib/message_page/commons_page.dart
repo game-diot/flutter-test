@@ -29,12 +29,13 @@ class CommentedPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('被评论',style: TextStyle(color: Colors.black),),
-        backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-        // 使用系统默认的AppBar替代自定义的CommonHeader以解决类型不匹配问题
-      ),
-      body: ListView.builder(
+     appBar: const PreferredSize(
+    preferredSize: Size.fromHeight(kToolbarHeight),
+    child: CommonHeader(title: "被评论信息"),
+  ),
+      body: Container(
+        color: Colors.white,
+        child: ListView.builder(
         itemCount: commentList.length,
         itemBuilder: (context, index) {
           final item = commentList[index];
@@ -50,6 +51,7 @@ class CommentedPage extends StatelessWidget {
             likeCount: item["likeCount"] as int,
           );
         },
+      ),
       ),
     );
   }

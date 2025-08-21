@@ -19,7 +19,7 @@ class DetailUserInfo extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(avatarUrl),
+            backgroundImage: NetworkImage("https://i.pravatar.cc/150?img=2"),
             radius: 18,
           ),
           const SizedBox(width: 8),

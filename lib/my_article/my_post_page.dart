@@ -12,7 +12,7 @@ class MyPostsPage extends StatelessWidget {
     final postList = [
       {
         "title": "Flutter UI组件封装",
-        "avatar": "https://example.com/avatar1.jpg",
+        "avatar": "https://i.pravatar.cc/150?img=2",
         "username": "张三",
         "content": "这是一篇关于Flutter组件封装的帖子……",
         "likes": 23,
@@ -20,7 +20,7 @@ class MyPostsPage extends StatelessWidget {
       },
       {
         "title": "数据可视化设计思路",
-        "avatar": "https://example.com/avatar2.jpg",
+        "avatar": "https://i.pravatar.cc/150?img=3",
         "username": "李四",
         "content": "你想做可视化平台？这里有一些设计思路……",
         "likes": 18,
@@ -29,7 +29,10 @@ class MyPostsPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: Text('我的帖子'),backgroundColor: const Color.fromARGB(0, 255, 255, 255),),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: CommonHeader(title: "我的帖子"),
+      ),
       body: ListView.builder(
         itemCount: postList.length,
         itemBuilder: (context, index) {

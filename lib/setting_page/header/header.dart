@@ -21,7 +21,7 @@ class SettingPageHeader extends StatelessWidget {
                 // 左侧头像
                 CircleAvatar(
                   radius: 30,
-                  backgroundImage: AssetImage('assets/avatar.png'),
+                  backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=4'),
                 ),
                 SizedBox(width: 16),
                 // 右侧账号信息

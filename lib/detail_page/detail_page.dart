@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'components/detail_appbar.dart';
 import 'components/detail_title.dart';
 import 'components/detail_user_info.dart';
 import 'components/detail_content.dart';
 import 'components/detail_divider_item.dart';
 import 'components/detail_bottom_bar.dart';
 import 'comment_section.dart';
-
+import '../my_article/components/common_header.dart';
 class DetailPage extends StatelessWidget {
   final String title;
   final String avatarUrl;
@@ -57,10 +56,14 @@ class DetailPage extends StatelessWidget {
           );
         },
       ),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CommonHeader(title: "文章详情"),
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            DetailAppBar(onBack: () => Navigator.pop(context)),
+        
             DetailTitle(title: title),
             DetailUserInfo(
               avatarUrl: avatarUrl,

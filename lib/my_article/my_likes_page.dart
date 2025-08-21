@@ -31,16 +31,15 @@ Widget _buildActionButton({
   Widget build(BuildContext context) {
     // 示例数据与上面类似
     return Scaffold(
-      appBar: AppBar(
-        title: Text('我的点赞',style: TextStyle(color: Colors.black),),
-        backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-        // 使用系统默认的AppBar替代自定义的CommonHeader以解决类型不匹配问题
-      ),
+      appBar: PreferredSize(
+    preferredSize: const Size.fromHeight(kToolbarHeight),
+    child: CommonHeader(title: "我的点赞"),
+  ),
       body: ListView(
         children: [
           ArticleCard(
             title: "我点赞的第一篇文章",
-            avatarUrl: "https://example.com/avatar1.jpg",
+            avatarUrl: "https://i.pravatar.cc/150?img=2",
             username: "王五",
             content: "这里是文章内容摘要，超出部分自动省略……",
             likes: 120,

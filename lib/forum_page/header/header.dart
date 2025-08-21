@@ -20,9 +20,7 @@ class _ForumHeaderState extends State<ForumHeader> {
     Color textColor = isDark
         ? Colors.white.withOpacity(isSelected ? 1.0 : 0.7)
         : (isSelected ? Colors.black : Colors.grey);
-    Color borderColor = isDark
-        ? Colors.transparent
-        : Color.fromRGBO(237, 176, 35, 1);
+    Color borderColor = const Color.fromRGBO(237, 176, 35, 1);
 
     return GestureDetector(
       onTap: () {
@@ -54,7 +52,7 @@ class _ForumHeaderState extends State<ForumHeader> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? Colors.grey[900] : Colors.white;
-    final searchBg = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.white;
+    final searchBg = isDark ? Color.fromRGBO(255, 255, 255, 1) : Colors.white;
     final searchIconColor = Colors.grey;
 
     return Column(
@@ -65,7 +63,7 @@ class _ForumHeaderState extends State<ForumHeader> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: Color.fromRGBO(223, 229, 236, 1),
+              color: Color.fromRGBO(255, 255, 255, 1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: TextField(

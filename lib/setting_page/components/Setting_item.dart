@@ -54,48 +54,48 @@ class _SettingItemState extends State<SettingItem> {
       });
     }
   }
+@override
+Widget build(BuildContext context) {
+  final colorScheme = Theme.of(context).colorScheme;
 
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return InkWell(
-      onTap: _showOptions,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            Icon(widget.icon, color: isDark ? Colors.white : Colors.black),
-            const SizedBox(width: 16),
-            Expanded(
+  return InkWell(
+    onTap: _showOptions,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          Icon(widget.icon, color: colorScheme.onSurface), // 图标颜色
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              widget.title,
+              style: TextStyle(
+                color: colorScheme.onSurface, // 标题颜色
+                fontSize: 16,
+              ),
+            ),
+          ),
+          if (currentSubtitle.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
               child: Text(
-                widget.title,
+                currentSubtitle,
                 style: TextStyle(
-                  color: isDark ? Colors.white : Colors.black,
-                  fontSize: 16,
+                  color: colorScheme.onSurfaceVariant, // 副标题颜色
+                  fontSize: 14,
                 ),
               ),
             ),
-            if (currentSubtitle.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Text(
-                  currentSubtitle,
-                  style: TextStyle(
-                    color: isDark ? Colors.white70 : Colors.grey[700],
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            if (widget.isArrow)
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: isDark ? Colors.white : Colors.grey[700],
-              ),
-          ],
-        ),
+          if (widget.isArrow)
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: colorScheme.onSurfaceVariant, // 箭头颜色
+            ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
+
+  }

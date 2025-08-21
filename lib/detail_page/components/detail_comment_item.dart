@@ -24,7 +24,7 @@ class DetailCommentItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Left Avatar
-          CircleAvatar(backgroundImage: NetworkImage(avatarUrl), radius: 20),
+          CircleAvatar(backgroundImage: NetworkImage("https://i.pravatar.cc/150?img=2",), radius: 20),
           const SizedBox(width: 10),
 
           // Middle Column

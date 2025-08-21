@@ -9,89 +9,85 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
 
-    return ListView(
-      children: [
-        // Header
-        SettingPageHeader(),
+    return Scaffold(
+      backgroundColor: colorScheme.background, // 背景颜色适配主题
+      body: ListView(
+        children: [
+          // Header
+          const SettingPageHeader(),
+          const SizedBox(height: 20),
 
-        SizedBox(height: 20),
-
-        // 中部两按钮：我的帖子 / 我的点赞
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: _buildStatButton(
-                  context,
-                  '我的帖子',
-                  '12',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => MyPostsPage()),
-                    );
-                  },
+          // 中部两按钮：我的帖子 / 我的点赞
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildStatButton(
+                    context,
+                    '我的帖子',
+                    '12',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const MyPostsPage()),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: _buildStatButton(
-                  context,
-                  '我的点赞',
-                  '34',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => MyLikesPage()),
-                    );
-                  },
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatButton(
+                    context,
+                    '我的点赞',
+                    '34',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const MyLikesPage()),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
 
-        SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-        // 广告图片
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Container(
-            height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image: AssetImage('assets/images/ad_banner.png'),
-                fit: BoxFit.cover,
+          // 广告图片
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Container(
+              height: 120,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/ad_banner.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
-        ),
 
-        SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-        // 设置选项
-        _buildSettingItem(
-          context,
-          Icons.language,
-          '切换语言',
-          '简体中文',
-          isArrow: true,
-        ),
-        _buildSettingItem(
-          context,
-          Icons.light_mode,
-          '主题',
-          '${isDark ? '暗黑' : '明亮'}',
-          isArrow: true,
-        ),
-        _buildSettingItem(context, Icons.show_chart, '涨跌颜色', '', isArrow: true),
-        _buildSettingItem(context, Icons.feedback, '意见反馈', '', isArrow: true),
-        _buildSettingItem(context, Icons.logout, '注销账号', ''),
-      ],
+          // 设置选项
+          _buildSettingItem(context, Icons.language, '切换语言', '简体中文', isArrow: true),
+          _buildSettingItem(
+            context,
+            Icons.light_mode,
+            '主题',
+            '${Theme.of(context).brightness == Brightness.dark ? '暗黑' : '明亮'}',
+            isArrow: true,
+          ),
+          _buildSettingItem(context, Icons.show_chart, '涨跌颜色', '', isArrow: true),
+          _buildSettingItem(context, Icons.feedback, '意见反馈', '', isArrow: true),
+          _buildSettingItem(context, Icons.logout, '注销账号', ''),
+        ],
+      ),
     );
   }
 
@@ -102,19 +98,19 @@ class SettingPage extends StatelessWidget {
     String count, {
     VoidCallback? onTap,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Material(
-      color: Colors.white, // 背景白色
+      color: colorScheme.surface, // 背景颜色适配主题
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: Color.fromRGBO(134, 144, 156, 0.4),
+          color: colorScheme.outline.withOpacity(0.4),
           width: 0.4,
-        ), // 黑色边框
+        ),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12), // 水波纹圆角
+        borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -127,20 +123,20 @@ class SettingPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 4),
-              // 文字 + 箭头
+              // 标题 + 箭头
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     title,
-                    style: TextStyle(fontSize: 14, color: Colors.black),
+                    style: TextStyle(fontSize: 14, color: colorScheme.onSurface),
                   ),
                   const SizedBox(width: 4),
-                  Icon(Icons.arrow_forward_ios, size: 14, color: Colors.black),
+                  Icon(Icons.arrow_forward_ios, size: 14, color: colorScheme.onSurface),
                 ],
               ),
             ],
@@ -158,7 +154,7 @@ class SettingPage extends StatelessWidget {
     String subtitle, {
     bool isArrow = false,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return InkWell(
       onTap: () {},
@@ -166,13 +162,13 @@ class SettingPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
         child: Row(
           children: [
-            Icon(icon, color: isDark ? Colors.white : Colors.black),
-            SizedBox(width: 16),
+            Icon(icon, color: colorScheme.onSurface), // 图标颜色
+            const SizedBox(width: 16),
             Expanded(
               child: Text(
                 title,
                 style: TextStyle(
-                  color: isDark ? Colors.white : Colors.black,
+                  color: colorScheme.onSurface, // 标题颜色
                   fontSize: 16,
                 ),
               ),
@@ -183,7 +179,7 @@ class SettingPage extends StatelessWidget {
                 child: Text(
                   subtitle,
                   style: TextStyle(
-                    color: isDark ? Colors.white70 : Colors.grey[700],
+                    color: colorScheme.onSurfaceVariant, // 副标题颜色
                     fontSize: 14,
                   ),
                 ),
@@ -192,9 +188,7 @@ class SettingPage extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 16,
-                color: isDark
-                    ? Colors.white
-                    : Color.fromRGBO(134, 144, 156, 0.4),
+                color: colorScheme.onSurfaceVariant, // 箭头颜色
               ),
           ],
         ),

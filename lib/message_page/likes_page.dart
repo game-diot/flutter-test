@@ -29,12 +29,13 @@ class LikedPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('被点赞',style: TextStyle(color: Colors.black),),
-        backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-        // 使用系统默认的AppBar替代自定义的CommonHeader以解决类型不匹配问题
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CommonHeader(title: "获赞信息"),
       ),
-      body: ListView.builder(
+      body: Container(
+        color: Colors.white,
+        child: ListView.builder(
         itemCount: likedList.length,
         itemBuilder: (context, index) {
           final item = likedList[index];
@@ -50,6 +51,7 @@ class LikedPage extends StatelessWidget {
             likeCount: item["likeCount"] as int?,
           );
         },
+      ),
       ),
     );
   }
