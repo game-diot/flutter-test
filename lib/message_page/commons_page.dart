@@ -33,8 +33,9 @@ class CommentedPage extends StatelessWidget {
     preferredSize: Size.fromHeight(kToolbarHeight),
     child: CommonHeader(title: "被评论信息"),
   ),
-      body: Container(
-        color: Colors.white,
+      body: Container(  
+        // 关键：不要写死颜色，改成主题色
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: ListView.builder(
         itemCount: commentList.length,
         itemBuilder: (context, index) {

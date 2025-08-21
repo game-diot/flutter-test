@@ -97,7 +97,7 @@ class _ForumPageState extends State<ForumPage> {
           children: [
             // 顶部 ForumHeader
             Container(
-              color: Color.fromRGBO(237, 176, 35, 1),
+              color: Theme.of(context).brightness == Brightness.dark ? Color.fromRGBO(18, 18, 18, 1) : Color.fromRGBO(237, 176, 35, 1),
               child: ForumHeader(),
             ),
             SizedBox(height: 10),

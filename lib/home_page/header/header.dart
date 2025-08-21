@@ -10,6 +10,7 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   late AdaptiveThemeMode _themeMode;
+  String _selectedLanguage = "English"; // 默认语言
 
   @override
   void didChangeDependencies() {
@@ -28,13 +29,22 @@ class _HeaderState extends State<Header> {
     }
   }
 
+  void _onLanguageSelected(String language) {
+    setState(() {
+      _selectedLanguage = language;
+    });
+    // TODO: 在这里做切换语言逻辑，例如调用国际化方法
+    debugPrint("选择的语言: $language");
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLight = _themeMode == AdaptiveThemeMode.light;
 
     // 颜色适配
     final avatarBg = isLight ? Colors.white : Colors.grey[850];
-    final avatarIconColor = isLight ? const Color.fromRGBO(237, 176, 35, 1) : Colors.orangeAccent;
+    final avatarIconColor =
+        isLight ? const Color.fromRGBO(237, 176, 35, 1) : Colors.orangeAccent;
     final searchBg = isLight ? const Color(0xfff2f2f2) : Colors.grey[800];
     final searchTextColor = isLight ? Colors.black87 : Colors.white70;
     final publicIconColor = isLight ? Colors.black : Colors.white;
@@ -86,9 +96,18 @@ class _HeaderState extends State<Header> {
           ),
           const SizedBox(width: 20),
 
-          // 公共图标
-          Icon(Icons.public, size: 36, color: publicIconColor),
-          const SizedBox(width: 16),
+          // 语言选择按钮（地球图标 + 下拉菜单）
+          PopupMenuButton<String>(
+            icon: Icon(Icons.public, size: 36, color: publicIconColor),
+            onSelected: _onLanguageSelected,
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: "English", child: Text("English")),
+              const PopupMenuItem(value: "日本語", child: Text("日本語")),
+              const PopupMenuItem(value: "中文", child: Text("中文")),
+              const PopupMenuItem(value: "한국어", child: Text("한국어")),
+            ],
+          ),
+          const SizedBox(width: 8),
 
           // 主题切换按钮
           IconButton(

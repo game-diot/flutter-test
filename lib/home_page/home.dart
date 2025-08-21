@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           // Header 区域
           Container(
-            color: isDark ? Colors.black : const Color.fromRGBO(237, 176, 35, 1),
+            color: isDark ? const Color.fromRGBO(18,18 ,18, 1) : const Color.fromRGBO(237, 176, 35, 1),
             child: const Column(children: [Header(), SizedBox(height: 10)]),
           ),
           const SizedBox(height: 10),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../my_article/components/article_card.dart';
 import 'components/interactionitem.dart';
 import '../my_article/components/common_header.dart';
+
 class LikedPage extends StatelessWidget {
   const LikedPage({Key? key}) : super(key: key);
 
@@ -34,24 +35,25 @@ class LikedPage extends StatelessWidget {
         child: CommonHeader(title: "获赞信息"),
       ),
       body: Container(
-        color: Colors.white,
+        // 关键：不要写死颜色，改成主题色
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: ListView.builder(
-        itemCount: likedList.length,
-        itemBuilder: (context, index) {
-          final item = likedList[index];
-          final isComment = item["isComment"] as bool? ?? false;
+          itemCount: likedList.length,
+          itemBuilder: (context, index) {
+            final item = likedList[index];
+            final isComment = item["isComment"] as bool? ?? false;
 
-          return InteractionItem(
-            avatarUrl: item["avatar"] as String,
-            username: item["username"] as String,
-            actionText: item["actionText"] as String,
-            content: item["content"] as String,
-            time: item["time"] as String,
-            isComment: isComment,
-            likeCount: item["likeCount"] as int?,
-          );
-        },
-      ),
+            return InteractionItem(
+              avatarUrl: item["avatar"] as String,
+              username: item["username"] as String,
+              actionText: item["actionText"] as String,
+              content: item["content"] as String,
+              time: item["time"] as String,
+              isComment: isComment,
+              likeCount: item["likeCount"] as int?,
+            );
+          },
+        ),
       ),
     );
   }

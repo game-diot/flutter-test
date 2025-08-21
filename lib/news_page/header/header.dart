@@ -17,10 +17,12 @@ class _NewsHeaderState extends State<NewsHeader> {
     final isDark = theme.brightness == Brightness.dark;
 
     // 根据主题设置颜色
-    final bgColor = isDark ? Colors.grey[900] : Color.fromRGBO(237, 176, 35, 1);
+    final bgColor = isDark
+        ? const Color.fromARGB(255, 18, 18, 18)
+        : Color.fromRGBO(237, 176, 35, 1);
     final textColor = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black;
-    final searchBgColor = isDark ? Color(0xFFF2F2F2) : Colors.white; // 修改点
-    final searchTextColor = isDark ? Colors.black87 : Colors.black87;
+    final searchBgColor = isDark ? Color(0xFF424242) : Colors.white; // 修改点
+    final searchTextColor = isDark ? Color(0xFF9D9D9D) : Colors.black87;
     final iconColor = isDark ? Colors.black54 : Colors.grey;
 
     return Container(
@@ -30,21 +32,31 @@ class _NewsHeaderState extends State<NewsHeader> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 搜索框
+          // 搜索框（修改后，保持和 homepage 一致）
           Container(
             height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               color: searchBgColor,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(25),
             ),
-            child: TextField(
-              style: TextStyle(color: searchTextColor),
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: iconColor),
-                hintText: '搜索新闻',
-                hintStyle: TextStyle(color: iconColor),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
+            child: Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: Icon(Icons.search, color: Colors.grey, size: 26),
+                ),
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(color: searchTextColor),
+                    decoration: const InputDecoration(
+                      hintText: '搜索新闻', // 只改这里的文字
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -68,7 +80,9 @@ class _NewsHeaderState extends State<NewsHeader> {
                       style: TextStyle(
                         color: textColor,
                         fontSize: 16,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
                     SizedBox(height: 4),

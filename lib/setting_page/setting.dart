@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'header/header.dart';
-import '../my_article/my_likes_page.dart';
-import '../my_article/my_post_page.dart';
+import '../../my_article/my_likes_page.dart';
+import '../../my_article/my_post_page.dart';
 import 'components/Setting_item.dart';
 
 class SettingPage extends StatelessWidget {
