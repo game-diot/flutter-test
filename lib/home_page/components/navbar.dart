@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import '../add_page/add.dart';
+import '../../add_page/add.dart';
 
 class Navbar extends StatelessWidget {
   final ValueChanged<int> onTabSelected;

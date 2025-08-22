@@ -1,6 +1,6 @@
 // lib/container/article_list.dart
 import 'package:flutter/material.dart';
-import 'article.dart';
+import '../container/article.dart';
 import 'article_model.dart';
 
 class ArticleList extends StatelessWidget {

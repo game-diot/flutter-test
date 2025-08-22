@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import '../models/symbol_item.dart';
+import '../../models/home_page/home_data_section.dart';
 
 class ApiService {
   static final Dio _dio = Dio();

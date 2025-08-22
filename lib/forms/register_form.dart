@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'login_form_widget/login_form_country_widget.dart';
-import '../network/Get/services/register_send_verification_code.dart';
-import '../network/Get/models/register_send_verification_code.dart';
+import '../../network/Get/services/splash_page/register_send_verification_code.dart';
+
 
 class RegisterForm extends StatefulWidget {
   final VoidCallback? onSwitchToLogin;

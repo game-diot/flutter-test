@@ -1,6 +1,6 @@
 // lib/services/auth_service.dart
 import 'package:dio/dio.dart';
-import '../models/register_send_verification_code.dart';
+import '../../models/splash_page/register_send_verification_code.dart';
 
 class RegisterSendVerificationCodeService {
   static final Dio _dio = Dio();

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test_project/network/urls/all_api_url.dart';
-import '../models/data_picture.dart';
+import '../../models/home_page/data_picture.dart';
 
 class SymbolService {
   

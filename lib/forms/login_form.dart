@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../home_page/home.dart';
-import '../network/Get/models/login_area.dart';
-import '../network/Get/services/login_area.dart';
+import '../network/Get/models/splash_page/login_area.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'login_form_widget/login_form_country_widget.dart';
 
 class AuthService {

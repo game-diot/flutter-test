@@ -10,7 +10,7 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   late AdaptiveThemeMode _themeMode;
-  String _selectedLanguage = "English"; // 默认语言
+
 
   @override
   void didChangeDependencies() {
@@ -31,7 +31,7 @@ class _HeaderState extends State<Header> {
 
   void _onLanguageSelected(String language) {
     setState(() {
-      _selectedLanguage = language;
+
     });
     // TODO: 在这里做切换语言逻辑，例如调用国际化方法
     debugPrint("选择的语言: $language");

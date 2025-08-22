@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  'lib/splash_screen_page/logo.png',
+                  'assets/images/logo.png',
                   width: 150,
                   height: 150,
                 ),
@@ -113,15 +113,13 @@ class _SplashScreenState extends State<SplashScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 40),
-                  child: _formType == FormType.login
-    ? LoginForm(
-        onSwitchToRegister: _showRegisterForm,
-      
-      )
-    : RegisterForm(
-        onSwitchToLogin: _showLoginForm,
-    )
-
+                        child: _formType == FormType.login
+                            ? LoginForm(
+                                onSwitchToRegister: _showRegisterForm,
+                              )
+                            : RegisterForm(
+                                onSwitchToLogin: _showLoginForm,
+                              ),
                       ),
                       Positioned(
                         top: 0,

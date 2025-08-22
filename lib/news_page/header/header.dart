@@ -23,7 +23,7 @@ class _NewsHeaderState extends State<NewsHeader> {
     final textColor = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black;
     final searchBgColor = isDark ? Color(0xFF424242) : Colors.white; // 修改点
     final searchTextColor = isDark ? Color(0xFF9D9D9D) : Colors.black87;
-    final iconColor = isDark ? Colors.black54 : Colors.grey;
+  
 
     return Container(
       color: bgColor,

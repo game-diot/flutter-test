@@ -8,7 +8,6 @@ import 'home_page/home.dart';
 import 'add_page/add.dart';
 import 'forum_page/forum.dart';
 import 'setting_page/setting.dart';
-import 'detail_page/detail_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 确保异步初始化

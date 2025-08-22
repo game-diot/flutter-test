@@ -24,7 +24,7 @@ class LikedPage extends StatelessWidget {
         "actionText": "点赞了你的评论",
         "content": "你在帖子里的评论内容",
         "time": "2025-08-18",
-        "isComment": true,
+        "isComment": false,
         "likeCount": 5,
       },
     ];

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/symbol_item.dart';
+import '../../network/Get/models/home_page/home_data_section.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
 class SymbolCarousel extends StatelessWidget {

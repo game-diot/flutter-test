@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'article_model.dart';
+import '../components/article_model.dart';
 
 class ArticleOverview extends StatelessWidget {
   final ArticleOverviewItem item;

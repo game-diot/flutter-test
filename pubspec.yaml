@@ -33,7 +33,6 @@ flutter:
   assets:
     - lib/home_page/container/
     - lib/splash_screen_page/
-    - lib/splash_screen_page/logo.png
     - assets/images/行情页广告图.png
     - assets/images/行情页指数图.png
     - assets/images/news_red.png
@@ -44,3 +43,4 @@ flutter:
     - assets/images/week.svg
     - assets/images/topic.svg
     - assets/images/fake.svg
+    - assets/images/logo.png

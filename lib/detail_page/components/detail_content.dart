@@ -13,7 +13,7 @@ class DetailContent extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Text(
             content,
-            style: const TextStyle(fontSize: 16, height: 1.5,color: Color.fromRGBO(41, 46, 56,1)),
+            style: TextStyle(fontSize: 16, height: 1.5, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
           ),
         ),
         

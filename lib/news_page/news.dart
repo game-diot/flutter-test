@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'header/header.dart';
 import 'container/news_carousel.dart';
-import 'container/article_widget.dart';
-import 'container/article_model.dart';
+import 'components/article_widget.dart';
+import 'components/article_model.dart';
 
 class NewsPage extends StatefulWidget {
   @override
