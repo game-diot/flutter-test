@@ -155,8 +155,9 @@ class _DataSectionState extends State<DataSection> {
           ),
           SizedBox(height: 8),
           // 表格内容
+          
           Expanded(
-            child: _selectedIndex == 3
+            child: (_selectedIndex == 3||_selectedIndex == 1 || _selectedIndex == 2)
                 ? _buildExchangeTable(textColor, subTextColor)
                 : _buildCoinTable(textColor, subTextColor),
           ),
@@ -297,15 +298,30 @@ class _DataSectionState extends State<DataSection> {
     );
   }
 
-  Widget _buildExchangeTable(Color textColor, Color? subTextColor) {
+    Widget _buildExchangeTable(Color textColor, Color? subTextColor) {
+    String emptyTitle = '';
+    String emptySubtitle = '';
+
+    // 根据选中的 tab 改提示语
+    if (_selectedIndex == 1) {
+      emptyTitle = '暂无热门榜数据';
+      emptySubtitle = '请切换到其他选项卡';
+    } else if (_selectedIndex == 2) {
+      emptyTitle = '暂无涨幅榜数据';
+      emptySubtitle = '请切换到其他选项卡';
+    } else {
+      emptyTitle = '暂无交易所数据';
+      emptySubtitle = '请切换到其他选项卡';
+    }
+
     if (_exchangeList.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('暂无交易所数据', style: TextStyle(color: textColor)),
+            Text(emptyTitle, style: TextStyle(color: textColor)),
             SizedBox(height: 10),
-            Text('请切换到其他选项卡', style: TextStyle(color: subTextColor)),
+            Text(emptySubtitle, style: TextStyle(color: subTextColor)),
           ],
         ),
       );
@@ -405,4 +421,5 @@ class _DataSectionState extends State<DataSection> {
       ],
     );
   }
+
 }

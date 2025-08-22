@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
 class NewsHeader extends StatefulWidget {
-  const NewsHeader({Key? key}) : super(key: key);
+  final ValueChanged<int>? onTabSelected; // 新增回调
+
+  const NewsHeader({Key? key, this.onTabSelected}) : super(key: key);
 
   @override
   State<NewsHeader> createState() => _NewsHeaderState();
@@ -16,14 +17,10 @@ class _NewsHeaderState extends State<NewsHeader> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // 根据主题设置颜色
-    final bgColor = isDark
-        ? const Color.fromARGB(255, 18, 18, 18)
-        : Color.fromRGBO(237, 176, 35, 1);
+    final bgColor = isDark ? Color.fromARGB(255, 18, 18, 18) : Color.fromRGBO(237, 176, 35, 1);
     final textColor = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black;
-    final searchBgColor = isDark ? Color(0xFF424242) : Colors.white; // 修改点
+    final searchBgColor = isDark ? Color(0xFF424242) : Colors.white;
     final searchTextColor = isDark ? Color(0xFF9D9D9D) : Colors.black87;
-  
 
     return Container(
       color: bgColor,
@@ -32,7 +29,6 @@ class _NewsHeaderState extends State<NewsHeader> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 搜索框
-          // 搜索框（修改后，保持和 homepage 一致）
           Container(
             height: 50,
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -50,7 +46,7 @@ class _NewsHeaderState extends State<NewsHeader> {
                   child: TextField(
                     style: TextStyle(color: searchTextColor),
                     decoration: const InputDecoration(
-                      hintText: '搜索新闻', // 只改这里的文字
+                      hintText: '搜索新闻',
                       hintStyle: TextStyle(color: Colors.grey),
                       border: InputBorder.none,
                     ),
@@ -59,10 +55,9 @@ class _NewsHeaderState extends State<NewsHeader> {
               ],
             ),
           ),
-
           SizedBox(height: 20),
 
-          // 五个文字按钮
+          // Tab 按钮
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(_labels.length, (index) {
@@ -72,6 +67,7 @@ class _NewsHeaderState extends State<NewsHeader> {
                   setState(() {
                     _selectedIndex = index;
                   });
+                  widget.onTabSelected?.call(index); // 回调给 NewsPage
                 },
                 child: Column(
                   children: [
@@ -80,9 +76,7 @@ class _NewsHeaderState extends State<NewsHeader> {
                       style: TextStyle(
                         color: textColor,
                         fontSize: 16,
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
                     SizedBox(height: 4),

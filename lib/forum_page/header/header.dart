@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ForumHeader extends StatefulWidget {
+  final ValueChanged<int>? onTabSelected; // 新增回调
+
+  const ForumHeader({super.key, this.onTabSelected});
+
   @override
   _ForumHeaderState createState() => _ForumHeaderState();
 }
@@ -10,11 +14,11 @@ class _ForumHeaderState extends State<ForumHeader> {
 
   void _onTabSelected(int index) {
     setState(() {
-      _selectedIndex = index; // 更新选中
+      _selectedIndex = index;
     });
+    widget.onTabSelected?.call(index); // 把 index 回传给 ForumPage
   }
 
-  // 搜索框 + 文字点击显示底部边框
   Widget buildTextWithBorder(int index, String title, bool isDark) {
     bool isSelected = _selectedIndex == index;
     Color textColor = isDark
@@ -23,9 +27,7 @@ class _ForumHeaderState extends State<ForumHeader> {
     Color borderColor = const Color.fromRGBO(237, 176, 35, 1);
 
     return GestureDetector(
-      onTap: () {
-        _onTabSelected(index);
-      },
+      onTap: () => _onTabSelected(index),
       child: Column(
         children: [
           Text(
@@ -52,14 +54,14 @@ class _ForumHeaderState extends State<ForumHeader> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? Colors.grey[900] : Colors.white;
-    final searchBg = isDark ? Color.fromRGBO(66, 66, 66, 1) : Colors.white;
+    final searchBg = isDark ? const Color.fromRGBO(66, 66, 66, 1) : Colors.white;
     final searchIconColor = Colors.grey;
 
     return Column(
       children: [
         // 搜索框
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           child: Container(
             height: 50,
             decoration: BoxDecoration(
@@ -67,13 +69,13 @@ class _ForumHeaderState extends State<ForumHeader> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: TextField(
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: searchIconColor),
                 hintText: '搜索论坛',
                 hintStyle: TextStyle(color: searchIconColor),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   vertical: 15,
                   horizontal: 20,
                 ),
@@ -82,12 +84,11 @@ class _ForumHeaderState extends State<ForumHeader> {
           ),
         ),
 
-        // 文字部分
+        // Tab 部分
         Container(
           color: bgColor,
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
-            spacing: 30,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               buildTextWithBorder(0, '热榜', isDark),
