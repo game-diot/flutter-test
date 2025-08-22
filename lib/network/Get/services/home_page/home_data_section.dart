@@ -1,15 +1,13 @@
 import 'package:dio/dio.dart';
 import '../../models/home_page/home_data_section.dart';
-
+import '../../../urls/all_api_url.dart';
 class ApiService {
   static final Dio _dio = Dio();
 
-  static const String _baseUrl =
-      'https://us12-h5.yanshi.lol/api/app-api/pay/symbol/search?pageNo=1&pageSize=10&plate=&type=1&priceSort=0&upDownRangSort=0&fuzzy=';
 
   static Future<List<SymbolItem>> fetchSymbols() async {
     try {
-      final response = await _dio.get(_baseUrl);
+      final response = await _dio.get(AllApiUrl.home_data_section_Url);
 
       if (response.statusCode == 200) {
         final dataList = response.data['data']['list'] as List;

@@ -3,6 +3,7 @@ import '../../network/Get/models/home_page/home_data_section.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:provider/provider.dart';
 import '../../providers/color/color.dart';
+import '../../Websocket/home_page_data_section/websocket.dart';
 
 class DataSection extends StatefulWidget {
   final List<SymbolItem> coinList;
@@ -22,10 +23,28 @@ class _DataSectionState extends State<DataSection> {
   Map<String, bool> _sortAscCoin = {'名称': true, '价格': true, '涨幅比': true};
   Map<String, bool> _sortAscExchange = {'名称': true, '交易额': true, '评分': true};
 
+  late SymbolWebSocketService _wsService;
+
   @override
   void initState() {
     super.initState();
     _coinList = widget.coinList;
+
+    _wsService = SymbolWebSocketService(
+      url: 'wss://你的websocket地址',
+      onData: (newData) {
+        setState(() {
+          _coinList = newData;
+        });
+      },
+    );
+    _wsService.connect();
+  }
+
+  @override
+  void dispose() {
+    _wsService.disconnect();
+    super.dispose();
   }
 
   void _onTextClicked(int index) {
@@ -93,7 +112,7 @@ class _DataSectionState extends State<DataSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 切换栏
+          // 切换栏
           Column(
             children: [
               Row(
@@ -134,12 +153,12 @@ class _DataSectionState extends State<DataSection> {
               Container(height: 1, color: dividerColor),
             ],
           ),
-
           SizedBox(height: 8),
-
-          /// 表格内容
+          // 表格内容
           Expanded(
-            child: _selectedIndex == 3 ? _buildExchangeTable(textColor, subTextColor) : _buildCoinTable(textColor, subTextColor),
+            child: _selectedIndex == 3
+                ? _buildExchangeTable(textColor, subTextColor)
+                : _buildCoinTable(textColor, subTextColor),
           ),
         ],
       ),
@@ -153,6 +172,7 @@ class _DataSectionState extends State<DataSection> {
 
     return Column(
       children: [
+        // 表头
         Container(
           padding: EdgeInsets.symmetric(vertical: 8),
           child: Row(
@@ -210,7 +230,7 @@ class _DataSectionState extends State<DataSection> {
             ],
           ),
         ),
-
+        // 表格内容
         Expanded(
           child: ListView.builder(
             itemCount: _coinList.length,
@@ -246,28 +266,27 @@ class _DataSectionState extends State<DataSection> {
                       ),
                     ),
                     Expanded(
-  flex: 1,
-  child: Consumer<ChangeColorProvider>(
-    builder: (context, colorProvider, _) {
-      final mode = colorProvider.mode;
-      final isUp = change >= 0;
+                      flex: 1,
+                      child: Consumer<ChangeColorProvider>(
+                        builder: (context, colorProvider, _) {
+                          final mode = colorProvider.mode;
+                          final isUp = change >= 0;
 
-      Color valueColor;
-      if (mode == ChangeColorMode.greenUpRedDown) {
-        valueColor = isUp ? Colors.green : Colors.red;
-      } else {
-        valueColor = isUp ? Colors.red : Colors.green;
-      }
+                          Color valueColor;
+                          if (mode == ChangeColorMode.greenUpRedDown) {
+                            valueColor = isUp ? Colors.green : Colors.red;
+                          } else {
+                            valueColor = isUp ? Colors.red : Colors.green;
+                          }
 
-      return Text(
-        '${change.toStringAsFixed(2)}%',
-        textAlign: TextAlign.right,
-        style: TextStyle(color: valueColor),
-      );
-    },
-  ),
-),
-
+                          return Text(
+                            '${change.toStringAsFixed(2)}%',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(color: valueColor),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -351,7 +370,6 @@ class _DataSectionState extends State<DataSection> {
             ],
           ),
         ),
-
         Expanded(
           child: ListView.builder(
             itemCount: _exchangeList.length,

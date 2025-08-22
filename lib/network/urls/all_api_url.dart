@@ -8,4 +8,6 @@ class AllApiUrl {
   static const String switchLanguageUrl = "https://us12-h5.yanshi.lol/api/app-api/system/i18n-type/list";
   //数据图显示
   static const String dataShowUrl = "https://us12-h5.yanshi.lol/api/app-api/pay/symbol/search?pageNo=1&pageSize=10&priceSort=0&upDownRangSort=0&type=3&stockType=8";
+  //获取首页数据
+  static const String home_data_section_Url = "https://us12-h5.yanshi.lol/api/app-api/pay/symbol/search?pageNo=1&pageSize=10&plate=&type=1&priceSort=0&upDownRangSort=0&fuzzy=";
 }

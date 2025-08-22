@@ -157,9 +157,9 @@ class SettingPage extends StatelessWidget {
             title: '意见反馈',
             isArrow: true,
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('意见反馈功能待实现')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('意见反馈功能待实现')));
             },
           ),
 
