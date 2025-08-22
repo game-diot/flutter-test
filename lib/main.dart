@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart'; // 新增
+import 'package:provider/provider.dart';
+import 'providers/language/language.dart';
+import 'providers/color/color.dart';
 
-import 'splash_screen_page/splash_screen.dart';
-import 'forms/login_form.dart';
-import 'forms/register_form.dart';
+
+import 'login_register_page/splash_screen.dart';
+import 'login_register_page/forms/login_form.dart';
+import 'login_register_page/forms/register_form.dart';
 import 'home_page/home.dart';
 import 'add_page/add.dart';
 import 'forum_page/forum.dart';
@@ -12,7 +16,16 @@ import 'setting_page/setting.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 确保异步初始化
   final savedThemeMode = await AdaptiveTheme.getThemeMode(); // 获取保存的主题模式
-  runApp(MyApp(savedThemeMode: savedThemeMode));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LanguageProvider()),
+        ChangeNotifierProvider(create: (context) => ChangeColorProvider()),
+
+      ],
+      child: MyApp(savedThemeMode: savedThemeMode),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,11 +37,10 @@ class MyApp extends StatelessWidget {
     return AdaptiveTheme(
       // 亮色主题
       light: ThemeData(
-        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+
         brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.white, // 页面背景白色
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.blue, // 顶部栏亮色
           foregroundColor: Colors.white,
         ),
         cardColor: Colors.white, // 卡片背景

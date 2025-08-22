@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../network/Get/models/home_page/home_data_section.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import '../../providers/color/color.dart';
 
 class SymbolCarousel extends StatelessWidget {
   final List<SymbolItem> coinList;
@@ -51,6 +53,15 @@ class SymbolCarousel extends StatelessWidget {
         : 0.0;
     final lineData = item.miniKlinePriceList.take(10).toList();
 
+    // 获取全局涨跌颜色设置
+    final colorProvider = context.watch<ChangeColorProvider>();
+    Color changeColor;
+    if (colorProvider.mode == ChangeColorMode.redUpGreenDown) {
+      changeColor = change >= 0 ? Colors.red : Colors.green;
+    } else {
+      changeColor = change >= 0 ? Colors.green : Colors.red;
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: isLight ? Colors.white : Color(0xFF1E1E1E),
@@ -84,7 +95,7 @@ class SymbolCarousel extends StatelessWidget {
           ),
           Text(
             '涨幅：${change.toStringAsFixed(2)}%',
-            style: TextStyle(color: change >= 0 ? Colors.green : Colors.red),
+            style: TextStyle(color: changeColor), // 使用全局设置的颜色
           ),
           SizedBox(height: 8),
           Expanded(

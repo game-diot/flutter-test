@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../network/Get/models/home_page/home_data_section.dart';
-import '../../network/Get/services/home_page/home_data_section.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:provider/provider.dart';
+import '../../providers/color/color.dart';
 
 class DataSection extends StatefulWidget {
   final List<SymbolItem> coinList;
@@ -245,13 +246,28 @@ class _DataSectionState extends State<DataSection> {
                       ),
                     ),
                     Expanded(
-                      flex: 1,
-                      child: Text(
-                        '${change.toStringAsFixed(2)}%',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(color: change >= 0 ? Colors.green : Colors.red),
-                      ),
-                    ),
+  flex: 1,
+  child: Consumer<ChangeColorProvider>(
+    builder: (context, colorProvider, _) {
+      final mode = colorProvider.mode;
+      final isUp = change >= 0;
+
+      Color valueColor;
+      if (mode == ChangeColorMode.greenUpRedDown) {
+        valueColor = isUp ? Colors.green : Colors.red;
+      } else {
+        valueColor = isUp ? Colors.red : Colors.green;
+      }
+
+      return Text(
+        '${change.toStringAsFixed(2)}%',
+        textAlign: TextAlign.right,
+        style: TextStyle(color: valueColor),
+      );
+    },
+  ),
+),
+
                   ],
                 ),
               );

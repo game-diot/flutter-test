@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../network/Get/models/splash_page/login_area.dart';
-import '../../../network/Get/services/splash_page/login_area.dart';
+import '../../../../network/Get/models/splash_page/login_area.dart';
+import '../../../../network/Get/services/splash_page/login_area.dart';
 
 class CountrySelectWidget extends StatefulWidget {
   final ValueChanged<Country> onSelected;

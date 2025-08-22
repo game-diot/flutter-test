@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../home_page/home.dart';
-import '../network/Get/models/splash_page/login_area.dart';
+import '../../home_page/home.dart';
+import '../../network/Get/models/splash_page/login_area.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'login_form_widget/login_form_country_widget.dart';

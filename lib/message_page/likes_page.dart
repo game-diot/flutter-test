@@ -1,6 +1,5 @@
 // pages/liked_page.dart
 import 'package:flutter/material.dart';
-import '../my_article/components/article_card.dart';
 import 'components/interactionitem.dart';
 import '../my_article/components/common_header.dart';
 

@@ -14,14 +14,14 @@ class StatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
 
     return Material(
-      color: colorScheme.surface,
+      color: theme.scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: colorScheme.outline.withOpacity(0.4),
+          color: theme.colorScheme.outline.withOpacity(0.4),
           width: 0.4,
         ),
       ),
@@ -38,16 +38,16 @@ class StatButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: colorScheme.onSurface,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 4),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(title, style: TextStyle(fontSize: 14, color: colorScheme.onSurface)),
+                  Text(title, style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface)),
                   const SizedBox(width: 4),
-                  Icon(Icons.arrow_forward_ios, size: 14, color: colorScheme.onSurface),
+                  Icon(Icons.arrow_forward_ios, size: 14, color: theme.colorScheme.onSurface),
                 ],
               ),
             ],

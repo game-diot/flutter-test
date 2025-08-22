@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import '../../providers/language/language.dart';
 
 class Header extends StatefulWidget {
   const Header({Key? key}) : super(key: key);
@@ -10,7 +12,6 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   late AdaptiveThemeMode _themeMode;
-
 
   @override
   void didChangeDependencies() {
@@ -30,16 +31,14 @@ class _HeaderState extends State<Header> {
   }
 
   void _onLanguageSelected(String language) {
-    setState(() {
-
-    });
-    // TODO: 在这里做切换语言逻辑，例如调用国际化方法
+    context.read<LanguageProvider>().setLanguage(language);
     debugPrint("选择的语言: $language");
   }
 
   @override
   Widget build(BuildContext context) {
     final isLight = _themeMode == AdaptiveThemeMode.light;
+    final currentLang = context.watch<LanguageProvider>().language;
 
     // 颜色适配
     final avatarBg = isLight ? Colors.white : Colors.grey[850];
@@ -96,15 +95,32 @@ class _HeaderState extends State<Header> {
           ),
           const SizedBox(width: 20),
 
-          // 语言选择按钮（地球图标 + 下拉菜单）
+          // 语言选择按钮（带高亮）
           PopupMenuButton<String>(
             icon: Icon(Icons.public, size: 36, color: publicIconColor),
+            initialValue: currentLang,
             onSelected: _onLanguageSelected,
             itemBuilder: (context) => [
-              const PopupMenuItem(value: "English", child: Text("English")),
-              const PopupMenuItem(value: "日本語", child: Text("日本語")),
-              const PopupMenuItem(value: "中文", child: Text("中文")),
-              const PopupMenuItem(value: "한국어", child: Text("한국어")),
+              for (var lang in ["English", "日本語", "中文", "한국어"])
+                PopupMenuItem(
+                  value: lang,
+                  child: Row(
+                    children: [
+                      if (lang == currentLang) ...[
+                        const Icon(Icons.check, size: 18, color: Colors.blue),
+                        const SizedBox(width: 6),
+                      ],
+                      Text(
+                        lang,
+                        style: TextStyle(
+                          fontWeight: lang == currentLang
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
           const SizedBox(width: 8),

@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         onTabSelected: _onTabSelected,
       ),
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
     );
   }
 }
