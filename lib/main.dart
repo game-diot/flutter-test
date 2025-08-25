@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:adaptive_theme/adaptive_theme.dart'; // 新增
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:provider/provider.dart';
+
 import 'providers/language/language.dart';
 import 'providers/color/color.dart';
-
+import 'providers/exchange/exchange.dart';
+import 'Websocket/home_page_data_section/services.dart';
 
 import 'login_register_page/splash_screen.dart';
 import 'login_register_page/forms/login_form.dart';
@@ -16,12 +18,17 @@ import 'setting_page/setting.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 确保异步初始化
   final savedThemeMode = await AdaptiveTheme.getThemeMode(); // 获取保存的主题模式
+
+  // 创建 WebSocket 服务实例
+  final wsService = ExchangeRateWebSocketService();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
         ChangeNotifierProvider(create: (context) => ChangeColorProvider()),
-
+        ChangeNotifierProvider(
+            create: (context) => ExchangeRateProvider()),
       ],
       child: MyApp(savedThemeMode: savedThemeMode),
     ),
@@ -38,14 +45,13 @@ class MyApp extends StatelessWidget {
       // 亮色主题
       light: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-
         brightness: Brightness.light,
         appBarTheme: AppBarTheme(
           foregroundColor: Colors.white,
         ),
-        cardColor: Colors.white, // 卡片背景
+        cardColor: Colors.white,
         textTheme: TextTheme(
-          bodyMedium: TextStyle(color: Colors.black87), // 文字颜色
+          bodyMedium: TextStyle(color: Colors.black87),
         ),
         iconTheme: IconThemeData(color: Colors.black87),
       ),
@@ -53,12 +59,12 @@ class MyApp extends StatelessWidget {
       dark: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Color(0xFF121212), // 暗黑背景
+        scaffoldBackgroundColor: Color(0xFF121212),
         appBarTheme: AppBarTheme(
           backgroundColor: Color(0xFF1F1F1F),
           foregroundColor: Colors.white,
         ),
-        cardColor: Color(0xFF1E1E1E), // 卡片背景
+        cardColor: Color(0xFF1E1E1E),
         textTheme: TextTheme(
           bodyMedium: TextStyle(color: Colors.white70),
         ),

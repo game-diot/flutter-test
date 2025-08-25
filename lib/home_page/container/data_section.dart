@@ -1,14 +1,103 @@
+// lib/home_page/data_section.dart
 import 'package:flutter/material.dart';
-import '../../network/Get/models/home_page/home_data_section.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:provider/provider.dart';
 import '../../providers/color/color.dart';
-import '../../Websocket/home_page_data_section/websocket.dart';
+import '../../providers/exchange/exchange.dart';
+
+class CoinRow extends StatelessWidget {
+  final String symbol; // 固定标识
+  final String displayName;
+  final String iconUrl;
+
+  const CoinRow({
+    required this.symbol,
+    required this.displayName,
+    required this.iconUrl,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+  child: Consumer<ExchangeRateProvider>(
+    builder: (context, provider, _) {
+      final allData = provider.filteredData; // 获取所有数据
+      if (allData.isEmpty) return const Center(child: CircularProgressIndicator());
+
+      return ListView.builder(
+        itemCount: allData.length,
+        itemBuilder: (context, index) {
+          final data = allData[index];
+          final change = data.percentChange;
+          final isUp = change >= 0;
+
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey.shade300, width: 0.5),
+              ),
+            ),
+            child: Row(
+              children: [
+                // 左侧固定名称列
+                Expanded(
+                  flex: 2,
+                  child: Row(
+                    children: [
+                      Image.network(
+                        data.iconUrl,
+                        width: 20,
+                        height: 20,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: 20,
+                            height: 20,
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.currency_bitcoin, size: 16),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        data.displayName,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // 右侧动态列
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '¥${data.price.toStringAsFixed(2)}',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '${change.toStringAsFixed(2)}%',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: isUp ? Colors.green : Colors.red),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  ),
+);
+  }}
 
 class DataSection extends StatefulWidget {
-  final List<SymbolItem> coinList;
-
-  const DataSection({Key? key, required this.coinList}) : super(key: key);
+  const DataSection({Key? key}) : super(key: key);
 
   @override
   _DataSectionState createState() => _DataSectionState();
@@ -17,35 +106,8 @@ class DataSection extends StatefulWidget {
 class _DataSectionState extends State<DataSection> {
   int _selectedIndex = 0;
 
-  List<SymbolItem> _coinList = [];
-  List<SymbolItem> _exchangeList = [];
-
   Map<String, bool> _sortAscCoin = {'名称': true, '价格': true, '涨幅比': true};
   Map<String, bool> _sortAscExchange = {'名称': true, '交易额': true, '评分': true};
-
-  late SymbolWebSocketService _wsService;
-
-  @override
-  void initState() {
-    super.initState();
-    _coinList = widget.coinList;
-
-    _wsService = SymbolWebSocketService(
-      url: 'wss://你的websocket地址',
-      onData: (newData) {
-        setState(() {
-          _coinList = newData;
-        });
-      },
-    );
-    _wsService.connect();
-  }
-
-  @override
-  void dispose() {
-    _wsService.disconnect();
-    super.dispose();
-  }
 
   void _onTextClicked(int index) {
     setState(() {
@@ -53,62 +115,37 @@ class _DataSectionState extends State<DataSection> {
     });
   }
 
-  void _onSortCoin(String key) {
-    setState(() {
-      bool asc = _sortAscCoin[key]!;
-      _coinList.sort((a, b) {
-        switch (key) {
-          case '名称':
-            return asc ? a.alias.compareTo(b.alias) : b.alias.compareTo(a.alias);
-          case '价格':
-            return asc
-                ? a.miniKlinePriceList[0].compareTo(b.miniKlinePriceList[0])
-                : b.miniKlinePriceList[0].compareTo(a.miniKlinePriceList[0]);
-          case '涨幅比':
-            return asc
-                ? a.miniKlinePriceList[1].compareTo(b.miniKlinePriceList[1])
-                : b.miniKlinePriceList[1].compareTo(a.miniKlinePriceList[1]);
-          default:
-            return 0;
-        }
-      });
-      _sortAscCoin[key] = !asc;
-    });
+  void _onSortCoin(String key, ExchangeRateProvider provider) {
+    String sortBy = key == '名称'
+        ? 'symbol'
+        : key == '价格'
+            ? 'price'
+            : 'change';
+    provider.setSorting(sortBy, ascending: _sortAscCoin[key]!);
+    _sortAscCoin[key] = !_sortAscCoin[key]!;
   }
 
-  void _onSortExchange(String key) {
-    setState(() {
-      bool asc = _sortAscExchange[key]!;
-      _exchangeList.sort((a, b) {
-        switch (key) {
-          case '名称':
-            return asc ? a.alias.compareTo(b.alias) : b.alias.compareTo(a.alias);
-          case '交易额':
-            return asc ? a.volume24h.compareTo(b.volume24h) : b.volume24h.compareTo(a.volume24h);
-          case '评分':
-            return asc
-                ? a.priceAccuracy.compareTo(b.priceAccuracy)
-                : b.priceAccuracy.compareTo(a.priceAccuracy);
-          default:
-            return 0;
-        }
-      });
-      _sortAscExchange[key] = !asc;
-    });
+  void _onSortExchange(String key, ExchangeRateProvider provider) {
+    String sortBy = key == '名称'
+        ? 'symbol'
+        : key == '交易额'
+            ? 'volume'
+            : 'change';
+    provider.setSorting(sortBy, ascending: _sortAscExchange[key]!);
+    _sortAscExchange[key] = !_sortAscExchange[key]!;
   }
 
   @override
   Widget build(BuildContext context) {
     final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
-
     final textColor = isLight ? Colors.black : Colors.white;
     final subTextColor = isLight ? Colors.grey[700] : Colors.grey[400];
     final dividerColor = isLight ? Colors.grey.withOpacity(0.3) : Colors.grey[700];
 
     return Container(
       height: 400,
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: isLight ? Colors.white : Color(0xFF1E1E1E),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      color: isLight ? Colors.white : const Color(0xFF1E1E1E),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -140,8 +177,8 @@ class _DataSectionState extends State<DataSection> {
                             Container(
                               height: 2,
                               width: 40,
-                              color: Color.fromRGBO(237, 176, 35, 1),
-                              margin: EdgeInsets.only(top: 4),
+                              color: const Color.fromRGBO(237, 176, 35, 1),
+                              margin: const EdgeInsets.only(top: 4),
                             ),
                         ],
                       ),
@@ -149,39 +186,46 @@ class _DataSectionState extends State<DataSection> {
                   );
                 }),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(height: 1, color: dividerColor),
             ],
           ),
-          SizedBox(height: 8),
-          // 表格内容
-          
+          const SizedBox(height: 8),
           Expanded(
-            child: (_selectedIndex == 3||_selectedIndex == 1 || _selectedIndex == 2)
-                ? _buildExchangeTable(textColor, subTextColor)
-                : _buildCoinTable(textColor, subTextColor),
+            child: Consumer<ExchangeRateProvider>(
+              builder: (context, provider, _) {
+                final coinList = provider.filteredData.where((e) => e.isCrypto).toList();
+                final exchangeList = provider.filteredData.where((e) => e.isForex).toList();
+
+                if (_selectedIndex == 3 || _selectedIndex == 1 || _selectedIndex == 2) {
+                  return _buildExchangeTable(exchangeList, textColor, subTextColor, provider);
+                } else {
+                  return _buildCoinTable(coinList, textColor, subTextColor, provider);
+                }
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCoinTable(Color textColor, Color? subTextColor) {
-    if (_coinList.isEmpty) {
-      return Center(child: CircularProgressIndicator());
+  Widget _buildCoinTable(List coinList, Color textColor, Color? subTextColor, ExchangeRateProvider provider) {
+    if (coinList.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Column(
       children: [
         // 表头
         Container(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             children: [
               Expanded(
                 flex: 2,
                 child: GestureDetector(
-                  onTap: () => _onSortCoin('名称'),
+                  onTap: () => _onSortCoin('名称', provider),
                   child: Row(
                     children: [
                       Text('名称', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
@@ -197,7 +241,7 @@ class _DataSectionState extends State<DataSection> {
               Expanded(
                 flex: 1,
                 child: GestureDetector(
-                  onTap: () => _onSortCoin('价格'),
+                  onTap: () => _onSortCoin('价格', provider),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -214,7 +258,7 @@ class _DataSectionState extends State<DataSection> {
               Expanded(
                 flex: 1,
                 child: GestureDetector(
-                  onTap: () => _onSortCoin('涨幅比'),
+                  onTap: () => _onSortCoin('涨幅比', provider),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -234,17 +278,17 @@ class _DataSectionState extends State<DataSection> {
         // 表格内容
         Expanded(
           child: ListView.builder(
-            itemCount: _coinList.length,
+            itemCount: coinList.length,
             itemBuilder: (context, index) {
-              final item = _coinList[index];
-              final change = item.miniKlinePriceList.length > 1 ? item.miniKlinePriceList[1] : 0.0;
+              final item = coinList[index];
+              final change = item.percentChange;
 
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   children: [
                     Image.network(
-                      item.icon1,
+                      item.iconUrl,
                       width: 20,
                       height: 20,
                       errorBuilder: (context, error, stackTrace) {
@@ -252,16 +296,16 @@ class _DataSectionState extends State<DataSection> {
                           width: 20,
                           height: 20,
                           color: Colors.grey[300],
-                          child: Icon(Icons.currency_bitcoin, size: 16),
+                          child: const Icon(Icons.currency_bitcoin, size: 16),
                         );
                       },
                     ),
-                    SizedBox(width: 8),
-                    Expanded(flex: 2, child: Text(item.alias, style: TextStyle(color: textColor))),
+                    const SizedBox(width: 8),
+                    Expanded(flex: 2, child: Text(item.displayName, style: TextStyle(color: textColor))),
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '¥${item.miniKlinePriceList.isNotEmpty ? item.miniKlinePriceList[0].toStringAsFixed(2) : "0.00"}',
+                        '¥${item.price.toStringAsFixed(2)}',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: textColor),
                       ),
@@ -298,30 +342,16 @@ class _DataSectionState extends State<DataSection> {
     );
   }
 
-    Widget _buildExchangeTable(Color textColor, Color? subTextColor) {
-    String emptyTitle = '';
-    String emptySubtitle = '';
 
-    // 根据选中的 tab 改提示语
-    if (_selectedIndex == 1) {
-      emptyTitle = '暂无热门榜数据';
-      emptySubtitle = '请切换到其他选项卡';
-    } else if (_selectedIndex == 2) {
-      emptyTitle = '暂无涨幅榜数据';
-      emptySubtitle = '请切换到其他选项卡';
-    } else {
-      emptyTitle = '暂无交易所数据';
-      emptySubtitle = '请切换到其他选项卡';
-    }
-
-    if (_exchangeList.isEmpty) {
+  Widget _buildExchangeTable(List exchangeList, Color textColor, Color? subTextColor, ExchangeRateProvider provider) {
+    if (exchangeList.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(emptyTitle, style: TextStyle(color: textColor)),
-            SizedBox(height: 10),
-            Text(emptySubtitle, style: TextStyle(color: subTextColor)),
+            Text('暂无交易所数据', style: TextStyle(color: textColor)),
+            const SizedBox(height: 10),
+            Text('请切换到其他选项卡', style: TextStyle(color: subTextColor)),
           ],
         ),
       );
@@ -330,13 +360,13 @@ class _DataSectionState extends State<DataSection> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             children: [
               Expanded(
                 flex: 2,
                 child: GestureDetector(
-                  onTap: () => _onSortExchange('名称'),
+                  onTap: () => _onSortExchange('名称', provider),
                   child: Row(
                     children: [
                       Text('名称', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
@@ -352,7 +382,7 @@ class _DataSectionState extends State<DataSection> {
               Expanded(
                 flex: 1,
                 child: GestureDetector(
-                  onTap: () => _onSortExchange('交易额'),
+                  onTap: () => _onSortExchange('交易额', provider),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -369,7 +399,7 @@ class _DataSectionState extends State<DataSection> {
               Expanded(
                 flex: 1,
                 child: GestureDetector(
-                  onTap: () => _onSortExchange('评分'),
+                  onTap: () => _onSortExchange('评分', provider),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -388,18 +418,18 @@ class _DataSectionState extends State<DataSection> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: _exchangeList.length,
+            itemCount: exchangeList.length,
             itemBuilder: (context, index) {
-              final item = _exchangeList[index];
+              final item = exchangeList[index];
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   children: [
-                    Expanded(flex: 2, child: Text(item.alias, style: TextStyle(color: textColor))),
+                    Expanded(flex: 2, child: Text(item.displayName, style: TextStyle(color: textColor))),
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '${item.volume24h.toStringAsFixed(2)}',
+                        '${item.volume.toStringAsFixed(2)}',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: textColor),
                       ),
@@ -407,7 +437,7 @@ class _DataSectionState extends State<DataSection> {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '${(item.priceAccuracy * 100).toInt()}%',
+                        '${(item.percentChange * 100).toInt()}%',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: textColor),
                       ),
@@ -421,5 +451,4 @@ class _DataSectionState extends State<DataSection> {
       ],
     );
   }
-
 }
