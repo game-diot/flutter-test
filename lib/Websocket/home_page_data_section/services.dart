@@ -84,7 +84,8 @@ class ExchangeRateWebSocketService {
 
     sendMessage({
       "type": "SUB",
-      "data": ["BTC~USDT",
+      "data": [
+        "BTC~USDT",
         "ETH~USDT",
         "BNB~USDT",
         "DASH~USDT",
@@ -98,7 +99,8 @@ class ExchangeRateWebSocketService {
         "DOT~USDT",
         "FARM_USDT",
         "TESTUSDC",
-        "GBP/USD"],
+        "GBP/USD",
+      ],
     });
   }
 
@@ -119,9 +121,9 @@ class ExchangeRateWebSocketService {
                 )
                 .toList() ??
             [];
-        for (var data in list) {
+        if (list.isNotEmpty) {
           _dataController.add(
-            ExchangeRateResponse(type: json["type"] ?? '', data: [data]),
+            ExchangeRateResponse(type: json["type"], data: list),
           );
         }
       }

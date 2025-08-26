@@ -12,6 +12,7 @@ class SymbolItem {
   final double commission;
   final int priceAccuracy;
   final int transactionAccuracy;
+  
 
   SymbolItem({
     required this.symbolId,

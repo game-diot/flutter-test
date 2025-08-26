@@ -19,9 +19,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 确保异步初始化
   final savedThemeMode = await AdaptiveTheme.getThemeMode(); // 获取保存的主题模式
 
-  // 创建 WebSocket 服务实例
-  final wsService = ExchangeRateWebSocketService();
-
   runApp(
     MultiProvider(
       providers: [

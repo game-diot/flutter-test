@@ -49,7 +49,9 @@ class MarketPage extends StatelessWidget {
                     child: Center(
                       child: Text(
                         '图片加载失败',
-                        style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                        style: TextStyle(
+                          color: isDark ? Colors.white : Colors.black,
+                        ),
                       ),
                     ),
                   ),
@@ -83,7 +85,9 @@ class MarketPage extends StatelessWidget {
                 ? SizedBox(
                     height: 150,
                     child: Center(
-                      child: CircularProgressIndicator(color: theme.colorScheme.primary),
+                      child: CircularProgressIndicator(
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
                   )
                 : SymbolCarousel(coinList: coinList),
@@ -101,10 +105,13 @@ class MarketPage extends StatelessWidget {
                 ? SizedBox(
                     height: 400,
                     child: Center(
-                      child: CircularProgressIndicator(color: theme.colorScheme.primary),
+                      child: CircularProgressIndicator(
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
                   )
-                : DataSection())
+                : DataSection(),
+          ),
         ],
       ),
     );
