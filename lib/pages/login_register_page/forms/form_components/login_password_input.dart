@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+
+class LoginPasswordInput extends StatelessWidget {
+  final TextEditingController controller;
+
+  const LoginPasswordInput({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      obscureText: true,
+      style: const TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        hintText: '请输入密码',
+        hintStyle: const TextStyle(color: Colors.black),
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    );
+  }
+}

@@ -1,7 +1,7 @@
 // providers/exchange_rate_provider.dart
 import 'package:flutter/material.dart';
-import '../../Websocket/home_page_data_section/models.dart';
-import '../../Websocket/home_page_data_section/services.dart';
+import '../../socket/home_page_data_section/models.dart';
+import '../../socket/home_page_data_section/services.dart';
 class ExchangeRateProvider extends ChangeNotifier {
   final ExchangeRateWebSocketService _wsService = ExchangeRateWebSocketService();
 
