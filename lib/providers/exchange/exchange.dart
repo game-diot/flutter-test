@@ -2,27 +2,29 @@
 import 'package:flutter/material.dart';
 import '../../Websocket/home_page_data_section/models.dart';
 import '../../Websocket/home_page_data_section/services.dart';
-// providers/exchange_rate_provider.dart
 class ExchangeRateProvider extends ChangeNotifier {
   final ExchangeRateWebSocketService _wsService = ExchangeRateWebSocketService();
 
   List<ExchangeRateData> _data = [];
+  Map<String, ExchangeRateData> _exchangeRateMap = {}; // 🔹 新增映射
+
   List<ExchangeRateData> get data => _data;
+  Map<String, ExchangeRateData> get exchangeRateMap => _exchangeRateMap;
 
   String _sortField = 'symbol';
   bool _ascending = true;
 
   ExchangeRateProvider() {
-    // 初始化 WebSocket
+    // 监听 WebSocket 数据
     _wsService.dataStream.listen((response) {
       _updateData(response.data);
     });
     _wsService.connect();
   }
 
+  // 排序后的列表
   List<ExchangeRateData> get filteredData {
     List<ExchangeRateData> list = List.from(_data);
-    // 排序逻辑
     list.sort((a, b) {
       dynamic valueA;
       dynamic valueB;
@@ -58,8 +60,17 @@ class ExchangeRateProvider extends ChangeNotifier {
   }
 
   void _updateData(List<ExchangeRateData> newData) {
-    // 可以做增量更新或覆盖更新
     _data = newData;
+
+    // 🔹 更新映射
+    _exchangeRateMap.clear();
+    for (var rate in newData) {
+      _exchangeRateMap[rate.symbol] = rate;
+    }
+
+    // 🔹 如果需要额外处理合并逻辑，可以调用类似 _updateCombinedData()
+    // _updateCombinedData();
+
     notifyListeners();
   }
 
@@ -69,13 +80,8 @@ class ExchangeRateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 🔹 新增方法：根据 symbol 获取单条数据
   ExchangeRateData? getDataForSymbol(String symbol) {
-    try {
-      return _data.firstWhere((element) => element.symbol == symbol);
-    } catch (e) {
-      return null;
-    }
+    return _exchangeRateMap[symbol];
   }
 
   @override

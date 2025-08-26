@@ -89,16 +89,6 @@ class ExchangeRateData {
   // 判断是否为外汇
   bool get isForex => type == 1;
 
-  // 获取图标URL (基于货币类型)
-  String get iconUrl {
-    final base = baseCurrency.toLowerCase();
-    if (isCrypto) {
-      return 'https://cryptoicons.org/api/icon/$base/64';
-    }
-    // 外汇图标可以使用其他服务或本地图标
-    return 'https://flagcdn.com/64x48/${base.substring(0, 2).toLowerCase()}.png';
-  }
-
   // 复制并更新价格数据
   ExchangeRateData copyWith({
     double? price,

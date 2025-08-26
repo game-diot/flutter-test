@@ -104,7 +104,7 @@ class MarketPage extends StatelessWidget {
                       child: CircularProgressIndicator(color: theme.colorScheme.primary),
                     ),
                   )
-                : DataSection())
+                : DataSection(coinList: coinList,))
         ],
       ),
     );
