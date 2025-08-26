@@ -9,6 +9,7 @@ import 'components/appbar.dart';
 import '../network/Get/models/home_page/home_data_section.dart';
 import '../network/Get/services/home_page/home_data_section.dart';
 
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -52,15 +53,15 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
 
     final pages = [
-      MarketPage(coinList: _coinList, isLoading: _isLoading), // ✅ 正确传递数据
-  NewsPage(),
- AddPage(),
- ForumPage(),
- SettingPage(),
+      MarketPage(coinList: _coinList, isLoading: _isLoading),
+      NewsPage(),
+      AddPage(),
+      ForumPage(),
+      SettingPage(),
     ];
 
     return Scaffold(
-      appBar: HomeAppBar(currentIndex: _currentIndex),
+      appBar: HomeAppBar(currentIndex: _currentIndex), // ⬅️ 已拆分
       body: _isLoading && _currentIndex == 0
           ? Center(
               child: CircularProgressIndicator(

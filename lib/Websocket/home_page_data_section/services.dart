@@ -80,7 +80,7 @@ class ExchangeRateWebSocketService {
     _connectionController.add(true);
 
     // 开始心跳检测
-    _startHeartbeat();
+    // _startHeartbeat();
 
     sendMessage({
       "type": "SUB",
@@ -175,15 +175,7 @@ class ExchangeRateWebSocketService {
     });
   }
 
-  // 开始心跳检测
-  void _startHeartbeat() {
-    _heartbeatTimer?.cancel();
-    _heartbeatTimer = Timer.periodic(_heartbeatInterval, (timer) {
-      if (_isConnected) {
-        _sendHeartbeat();
-      }
-    });
-  }
+
 
   // 停止心跳检测
   void _stopHeartbeat() {
@@ -191,20 +183,28 @@ class ExchangeRateWebSocketService {
     _heartbeatTimer = null;
   }
 
-  // 发送心跳消息
-  void _sendHeartbeat() {
-    try {
-      if (_channel != null && _isConnected) {
-        final heartbeat = jsonEncode({
-          'type': 'ping',
-          'timestamp': DateTime.now().millisecondsSinceEpoch,
-        });
-        _channel!.sink.add(heartbeat);
-      }
-    } catch (e) {
-      print('发送心跳失败: $e');
+ // 开始心跳检测
+void _startHeartbeat() {
+  _heartbeatTimer?.cancel();
+  _heartbeatTimer = Timer.periodic(_heartbeatInterval, (timer) {
+    if (_isConnected) {
+      _sendHeartbeat();
     }
+  });
+}
+
+// 发送心跳消息
+void _sendHeartbeat() {
+  try {
+    if (_channel != null && _isConnected) {
+      _channel!.sink.add('ping'); // 只发送 "ping" 字符串
+      print('发送心跳: ping');
+    }
+  } catch (e) {
+    print('发送心跳失败: $e');
   }
+}
+
 
   // 发送消息
   void sendMessage(Map<String, dynamic> message) {
