@@ -1,8 +1,4 @@
 
-// ==========================================
-// lib/home_page/data_section/services/data_section_service.dart
-// ==========================================
-
 import '../../../../../socket/home_page_data_section/models.dart';
 import '../../../../../socket/home_page_data_section/services.dart';
 import '../../../../../network/Get/models/home_page/home_data_section.dart';

@@ -8,7 +8,7 @@ class RegisterFormContent extends StatefulWidget {
   final VoidCallback? onSwitchToLogin;
   final bool isPhoneSelected;
   final ValueChanged<bool> onSwitch;
-  
+
   const RegisterFormContent({
     this.onSwitchToLogin,
     required this.isPhoneSelected,
@@ -44,28 +44,60 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
           onSwitch: widget.onSwitch,
         ),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
 
-        // 输入区域
+        // 替换原来的手机号输入 Row
         if (widget.isPhoneSelected)
-          Row(
-            children: [
-              Container(
-                width: 100,
-                child: CountrySelectWidget(
-                  onSelected: (country) =>
-                      setState(() => selectedCountry = country.toJson()),
+          TextField(
+            controller: phoneController,
+            style: const TextStyle(color: Colors.black),
+            decoration: InputDecoration(
+              hintText: '请输入手机号',
+              hintStyle: const TextStyle(color: Colors.black54),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 14,
+                horizontal: 12,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: Color.fromRGBO(244, 244, 244, 1),
+                  width: 1,
                 ),
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: TextFieldWidget(
-                  controller: phoneController,
-                  hint: '请输入手机号',
-                  keyboardType: TextInputType.phone,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: Color.fromRGBO(244, 244, 244, 1),
+                  width: 1,
                 ),
               ),
-            ],
+              prefixIcon: Padding(
+                padding: const EdgeInsets.only(left: 8, right: 16),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: CountrySelectWidget(
+                        onSelected: (country) =>
+                            setState(() => selectedCountry = country.toJson()),
+                      ),
+                    ),
+                    const VerticalDivider(
+                      width: 1,
+                      thickness: 1,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 120,
+                minHeight: 0,
+              ),
+            ),
+            keyboardType: TextInputType.phone,
           )
         else
           Row(
@@ -103,7 +135,7 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
             ],
           ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
 
         // 验证码
         Row(
@@ -123,14 +155,14 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
           ],
         ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         // 密码
         TextFieldWidget(
           controller: passwordController,
           hint: '请输入密码',
           obscureText: true,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         // 确认密码
         TextFieldWidget(
           controller: confirmPasswordController,
@@ -138,24 +170,36 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
           obscureText: true,
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
           height: 48,
           child: ElevatedButton(
-            onPressed: widget.onSwitchToLogin,
+            onPressed: () {
+              // 弹出提示
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('正在跳转到登录页面'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+
+              // 延迟 1 秒再调用父组件传来的回调
+              Future.delayed(const Duration(seconds: 1), () {
+                widget.onSwitchToLogin?.call();
+              });
+            },
+            child: const Text('注册', style: TextStyle(fontSize: 18)),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF292e38),
-              foregroundColor: Colors.white,
+              backgroundColor: const Color.fromRGBO(244, 244, 245, 1),
+              foregroundColor: const Color.fromARGB(255, 0, 0, 0),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('注册', style: TextStyle(fontSize: 18)),
           ),
         ),
 
-        const SizedBox(height: 20),
         TextButton(
           onPressed: widget.onSwitchToLogin,
           child: const Text(

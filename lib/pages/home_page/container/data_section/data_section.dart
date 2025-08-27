@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:provider/provider.dart';
@@ -56,43 +55,41 @@ class _DataSectionState extends State<DataSection> {
     });
   }
 
- 
-
   void _updateCombinedData() {
-  if (widget.coinList == null) return;
+    if (widget.coinList == null) return;
 
-  _combinedData = widget.coinList!.map((symbolItem) {
-    final wsSymbol = symbolItem.symbol.replaceAll('_', '~');
+    _combinedData = widget.coinList!.map((symbolItem) {
+      final wsSymbol = symbolItem.symbol.replaceAll('_', '~');
 
-    final prevData = _combinedData.firstWhere(
-      (e) => e.symbol == symbolItem.symbol,
-      orElse: () => CombinedCoinData.fromSymbolItem(symbolItem),
-    );
-
-    final exchangeRate = _exchangeRateMap[wsSymbol] ?? _exchangeRateMap[symbolItem.symbol];
-
-    if (exchangeRate != null) {
-      // 只更新有值的字段
-      return CombinedCoinData(
-        symbolId: symbolItem.symbolId,
-        symbol: symbolItem.symbol,
-        baseSymbol: symbolItem.baseSymbol,
-        alias: symbolItem.alias,
-        icon1: symbolItem.icon1,
-        currentPrice: exchangeRate.price ,
-        priceChangePercent: exchangeRate.percentChange ,
-        priceChangeAmount: exchangeRate.priceChange ,
-        hasRealTimeData: true,
+      final prevData = _combinedData.firstWhere(
+        (e) => e.symbol == symbolItem.symbol,
+        orElse: () => CombinedCoinData.fromSymbolItem(symbolItem),
       );
-    } else {
-      // WS 没返回数据，保留上次值
-      return prevData;
-    }
-  }).toList();
 
-  setState(() {});
-}
+      final exchangeRate =
+          _exchangeRateMap[wsSymbol] ?? _exchangeRateMap[symbolItem.symbol];
 
+      if (exchangeRate != null) {
+        // 只更新有值的字段
+        return CombinedCoinData(
+          symbolId: symbolItem.symbolId,
+          symbol: symbolItem.symbol,
+          baseSymbol: symbolItem.baseSymbol,
+          alias: symbolItem.alias,
+          icon1: symbolItem.icon1,
+          currentPrice: exchangeRate.price,
+          priceChangePercent: exchangeRate.percentChange,
+          priceChangeAmount: exchangeRate.priceChange,
+          hasRealTimeData: true,
+        );
+      } else {
+        // WS 没返回数据，保留上次值
+        return prevData;
+      }
+    }).toList();
+
+    setState(() {});
+  }
 
   @override
   void didUpdateWidget(DataSection oldWidget) {
@@ -177,7 +174,7 @@ class _DataSectionState extends State<DataSection> {
     Color textColor,
     Color? subTextColor,
   ) {
-    // 如果有coinList数据且选择的是主流币，使用合并数据
+    // 主流币
     if (widget.coinList != null && _selectedIndex == 0) {
       return CombinedTable(
         data: _combinedData,
@@ -189,28 +186,19 @@ class _DataSectionState extends State<DataSection> {
       );
     }
 
-    // 否则使用原有逻辑
-    final coinList = provider.filteredData.where((e) => e.isCrypto).toList();
-    final exchangeList = provider.filteredData.where((e) => e.isForex).toList();
-
-    if (_selectedIndex == 3 || _selectedIndex == 1 || _selectedIndex == 2) {
-      return ExchangeTable(
-        exchangeList: exchangeList,
-        sortAscending: _sortAscExchange,
-        onSort: _onSortExchange,
-        textColor: textColor,
-        subTextColor: subTextColor,
-        provider: provider,
-      );
-    } else {
-      return CoinTable(
-        coinList: coinList,
-        sortAscending: _sortAscCoin,
-        onSort: _onSortCoin,
-        textColor: textColor,
-        subTextColor: subTextColor,
-        provider: provider,
-      );
-    }
+    // 其它标签：热门榜 / 涨幅榜 / 交易所
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('暂无数据', style: TextStyle(color: textColor, fontSize: 16)),
+          const SizedBox(height: 8),
+          Text(
+            '请切换到其他图表标签',
+            style: TextStyle(color: subTextColor, fontSize: 14),
+          ),
+        ],
+      ),
+    );
   }
 }

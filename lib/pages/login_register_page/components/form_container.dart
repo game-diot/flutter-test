@@ -28,36 +28,24 @@ class AuthFormContainer extends StatelessWidget {
       curve: Curves.easeInOut,
       child: Align(
         alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Container(
-            height: screenHeight * 0.5,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(25),
-              ),
-              boxShadow: [
-                BoxShadow(color: Colors.black26, blurRadius: 10),
-              ],
+        child: Container(
+          height: screenHeight * 0.55, // 固定高度
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(25),
             ),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: formType == FormType.login
-                      ? LoginForm(onSwitchToRegister: onSwitchToRegister)
-                      : formType == FormType.register
-                          ? RegisterForm(onSwitchToLogin: onSwitchToLogin)
-                          : const SizedBox(),
-                ),
-               
-              ],
-            ),
+            boxShadow: [
+              BoxShadow(color: Colors.black26, blurRadius: 10),
+            ],
           ),
+          // 直接放置表单，键盘弹出时可遮挡
+          child: formType == FormType.login
+              ? LoginForm(onSwitchToRegister: onSwitchToRegister)
+              : formType == FormType.register
+                  ? RegisterForm(onSwitchToLogin: onSwitchToLogin)
+                  : const SizedBox(),
         ),
       ),
     );

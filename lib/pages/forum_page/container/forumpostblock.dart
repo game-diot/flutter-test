@@ -42,7 +42,6 @@ class ForumPostBlock extends StatelessWidget {
     final titleColor = isDark ? Color.fromRGBO(223, 229, 236, 1)  : Colors.black;
     final subtitleColor = isDark ? Colors.white70 : Colors.grey[600];
     final iconColor = Color.fromRGBO(237, 176, 35, 1);
-    final shadowColor = isDark ? Colors.black26 : Colors.grey.withOpacity(0.2);
 
     return GestureDetector(
       onTap: () {

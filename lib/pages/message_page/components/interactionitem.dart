@@ -4,26 +4,26 @@ class AppColors {
   /// 页面背景
   static Color background(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? const Color(0xFF121212)
-          : const Color(0xFFF5F5F5);
+      ? const Color(0xFF121212)
+      : const Color(0xFFF5F5F5);
 
   /// 卡片背景
   static Color cardBackground(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? const Color(0xFF1E1E1E)
-          : Colors.white;
+      ? const Color(0xFF1E1E1E)
+      : Colors.white;
 
   /// 主文本
   static Color textPrimary(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? Colors.white
-          : Colors.black;
+      ? Colors.white
+      : Colors.black;
 
   /// 次级文本
   static Color textSecondary(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? Colors.grey[400]!
-          : Colors.grey[700]!;
+      ? Colors.grey[400]!
+      : Colors.grey[700]!;
 
   /// 强调色（按钮/高亮）
   static Color accent(BuildContext context) =>
@@ -53,6 +53,7 @@ class InteractionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       color: AppColors.cardBackground(context),
       child: Padding(
@@ -61,10 +62,7 @@ class InteractionItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 左侧头像
-            CircleAvatar(
-              radius: 22,
-              backgroundImage: NetworkImage(avatarUrl),
-            ),
+            CircleAvatar(radius: 22, backgroundImage: NetworkImage(avatarUrl)),
             const SizedBox(width: 12),
 
             // 中间内容
@@ -95,15 +93,13 @@ class InteractionItem extends StatelessWidget {
                   // 内容
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.only(top: 10,),
+                    padding: const EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       content,
-                      style: TextStyle(
-                        color: AppColors.textPrimary(context),
-                      ),
+                      style: TextStyle(color: AppColors.textPrimary(context)),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -131,7 +127,7 @@ class InteractionItem extends StatelessWidget {
                           ),
                           child: Text(
                             "回复",
-                            style: TextStyle(color: AppColors.accent(context)),
+                            style: TextStyle(color: AppColors.textSecondary(context)),
                           ),
                         ),
                       ],

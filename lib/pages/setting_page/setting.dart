@@ -11,7 +11,7 @@ import 'components/setting_item.dart';
 import '../my_article/my_likes_page.dart';
 import '../my_article/my_post_page.dart';
 import '../login_register_page/splash_screen.dart';
-
+import '../../providers/login/login.dart';
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
 
@@ -179,40 +179,47 @@ class SettingPage extends StatelessWidget {
           const SizedBox(height: 8),
 
           // 注销账号
-          SettingItem(
-            icon: Icons.lock,
-            title: '注销账号',
-            isArrow: true,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('确认注销'),
-                  content: const Text('确定要注销当前账号吗？'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('取消'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        // 跳转到登录页并清空路由栈
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SplashScreen(),
-                          ),
-                          (route) => false,
-                        );
-                      },
-                      child: const Text('确认'),
-                    ),
-                  ],
+SettingItem(
+  icon: Icons.lock,
+  title: '注销账号',
+  isArrow: true,
+  onTap: () {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('确认注销'),
+        content: const Text('确定要注销当前账号吗？'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('取消'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+
+              // 清空登录状态
+              final authProvider =
+                  Provider.of<AuthProvider>(context, listen: false);
+              await authProvider.logout();
+
+              // 跳转到登录页并清空路由栈
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SplashScreen(),
                 ),
+                (route) => false,
               );
             },
+            child: const Text('确认'),
           ),
+        ],
+      ),
+    );
+  },
+),
+
         ],
       ),
     );

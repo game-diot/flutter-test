@@ -17,7 +17,7 @@ class DataSectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
     final textColor = isLight ? Colors.black : Colors.white;
-    final subTextColor = isLight ? Colors.grey[700] : Colors.grey[400];
+  
     final dividerColor = isLight
         ? Colors.grey.withOpacity(0.3)
         : Colors.grey[700];

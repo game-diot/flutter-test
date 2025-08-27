@@ -69,7 +69,7 @@ class _CountrySelectWidgetState extends State<CountrySelectWidget> {
                   errorWidget: (_, __, ___) => const Icon(Icons.error, size: 20),
                 ),
               ),
-              const SizedBox(width: 12),
+
               Text('+${country.areaCode}', style: const TextStyle(color: Colors.black)),
             ],
           ),
