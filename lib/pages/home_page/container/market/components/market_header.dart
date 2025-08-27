@@ -9,11 +9,11 @@ class MarketHeader extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      color: isDark ? const Color.fromRGBO(18, 18, 18, 1) : const Color.fromRGBO(237, 176, 35, 1),
+      color: isDark ? const Color.fromRGBO(18, 18, 18, 1) : const Color.fromARGB(255, 255, 255, 255),
       child: const Column(
         children: [
           Header(),
-          SizedBox(height: 10),
+          SizedBox(height: 12),
         ],
       ),
     );

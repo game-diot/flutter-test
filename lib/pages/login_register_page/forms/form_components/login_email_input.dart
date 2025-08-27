@@ -23,8 +23,24 @@ class LoginEmailInput extends StatelessWidget {
             decoration: InputDecoration(
               hintText: '请输入邮箱',
               hintStyle: const TextStyle(color: Colors.black),
-              contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 14,
+                horizontal: 12,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: Color.fromRGBO(244, 244, 244, 1), // 纯淡灰色
+                  width: 1, // 比较细，但能看到
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: Color.fromRGBO(244, 244, 244, 1),
+                  width: 1,
+                ),
+              ),
             ),
             keyboardType: TextInputType.emailAddress,
           ),
@@ -38,10 +54,15 @@ class LoginEmailInput extends StatelessWidget {
             isExpanded: true,
             underline: const SizedBox(),
             items: ["@qq.com", "@163.com", "@gmail.com"]
-                .map((suffix) => DropdownMenuItem(
-                      value: suffix,
-                      child: Text(suffix, style: const TextStyle(color: Colors.black)),
-                    ))
+                .map(
+                  (suffix) => DropdownMenuItem(
+                    value: suffix,
+                    child: Text(
+                      suffix,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                )
                 .toList(),
             onChanged: (String? value) {
               if (value != null) {

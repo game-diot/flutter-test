@@ -7,13 +7,23 @@ class HeaderAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
-    final avatarBg = isLight ? Colors.white : Colors.grey[850];
-    final avatarIconColor = isLight ? const Color.fromRGBO(237, 176, 35, 1) : Colors.orangeAccent;
+    final avatarBg = isLight
+        ? Color.fromRGBO(237, 176, 35, 1)
+        : Colors.grey[850];
+    final avatarIconColor = isLight
+        ? const Color.fromARGB(255, 255, 255, 255)
+        : const Color.fromARGB(255, 255, 255, 255);
 
-    return CircleAvatar(
-      radius: 20,
-      backgroundColor: avatarBg,
-      child: Icon(Icons.person, size: 30, color: avatarIconColor),
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.black, width: 1), // 黑色边框
+      ),
+      child: CircleAvatar(
+        radius: 20,
+        backgroundColor: avatarBg,
+        child: Icon(Icons.person, size: 30, color: avatarIconColor),
+      ),
     );
   }
 }

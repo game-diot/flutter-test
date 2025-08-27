@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-
 class SettingItem extends StatefulWidget {
   final IconData icon;
   final String title;
   final String? subtitle;
+  
+  final Widget? subtitleWidget; // 新增
   final List<String>? options;
   final bool isArrow;
   final void Function(String)? onSelected;
-  final VoidCallback? onTap; // 添加一个简单的点击回调
+  final VoidCallback? onTap;
 
   const SettingItem({
     Key? key,
     required this.icon,
     required this.title,
     this.subtitle,
+    this.subtitleWidget,
     this.options,
     this.isArrow = false,
     this.onSelected,
@@ -44,7 +46,6 @@ class _SettingItemState extends State<SettingItem> {
   }
 
   void _handleTap() async {
-    // 如果有options，显示选择框
     if (widget.options != null && widget.options!.isNotEmpty) {
       final selected = await showModalBottomSheet<String>(
         context: context,
@@ -58,20 +59,15 @@ class _SettingItemState extends State<SettingItem> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                Text(widget.title, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 16),
-                ...widget.options!.map(
-                  (option) => ListTile(
-                    title: Text(option),
-                    trailing: currentSubtitle == option 
-                        ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
-                        : null,
-                    onTap: () => Navigator.pop(context, option),
-                  ),
-                ),
+                ...widget.options!.map((option) => ListTile(
+                      title: Text(option),
+                      trailing: currentSubtitle == option
+                          ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
+                          : null,
+                      onTap: () => Navigator.pop(context, option),
+                    )),
               ],
             ),
           );
@@ -79,58 +75,52 @@ class _SettingItemState extends State<SettingItem> {
       );
 
       if (selected != null) {
-        setState(() {
-          currentSubtitle = selected;
-        });
-        if (widget.onSelected != null) {
-          widget.onSelected!(selected);
-        }
+        setState(() => currentSubtitle = selected);
+        widget.onSelected?.call(selected);
       }
-    } else if (widget.onTap != null) {
-      // 如果没有options但有onTap回调，直接调用
-      widget.onTap!();
+    } else {
+      widget.onTap?.call();
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+Widget build(BuildContext context) {
+  final colorScheme = Theme.of(context).colorScheme;
 
-    return InkWell(
-      onTap: _handleTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            Icon(widget.icon, color: colorScheme.onSurface),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                widget.title,
-                style: TextStyle(color: colorScheme.onSurface, fontSize: 16),
-              ),
+  return InkWell(
+    onTap: _handleTap,
+    borderRadius: BorderRadius.circular(8),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          Icon(widget.icon, color: colorScheme.onSurface),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              widget.title,
+              style: TextStyle(color: colorScheme.onSurface, fontSize: 16),
             ),
-            if (currentSubtitle != null && currentSubtitle!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Text(
-                  currentSubtitle!,
-                  style: TextStyle(
-                    color: colorScheme.onSurfaceVariant,
-                    fontSize: 14,
-                  ),
+          ),
+          if (widget.subtitleWidget != null)
+            widget.subtitleWidget!
+          else if (currentSubtitle != null && currentSubtitle!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(
+                currentSubtitle!,
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+                  fontSize: 14,
                 ),
               ),
-            if (widget.isArrow)
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: colorScheme.onSurfaceVariant,
-              ),
-          ],
-        ),
+            ),
+          if (widget.isArrow)
+            Icon(Icons.arrow_forward_ios, size: 16, color: colorScheme.onSurfaceVariant),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

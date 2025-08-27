@@ -1,8 +1,4 @@
 
-// ==========================================
-// lib/home_page/data_section/widgets/coin_table.dart
-// ==========================================
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../providers/color/color.dart';
@@ -62,11 +58,11 @@ class CoinTable extends StatelessWidget {
         child: Row(
           mainAxisAlignment: alignment ?? MainAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+            Text(title, style: TextStyle(fontWeight: FontWeight.w100, color: Color.fromRGBO(134, 144, 156, 1))),
             Icon(
               sortAscending[title] == true ? Icons.arrow_upward : Icons.arrow_downward,
               size: 16,
-              color: subTextColor,
+              color: Color.fromRGBO(134, 144, 156,1),
             ),
           ],
         ),
@@ -83,26 +79,32 @@ class CoinTable extends StatelessWidget {
           final change = item.percentChange;
 
           return Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
               children: [
                 Image.network(
                   item.iconUrl,
-                  width: 20,
-                  height: 20,
+                  width: 30,
+                  height: 30,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       width: 20,
                       height: 20,
                       color: Colors.grey[300],
-                      child: const Icon(Icons.currency_bitcoin, size: 16),
+                      child: const Icon(Icons.currency_bitcoin, size: 30),
                     );
                   },
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   flex: 2, 
-                  child: Text(item.displayName, style: TextStyle(color: textColor))
+                  child: Text(
+                    item.displayName,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 12,
+                    ),
+                  )
                 ),
                 Expanded(
                   flex: 1,

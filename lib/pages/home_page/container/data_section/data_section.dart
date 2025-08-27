@@ -1,6 +1,3 @@
-// ==========================================
-// lib/home_page/data_section/data_section.dart (主文件)123456
-// ==========================================
 
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';

@@ -23,7 +23,7 @@ class _ForumHeaderState extends State<ForumHeader> {
     bool isSelected = _selectedIndex == index;
     Color textColor = isDark
         ? Colors.white.withOpacity(isSelected ? 1.0 : 0.7)
-        : (isSelected ? Colors.black : Colors.grey);
+        : (isSelected ?  Color.fromRGBO(41, 46, 56, 1) :  Color.fromRGBO(46, 46, 46, 1));
     Color borderColor = const Color.fromRGBO(237, 176, 35, 1);
 
     return GestureDetector(
@@ -54,14 +54,14 @@ class _ForumHeaderState extends State<ForumHeader> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? Colors.grey[900] : Colors.white;
-    final searchBg = isDark ? const Color.fromRGBO(66, 66, 66, 1) : Colors.white;
+    final searchBg = isDark ? const Color.fromRGBO(66, 66, 66, 1) :  Color.fromRGBO(242, 242, 242, 1);
     final searchIconColor = Colors.grey;
 
     return Column(
       children: [
         // 搜索框
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 13),
           child: Container(
             height: 50,
             decoration: BoxDecoration(

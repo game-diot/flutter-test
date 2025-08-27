@@ -93,6 +93,8 @@ class ExchangeRateWebSocketService {
         "TAO~USDT",
         "TON~USDT",
         "IOTX_USDT",
+        "ADA_USDT",
+        "DYDX_USDT",
         "XRP~USDT",
         "WBTC_USDT",
         "DOT~USDT",

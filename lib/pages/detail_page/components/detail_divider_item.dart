@@ -6,8 +6,8 @@ class DetailDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Divider(
-      thickness: 1,
-      color: Color(0xFFEEEEEE),
+      thickness: 8,
+      color: Color.fromRGBO(241, 245, 249, 1),
       height: 20,
     );
   }

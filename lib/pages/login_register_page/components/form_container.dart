@@ -33,7 +33,7 @@ class AuthFormContainer extends StatelessWidget {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Container(
-            height: screenHeight * 0.60,
+            height: screenHeight * 0.5,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -47,21 +47,14 @@ class AuthFormContainer extends StatelessWidget {
             child: Stack(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 40),
+                  padding: const EdgeInsets.only(top: 20),
                   child: formType == FormType.login
                       ? LoginForm(onSwitchToRegister: onSwitchToRegister)
                       : formType == FormType.register
                           ? RegisterForm(onSwitchToLogin: onSwitchToLogin)
                           : const SizedBox(),
                 ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: IconButton(
-                    icon: const Icon(Icons.close, size: 28),
-                    onPressed: onClose,
-                  ),
-                ),
+               
               ],
             ),
           ),

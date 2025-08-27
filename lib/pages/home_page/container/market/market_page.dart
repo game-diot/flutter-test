@@ -19,9 +19,7 @@ class MarketPage extends StatelessWidget {
       child: Column(
         children: [
           const MarketHeader(),
-          const SizedBox(height: 10),
           const MarketBanner(),
-          const SizedBox(height: 10),
           MarketCarousel(coinList: coinList, isLoading: isLoading),
           const SizedBox(height: 10),
           const MarketRowSection(),

@@ -17,7 +17,7 @@ class Header extends StatelessWidget {
       child: Row(
         children: [
           const HeaderAvatar(),
-          const SizedBox(width: 20),
+          const SizedBox(width: 12),
           const HeaderSearchBar(),
           const SizedBox(width: 10),
           HeaderLanguage(),

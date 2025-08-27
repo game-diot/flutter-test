@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class NewsHeader extends StatefulWidget {
   final ValueChanged<int>? onTabSelected; // 新增回调
 
@@ -17,14 +18,17 @@ class _NewsHeaderState extends State<NewsHeader> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final bgColor = isDark ? Color.fromARGB(255, 18, 18, 18) : Color.fromRGBO(237, 176, 35, 1);
+    final bgColor = isDark
+        ? Color.fromARGB(255, 18, 18, 18)
+        : Color.fromRGBO(237, 176, 35, 1);
     final textColor = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black;
     final searchBgColor = isDark ? Color(0xFF424242) : Colors.white;
     final searchTextColor = isDark ? Color(0xFF9D9D9D) : Colors.black87;
 
     return Container(
       color: bgColor,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,13 +38,17 @@ class _NewsHeaderState extends State<NewsHeader> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               color: searchBgColor,
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: [
                 const Padding(
                   padding: EdgeInsets.only(top: 5),
-                  child: Icon(Icons.search, color: Colors.grey, size: 26),
+                  child: Icon(
+                    Icons.search_rounded, // 圆角放大镜
+                    color: Colors.grey,
+                    size: 28, // 调大整体大小
+                  ),
                 ),
                 Expanded(
                   child: TextField(
@@ -76,13 +84,15 @@ class _NewsHeaderState extends State<NewsHeader> {
                       style: TextStyle(
                         color: textColor,
                         fontSize: 16,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
                     SizedBox(height: 4),
                     AnimatedContainer(
                       duration: Duration(milliseconds: 300),
-                      width: 40,
+                      width: 15,
                       height: 2,
                       color: isSelected ? textColor : Colors.transparent,
                     ),

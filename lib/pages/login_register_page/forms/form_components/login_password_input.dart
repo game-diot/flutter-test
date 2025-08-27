@@ -15,8 +15,20 @@ class LoginPasswordInput extends StatelessWidget {
         hintText: '请输入密码',
         hintStyle: const TextStyle(color: Colors.black),
         contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-      ),
+       enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Color.fromRGBO(244, 244, 244, 1), // 纯淡灰色
+            width: 1, // 比较细，但能看到
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Color.fromRGBO(244, 244, 244, 1),
+            width: 1,
+          ),
+        ),)
     );
   }
 }

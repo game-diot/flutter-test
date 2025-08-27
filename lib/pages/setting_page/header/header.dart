@@ -8,7 +8,16 @@ class SettingPageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromRGBO(81, 63, 41, 1), // 背景色
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color.fromRGBO(81, 63, 41, 1), // 上方颜色
+            Color.fromRGBO(54, 40, 24, 1), // 下方颜色
+          ],
+        ),
+      ),
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         children: [
@@ -20,7 +29,9 @@ class SettingPageHeader extends StatelessWidget {
                 // 左侧头像
                 CircleAvatar(
                   radius: 30,
-                  backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=4'),
+                  backgroundImage: NetworkImage(
+                    'https://i.pravatar.cc/150?img=4',
+                  ),
                 ),
                 SizedBox(width: 16),
                 // 右侧账号信息
@@ -57,12 +68,7 @@ class SettingPageHeader extends StatelessWidget {
             child: Row(
               children: [
                 // 收藏
-                _infoItem(
-                  context,
-                  '收藏',
-                  '12',
-                 
-                ),
+                _infoItem(context, '收藏', '12'),
                 SizedBox(width: 24),
                 // 被点赞
                 _infoItem(
@@ -90,19 +96,36 @@ class SettingPageHeader extends StatelessWidget {
                   },
                 ),
                 Spacer(),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(81, 63, 41, 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(color: Colors.white, width: 1),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color.fromRGBO(81, 63, 41, 1),
+                        Color.fromRGBO(54, 40, 24, 1),
+                      ],
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Text(
-                    '编辑资料',
-                    style: TextStyle(color: Colors.white),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent, // 背景透明，显示渐变
+                      shadowColor: Colors.transparent, // 去掉按钮默认阴影
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: Colors.white, width: 1),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                    ),
+                    child: const Text(
+                      '编辑资料',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ],
@@ -113,7 +136,12 @@ class SettingPageHeader extends StatelessWidget {
     );
   }
 
-  Widget _infoItem(BuildContext context, String title, String count, {VoidCallback? onTap}) {
+  Widget _infoItem(
+    BuildContext context,
+    String title,
+    String count, {
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -127,13 +155,7 @@ class SettingPageHeader extends StatelessWidget {
             ),
           ),
           SizedBox(height: 4),
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 12,
-            ),
-          ),
+          Text(title, style: TextStyle(color: Colors.white70, fontSize: 12)),
         ],
       ),
     );

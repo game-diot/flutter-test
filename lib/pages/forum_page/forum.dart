@@ -24,7 +24,7 @@ class _ForumPageState extends State<ForumPage> {
             Container(
               color: Theme.of(context).brightness == Brightness.dark
                   ? const Color.fromRGBO(18, 18, 18, 1)
-                  : const Color.fromRGBO(237, 176, 35, 1),
+                  : const Color.fromARGB(255, 255, 255, 255),
               child: ForumHeader(
                 onTabSelected: (i) => setState(() => _selectedTabIndex = i),
               ),

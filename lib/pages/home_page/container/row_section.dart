@@ -5,7 +5,7 @@ class RowSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 35,
+      height: 45,
       color: Color.fromARGB(255, 63, 61, 51),
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -17,7 +17,7 @@ class RowSection extends StatelessWidget {
             child: SvgPicture.asset(
               'assets/images/book.svg',
               width: 30,
-              height: 28,
+              height: 30,
               color: Color.fromRGBO(237, 176, 35, 1),
             ),
           ),
@@ -34,7 +34,7 @@ class RowSection extends StatelessWidget {
 
           Icon(
             Icons.arrow_forward,
-            size: 18,
+            size: 20,
             color: Color.fromRGBO(237, 176, 35, 1),
           ),
         ],

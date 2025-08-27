@@ -1,6 +1,3 @@
-// ==========================================
-// lib/home_page/data_section/widgets/exchange_table.dart
-// ==========================================
 
 import 'package:flutter/material.dart';
 import '../../../../../providers/exchange/exchange.dart';
@@ -97,7 +94,7 @@ class ExchangeTable extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Text(
-                    '${item.volume.toStringAsFixed(2)}',
+                    '${item?.volume.toStringAsFixed(2)}',
                     textAlign: TextAlign.right,
                     style: TextStyle(color: textColor),
                   ),

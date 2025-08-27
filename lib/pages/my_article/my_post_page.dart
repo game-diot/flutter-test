@@ -11,14 +11,46 @@ class MyPostsPage extends StatelessWidget {
     // 示例数据
     final postList = [
       {
-        "title": "Flutter UI组件封装",
+        "title": "Flutter UIashdgjjasydg7iadhjk家哈是德国海粟对爱温度计卡死你不信你不名称不能寄回家啊都不说假话组件封装",
         "avatar": "https://i.pravatar.cc/150?img=2",
         "username": "张三",
-        "content": "这是一篇关于Flutter组件封装的帖子……",
+        "content": "这是一篇关于Flut撒打算大撒打算大就尬死都尬舞i为渡鸦高度压缩记得挂上度过ter组件封装的帖子……",
         "likes": 23,
         "comments": 5,
       },
       {
+        "title": "数据可视化设计思路",
+        "avatar": "https://i.pravatar.cc/150?img=3",
+        "username": "李四",
+        "content": "你想做可视化平asfajkbzxhjcy7iawbhjbmzxncuiyauiywdbhjasdghjatyuayuiweuioqwghju111111台？这里有一些设计思路……",
+        "likes": 18,
+        "comments": 2,
+      },
+       {
+        "title": "数据可视化设计思路",
+        "avatar": "https://i.pravatar.cc/150?img=3",
+        "username": "李四",
+        "content": "你想做可视化平台？这里有一些设计思路……",
+        "likes": 18,
+        "comments": 2,
+      },
+       {
+        "title": "数据可视化设计思路",
+        "avatar": "https://i.pravatar.cc/150?img=3",
+        "username": "李四",
+        "content": "你想做可视化平台？这里有一些设计思路……",
+        "likes": 18,
+        "comments": 2,
+      },
+       {
+        "title": "数据可视化设计思路",
+        "avatar": "https://i.pravatar.cc/150?img=3",
+        "username": "李四",
+        "content": "你想做可视化平台？这里有一些设计思路……",
+        "likes": 18,
+        "comments": 2,
+      },
+       {
         "title": "数据可视化设计思路",
         "avatar": "https://i.pravatar.cc/150?img=3",
         "username": "李四",

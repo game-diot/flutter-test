@@ -9,12 +9,17 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-
-    if (currentIndex == 4) {
+  if (currentIndex == 4) {
       // Setting 页面固定深色
       return AppBar(
         toolbarHeight: 0,
-        backgroundColor: const Color.fromRGBO(81, 63, 41, 1),
+        backgroundColor: const  Color.fromRGBO(81, 63, 41, 1),
+        elevation: 0,
+      );
+    } else if (currentIndex == 1) {
+      return AppBar(
+        toolbarHeight: 0,
+        backgroundColor:isDark?const Color.fromRGBO(18, 18, 18, 1): const Color.fromRGBO(237, 176, 35, 1),
         elevation: 0,
       );
     }
@@ -23,7 +28,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 0,
       backgroundColor: isDark
           ? const Color.fromRGBO(18, 18, 18, 1) // 暗色背景
-          : const Color.fromRGBO(237, 176, 35, 1), // 明亮背景
+          : const Color.fromARGB(255, 255, 255, 255), // 明亮背景
       elevation: 0,
     );
   }

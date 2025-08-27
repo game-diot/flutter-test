@@ -40,6 +40,7 @@ class _CountrySelectWidgetState extends State<CountrySelectWidget> {
       isExpanded: true,
       underline: const SizedBox(),
       dropdownColor: Colors.white,
+        icon: const SizedBox.shrink(), // 👈 去掉默认的箭头
       onChanged: (Country? newValue) {
         if (newValue != null) {
           context.read<CountryProvider>().selectCountry(newValue);
@@ -68,7 +69,7 @@ class _CountrySelectWidgetState extends State<CountrySelectWidget> {
                   errorWidget: (_, __, ___) => const Icon(Icons.error, size: 20),
                 ),
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: 12),
               Text('+${country.areaCode}', style: const TextStyle(color: Colors.black)),
             ],
           ),

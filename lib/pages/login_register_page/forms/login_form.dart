@@ -3,7 +3,7 @@ import '../../home_page/home.dart';
 import '../../../../network/Get/models/splash_page/login_area.dart';
 import '../../../../network/Post/services/login_page/login_request.dart';
 import '../../../../network/Post/models/login_page/login_request.dart';
-import 'form_components/login_switch_buttons.dart';
+import 'form_components/switch_buttons.dart';
 import 'form_components/login_phone_input.dart';
 import 'form_components/login_email_input.dart';
 import 'form_components/login_password_input.dart';
@@ -16,7 +16,7 @@ class LoginForm extends StatefulWidget {
   final VoidCallback? onLoginSuccess;
 
   const LoginForm({this.onSwitchToRegister, this.onLoginSuccess, Key? key})
-      : super(key: key);
+    : super(key: key);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -57,7 +57,9 @@ class _LoginFormState extends State<LoginForm> {
 
     if (success) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => HomePage()));
+        context,
+        MaterialPageRoute(builder: (_) => HomePage()),
+      );
       widget.onLoginSuccess?.call();
     }
   }
@@ -70,17 +72,19 @@ class _LoginFormState extends State<LoginForm> {
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 16),
-              LoginSwitchButtons(
-                isPhoneSelected: isPhoneSelected,
+              SwitchButtons(
+                isFirstSelected: isPhoneSelected,
+                labels: ['手机号', '邮箱'],
                 onSwitch: (val) => setState(() => isPhoneSelected = val),
               ),
-              const SizedBox(height: 28),
+
+              const SizedBox(height: 16),
               isPhoneSelected
                   ? LoginPhoneInput(
                       controller: phoneController,
@@ -93,16 +97,15 @@ class _LoginFormState extends State<LoginForm> {
                       onSuffixChanged: (val) =>
                           setState(() => selectedEmailSuffix = val),
                     ),
-              const SizedBox(height: 22),
+              const SizedBox(height: 16),
               LoginPasswordInput(controller: passwordController),
               const SizedBox(height: 28),
-              LoginButton(
-                isLoading: _isLoading,
-                onPressed: _handleLogin,
+              LoginButton(isLoading: _isLoading, onPressed: _handleLogin),
+              const SizedBox(height: 24),
+              LoginRegisterButton(
+                onSwitchToRegister: widget.onSwitchToRegister,
               ),
-              const SizedBox(height: 18),
-              LoginRegisterButton(onSwitchToRegister: widget.onSwitchToRegister),
-              const SizedBox(height: 18),
+              const SizedBox(height: 8),
               const LoginAgreement(),
             ],
           ),

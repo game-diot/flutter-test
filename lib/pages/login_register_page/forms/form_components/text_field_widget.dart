@@ -1,3 +1,4 @@
+// text_field_widget.dart
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
@@ -18,17 +19,27 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      style: TextStyle(color: Colors.black),
+      style: const TextStyle(color: Colors.black),
       cursorColor: Colors.black,
       obscureText: obscureText,
       keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.black),
-        contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        hintStyle: const TextStyle(color: Colors.black),
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+        // Use the same border for all states
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color.fromRGBO(244, 244, 244, 1), width: 1),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color.fromRGBO(244, 244, 244, 1), width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color.fromRGBO(244, 244, 244, 1), width: 1),
+        ),
       ),
     );
   }

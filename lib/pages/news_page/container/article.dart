@@ -21,17 +21,12 @@ class ArticleOverview extends StatelessWidget {
     final dateColor = isDark ? Colors.white70 : Colors.grey[600];
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black54 : Colors.grey.shade300,
-            blurRadius: 4,
-          )
-        ],
+        
       ),
       child: Row(
         children: [
@@ -46,7 +41,7 @@ class ArticleOverview extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     color: titleColor,
                   ),
                 ),
@@ -64,13 +59,14 @@ class ArticleOverview extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: Image.asset(
               item.imageUrl,
-              width: 100,
+              width: 80,
               height: 80,
               fit: BoxFit.cover,
             ),
           ),
         ],
       ),
+    
     );
   }
 }

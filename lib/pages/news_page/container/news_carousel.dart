@@ -42,7 +42,6 @@ class NewsCarousel extends StatelessWidget {
                   fit: StackFit.expand,
                   children: [
                     Image.asset(bgImage, fit: BoxFit.cover),
-                    Container(color: Colors.black.withOpacity(0.3)),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),

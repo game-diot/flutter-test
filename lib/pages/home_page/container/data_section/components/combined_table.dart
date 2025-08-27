@@ -1,8 +1,4 @@
 
-// ==========================================
-// lib/home_page/data_section/widgets/combined_table.dart
-// ==========================================
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../providers/color/color.dart';
@@ -52,7 +48,7 @@ class CombinedTable extends StatelessWidget {
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 12),
       child: Row(
         children: [
           _buildSortableHeader('名称', flex: 2, alignment: MainAxisAlignment.start),
@@ -71,11 +67,11 @@ class CombinedTable extends StatelessWidget {
         child: Row(
           mainAxisAlignment: alignment ?? MainAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+            Text(title, style: TextStyle(fontWeight: FontWeight.w100, color: Color.fromRGBO(134, 144, 156,1))),
             Icon(
               sortAscending[title] == true ? Icons.arrow_upward : Icons.arrow_downward,
               size: 16,
-              color: subTextColor,
+              color: Color.fromRGBO(134, 144, 156,1),
             ),
           ],
         ),
@@ -83,8 +79,10 @@ class CombinedTable extends StatelessWidget {
     );
   }
 
-  Widget _buildContent() {
-    return Expanded(
+ Widget _buildContent() {
+  return Expanded(
+    child: Transform.translate(
+      offset: const Offset(-8, 0), // 整体向左移动4像素
       child: ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
@@ -92,12 +90,14 @@ class CombinedTable extends StatelessWidget {
           return _buildTableRow(item);
         },
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _buildTableRow(CombinedCoinData item) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 12),
       child: Row(
         children: [
           _buildCoinIcon(item.icon1),
@@ -113,12 +113,12 @@ class CombinedTable extends StatelessWidget {
   Widget _buildCoinIcon(String iconUrl) {
     return Image.network(
       iconUrl,
-      width: 20,
-      height: 20,
+      width: 30,
+      height: 30,
       errorBuilder: (context, error, stackTrace) {
         return Container(
-          width: 20,
-          height: 20,
+          width: 30,
+          height: 30,
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(10),
@@ -160,22 +160,26 @@ class CombinedTable extends StatelessWidget {
     );
   }
 
-  Widget _buildPrice(CombinedCoinData item) {
-    return Expanded(
-      flex: 1,
-      child: item.hasRealTimeData && item.currentPrice != null
-          ? Text(
-              '¥${item.currentPrice!.toStringAsFixed(2)}',
-              textAlign: TextAlign.right,
-              style: TextStyle(color: textColor),
-            )
-          : Text(
-              '--',
-              textAlign: TextAlign.right,
-              style: TextStyle(color: textColor.withOpacity(0.5)),
-            ),
-    );
-  }
+ Widget _buildPrice(CombinedCoinData item) {
+  return Expanded(
+    flex: 1,
+    child: Padding(
+      padding: const EdgeInsets.only(right: 2), // 右边留点空，让文本看起来左移
+      child: Align(
+        alignment: Alignment.centerRight, // 保持右对齐
+        child: item.hasRealTimeData && item.currentPrice != null
+            ? Text(
+                '¥${item.currentPrice!.toStringAsFixed(2)}',
+                style: TextStyle(color: textColor),
+              )
+            : Text(
+                '--',
+                style: TextStyle(color: textColor.withOpacity(0.5)),
+              ),
+      ),
+    ),
+  );
+}
 
   Widget _buildPriceChange(CombinedCoinData item) {
     return Expanded(

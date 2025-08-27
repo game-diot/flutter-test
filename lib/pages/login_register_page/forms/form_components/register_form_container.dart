@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'register_form_content.dart';
-
-class RegisterFormContainer extends StatelessWidget {
+class RegisterFormContainer extends StatefulWidget {
   final VoidCallback? onSwitchToLogin;
-
   const RegisterFormContainer({this.onSwitchToLogin, Key? key}) : super(key: key);
+
+  @override
+  State<RegisterFormContainer> createState() => _RegisterFormContainerState();
+}
+
+class _RegisterFormContainerState extends State<RegisterFormContainer> {
+  bool isPhoneSelected = true;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +23,14 @@ class RegisterFormContainer extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
+
         ),
         child: SingleChildScrollView(
-          child: RegisterFormContent(onSwitchToLogin: onSwitchToLogin),
+          child: RegisterFormContent(
+            onSwitchToLogin: widget.onSwitchToLogin,
+            isPhoneSelected: isPhoneSelected,
+            onSwitch: (val) => setState(() => isPhoneSelected = val),
+          ),
         ),
       ),
     );

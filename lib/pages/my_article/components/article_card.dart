@@ -82,7 +82,8 @@ class ArticleCard extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: onMore,
-                  child: Text("更多操作", style: TextStyle(color: subTextColor)),
+                  child: Text("...", style: TextStyle(color: subTextColor,
+                  fontSize: 24)),
                 ),
               ],
             ),

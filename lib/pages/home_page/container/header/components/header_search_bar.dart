@@ -7,7 +7,7 @@ class HeaderSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
-    final searchBg = isLight ? const Color(0xfff2f2f2) : Colors.grey[800];
+    final searchBg = isLight ? const Color.fromRGBO(242, 242, 242, 1) :Color.fromRGBO(242, 242, 242, 1);
     final searchTextColor = isLight ? Colors.black87 : Colors.white70;
 
     return Container(

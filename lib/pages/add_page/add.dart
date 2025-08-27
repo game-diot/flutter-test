@@ -43,12 +43,16 @@ class AddPage extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: '请输入帖子标题（30个字内）',
                   border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(241, 245, 249, 0.1),
+                      width: 0.1, // 设置线宽为 0.5，更细
+                    ),
                   ),
+
                   counterText: '',
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
 
               // 正文输入框
               const Expanded(
@@ -80,7 +84,10 @@ class AddPage extends StatelessWidget {
                   ),
                   child: const Text(
                     '发布',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color.fromRGBO(41, 46, 56, 1), // 正确写法
+                    ),
                   ),
                 ),
               ),

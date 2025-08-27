@@ -26,7 +26,7 @@ class HeaderLanguage extends StatelessWidget {
               children: [
                 if (lang == currentLang) ...[
                   const Icon(Icons.check, size: 18, color: Colors.blue),
-                  const SizedBox(width: 6),
+
                 ],
                 Text(
                   lang,

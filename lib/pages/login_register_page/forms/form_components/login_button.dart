@@ -21,7 +21,7 @@ class LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator(color: Colors.white)
             : const Text('登录', style: TextStyle(fontSize: 18)),
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF292e38),
+          backgroundColor: const Color.fromRGBO(237, 176, 35,1),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),

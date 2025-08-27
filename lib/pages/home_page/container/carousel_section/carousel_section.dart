@@ -125,16 +125,7 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
 
     if (widget.isLoading == true) {
       return Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: isLight
-                  ? Color.fromRGBO(134, 144, 156, 0.4)
-                  : Colors.grey.withOpacity(0.4),
-              width: 0.4,
-            ),
-          ),
-        ),
+        
         height: 150,
         child: const Center(child: CircularProgressIndicator()),
       );
@@ -142,16 +133,6 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
 
     if (_combinedData.isEmpty) {
       return Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: isLight
-                  ? Color.fromRGBO(134, 144, 156, 0.4)
-                  : Colors.grey.withOpacity(0.4),
-              width: 0.4,
-            ),
-          ),
-        ),
         height: 150,
         child: Center(
           child: Text(
@@ -165,16 +146,7 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
     }
 
     return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: isLight
-                ? Color.fromRGBO(134, 144, 156, 0.4)
-                : Colors.grey.withOpacity(0.4),
-            width: 0.4,
-          ),
-        ),
-      ),
+      
       height: 150,
       width: double.infinity,
       child: PageView.builder(

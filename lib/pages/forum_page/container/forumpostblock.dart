@@ -39,7 +39,7 @@ class ForumPostBlock extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final bgColor = isDark ? Colors.grey[850] : Colors.white;
-    final titleColor = isDark ? Colors.white : Colors.black;
+    final titleColor = isDark ? Color.fromRGBO(223, 229, 236, 1)  : Colors.black;
     final subtitleColor = isDark ? Colors.white70 : Colors.grey[600];
     final iconColor = Color.fromRGBO(237, 176, 35, 1);
     final shadowColor = isDark ? Colors.black26 : Colors.grey.withOpacity(0.2);
@@ -70,13 +70,18 @@ class ForumPostBlock extends StatelessWidget {
             decoration: BoxDecoration(
               color: bgColor,
               borderRadius: BorderRadius.circular(10),
-              boxShadow: [BoxShadow(color: shadowColor, blurRadius: 4)],
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.black.withOpacity(0.05), // 很淡的黑色
+                  width: 1, // 线宽
+                ),
+              ),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 左侧标
-                SizedBox(width: 12),
+                SizedBox(width: 18),
                 // 右侧内容
                 Expanded(
                   child: Column(
@@ -90,19 +95,19 @@ class ForumPostBlock extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: titleColor,
                         ),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 8),
                       // 作者信息
                       Row(
                         children: [
                           Icon(
                             Icons.account_circle,
-                            size: 20,
+                            size: 25,
                             color: iconColor,
                           ),
-                          SizedBox(width: 4),
+                          SizedBox(width: 6),
                           Text(
                             author,
                             style: TextStyle(
@@ -112,7 +117,7 @@ class ForumPostBlock extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 6),
+                      SizedBox(height: 10),
                       // 内容摘要
                       Text(
                         content,
@@ -123,14 +128,8 @@ class ForumPostBlock extends StatelessWidget {
                       SizedBox(height: 8),
                       // 点赞与评论
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.favorite_border,
-                            size: 16,
-                            color: subtitleColor,
-                          ),
-                          SizedBox(width: 4),
                           Text(
                             '$likes',
                             style: TextStyle(
@@ -138,9 +137,24 @@ class ForumPostBlock extends StatelessWidget {
                               color: subtitleColor,
                             ),
                           ),
-                          SizedBox(width: 16),
-                          Icon(Icons.comment, size: 16, color: subtitleColor),
                           SizedBox(width: 4),
+
+                          Text(
+                            '点赞',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: subtitleColor,
+                            ),
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            '/',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: subtitleColor,
+                            ),
+                          ),
+                          SizedBox(width: 6),
                           Text(
                             '$comments',
                             style: TextStyle(
@@ -148,8 +162,17 @@ class ForumPostBlock extends StatelessWidget {
                               color: subtitleColor,
                             ),
                           ),
+
+                          Text(
+                            '评论',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: subtitleColor,
+                            ),
+                          ),
                         ],
                       ),
+                      SizedBox(height: 8),
                     ],
                   ),
                 ),
@@ -160,10 +183,10 @@ class ForumPostBlock extends StatelessWidget {
           // 排行榜徽章
           if (rank != null)
             Positioned(
-              left: 16, // 左侧内边距，紧贴帖子左边缘
-              top: 4, // 上方间距
+              left: 20, // 左侧内边距，紧贴帖子左边缘
+              top: 24, // 上方间距
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
                 decoration: BoxDecoration(
                   color: getRankColor(rank!),
                   borderRadius: BorderRadius.circular(5),

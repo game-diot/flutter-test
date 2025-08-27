@@ -10,7 +10,7 @@ class MarketBanner extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         child: SizedBox(
           width: double.infinity,
           height: 150,

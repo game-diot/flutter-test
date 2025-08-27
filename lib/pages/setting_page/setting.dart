@@ -10,6 +10,7 @@ import 'components/ad_banner.dart';
 import 'components/setting_item.dart';
 import '../my_article/my_likes_page.dart';
 import '../my_article/my_post_page.dart';
+import '../login_register_page/splash_screen.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -67,7 +68,22 @@ class SettingPage extends StatelessWidget {
           ),
 
           const SizedBox(height: 20),
-
+          // 语言设置
+          Consumer<LanguageProvider>(
+            builder: (context, languageProvider, child) {
+              return SettingItem(
+                icon: Icons.language,
+                title: '切换语言',
+                subtitle: languageProvider.language,
+                options: const ['中文', 'English', '日本語', '한국어'],
+                isArrow: true,
+                onSelected: (selected) {
+                  languageProvider.setLanguage(selected);
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 8),
           // 主题设置
           Builder(
             builder: (context) {
@@ -109,34 +125,27 @@ class SettingPage extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // 语言设置
-          Consumer<LanguageProvider>(
-            builder: (context, languageProvider, child) {
-              return SettingItem(
-                icon: Icons.language,
-                title: '切换语言',
-                subtitle: languageProvider.language,
-                options: const ['中文', 'English', '日本語', '한국어'],
-                isArrow: true,
-                onSelected: (selected) {
-                  languageProvider.setLanguage(selected);
-                },
-              );
-            },
-          ),
-
-          const SizedBox(height: 8),
-
-          // 涨跌颜色设置
           Consumer<ChangeColorProvider>(
             builder: (context, colorProvider, child) {
+              final isGreenUpRedDown =
+                  colorProvider.mode == ChangeColorMode.greenUpRedDown;
+              final upColor = isGreenUpRedDown ? Colors.green : Colors.red;
+              final downColor = isGreenUpRedDown ? Colors.red : Colors.green;
+
               return SettingItem(
                 icon: Icons.show_chart,
                 title: '涨跌颜色',
-                subtitle: colorProvider.subtitle,
-                options: const ['涨绿跌红', '涨红跌绿'],
+                subtitleWidget: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.arrow_upward, color: upColor, size: 18),
+                    Icon(Icons.arrow_downward, color: downColor, size: 18),
+                  ],
+                ),
                 isArrow: true,
+                options: const ['涨绿跌红', '涨红跌绿'], // 保留选择项
                 onSelected: (selected) {
+                  // 这里同步更新颜色模式
                   if (selected == '涨红跌绿' &&
                       colorProvider.mode == ChangeColorMode.greenUpRedDown) {
                     colorProvider.toggleMode();
@@ -144,6 +153,10 @@ class SettingPage extends StatelessWidget {
                       colorProvider.mode == ChangeColorMode.redUpGreenDown) {
                     colorProvider.toggleMode();
                   }
+                },
+                onTap: () {
+                  // 点击整行也可以切换
+                  colorProvider.toggleMode();
                 },
               );
             },
@@ -153,7 +166,7 @@ class SettingPage extends StatelessWidget {
 
           // 意见反馈
           SettingItem(
-            icon: Icons.feedback,
+            icon: Icons.email,
             title: '意见反馈',
             isArrow: true,
             onTap: () {
@@ -167,8 +180,9 @@ class SettingPage extends StatelessWidget {
 
           // 注销账号
           SettingItem(
-            icon: Icons.logout,
+            icon: Icons.lock,
             title: '注销账号',
+            isArrow: true,
             onTap: () {
               showDialog(
                 context: context,
@@ -183,8 +197,13 @@ class SettingPage extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('账号注销功能待实现')),
+                        // 跳转到登录页并清空路由栈
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SplashScreen(),
+                          ),
+                          (route) => false,
                         );
                       },
                       child: const Text('确认'),
