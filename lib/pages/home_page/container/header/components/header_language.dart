@@ -15,7 +15,7 @@ class HeaderLanguage extends StatelessWidget {
     final currentLang = context.watch<LanguageProvider>().language;
 
     return PopupMenuButton<String>(
-      icon: Icon(Icons.public, size: 36, color: Theme.of(context).iconTheme.color),
+      icon: Icon(Icons.public, size: 28, color: Theme.of(context).iconTheme.color),
       initialValue: currentLang,
       onSelected: (lang) => _onLanguageSelected(context, lang),
       itemBuilder: (context) => [

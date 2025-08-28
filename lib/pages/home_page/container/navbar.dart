@@ -61,17 +61,20 @@ class Navbar extends StatelessWidget {
             label: '新闻',
           ),
           BottomNavigationBarItem(
-            icon: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(237, 176, 35, 1), // 背景黑色
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.add,
-                size: 30,
-                color: Color.fromRGBO(51,51,51, 1), // 图标黄色
+            icon: Transform.translate(
+              offset: const Offset(0, 4), // x=0, y=2px 向下移动
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(237, 176, 35, 1), // 背景黄色
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.add,
+                  size: 30,
+                  color: Color.fromRGBO(51, 51, 51, 1), // 图标深色
+                ),
               ),
             ),
             label: '',

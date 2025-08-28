@@ -17,7 +17,7 @@ class MarketCarousel extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             '全球指数',
             style: TextStyle(
@@ -27,7 +27,6 @@ class MarketCarousel extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 10),
         Container(
           color: theme.cardColor,
           child: isLoading

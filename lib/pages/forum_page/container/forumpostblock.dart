@@ -103,14 +103,14 @@ class ForumPostBlock extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.account_circle,
-                            size: 25,
+                            size: 30,
                             color: iconColor,
                           ),
                           SizedBox(width: 6),
                           Text(
                             author,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 16,
                               color: subtitleColor,
                             ),
                           ),
@@ -171,7 +171,7 @@ class ForumPostBlock extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8),
+
                     ],
                   ),
                 ),
@@ -182,10 +182,10 @@ class ForumPostBlock extends StatelessWidget {
           // 排行榜徽章
           if (rank != null)
             Positioned(
-              left: 20, // 左侧内边距，紧贴帖子左边缘
-              top: 24, // 上方间距
+              left: 16, // 左侧内边距，紧贴帖子左边缘
+              top: 20, // 上方间距
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1.5),
                 decoration: BoxDecoration(
                   color: getRankColor(rank!),
                   borderRadius: BorderRadius.circular(5),
@@ -194,7 +194,7 @@ class ForumPostBlock extends StatelessWidget {
                   '$rank',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

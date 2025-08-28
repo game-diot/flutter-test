@@ -16,7 +16,7 @@ class SwitchButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(4),
+
       decoration: BoxDecoration(
         color: const Color(0xFFF4F4F5),
         borderRadius: BorderRadius.circular(12),

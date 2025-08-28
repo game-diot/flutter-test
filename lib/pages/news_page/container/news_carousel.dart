@@ -22,7 +22,7 @@ class NewsCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 150,
+      height: 170,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(left: 16), // 左边距，让第一个项目贴边
@@ -34,8 +34,8 @@ class NewsCarousel extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(right: 8), // 右边距
             child: SizedBox(
-              width: 150,
-              height: 150,
+              width: 170,
+              height: 170,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Stack(

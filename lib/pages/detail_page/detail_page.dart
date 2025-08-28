@@ -4,7 +4,7 @@ import 'components/detail_user_info.dart';
 import 'components/detail_content.dart';
 import 'components/detail_divider_item.dart';
 import 'components/detail_bottom_bar.dart';
-import 'comment_section.dart';
+import 'components/comment_section.dart';
 import '../my_article/components/common_header.dart';
 class DetailPage extends StatelessWidget {
   final String title;

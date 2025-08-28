@@ -11,10 +11,10 @@ class HeaderSearchBar extends StatelessWidget {
     final searchTextColor = isLight ? Colors.black87 : Colors.white70;
 
     return Container(
-      width: 200,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      width: 230,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(8),
         color: searchBg,
       ),
       child: Row(

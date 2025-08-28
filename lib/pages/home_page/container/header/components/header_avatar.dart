@@ -17,7 +17,7 @@ class HeaderAvatar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.black, width: 1), // 黑色边框
+
       ),
       child: CircleAvatar(
         radius: 20,

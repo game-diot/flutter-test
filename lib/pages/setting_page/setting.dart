@@ -12,6 +12,7 @@ import '../my_article/my_likes_page.dart';
 import '../my_article/my_post_page.dart';
 import '../login_register_page/splash_screen.dart';
 import '../../providers/login/login.dart';
+
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
 
@@ -23,11 +24,11 @@ class SettingPage extends StatelessWidget {
         children: [
           // Header
           const SettingPageHeader(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
           // 我的帖子 / 我的点赞
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: [
                 Expanded(
@@ -83,7 +84,7 @@ class SettingPage extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           // 主题设置
           Builder(
             builder: (context) {
@@ -123,7 +124,7 @@ class SettingPage extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
 
           Consumer<ChangeColorProvider>(
             builder: (context, colorProvider, child) {
@@ -162,7 +163,7 @@ class SettingPage extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
 
           // 意见反馈
           SettingItem(
@@ -176,50 +177,51 @@ class SettingPage extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
 
           // 注销账号
-SettingItem(
-  icon: Icons.lock,
-  title: '注销账号',
-  isArrow: true,
-  onTap: () {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('确认注销'),
-        content: const Text('确定要注销当前账号吗？'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('取消'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
+          SettingItem(
+            icon: Icons.lock,
+            title: '注销账号',
+            isArrow: true,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('确认注销'),
+                  content: const Text('确定要注销当前账号吗？'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('取消'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
 
-              // 清空登录状态
-              final authProvider =
-                  Provider.of<AuthProvider>(context, listen: false);
-              await authProvider.logout();
+                        // 清空登录状态
+                        final authProvider = Provider.of<AuthProvider>(
+                          context,
+                          listen: false,
+                        );
+                        await authProvider.logout();
 
-              // 跳转到登录页并清空路由栈
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SplashScreen(),
+                        // 跳转到登录页并清空路由栈
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SplashScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                      child: const Text('确认'),
+                    ),
+                  ],
                 ),
-                (route) => false,
               );
             },
-            child: const Text('确认'),
           ),
-        ],
-      ),
-    );
-  },
-),
-
         ],
       ),
     );

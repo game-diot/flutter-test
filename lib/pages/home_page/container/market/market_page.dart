@@ -10,7 +10,11 @@ class MarketPage extends StatelessWidget {
   final List<SymbolItem> coinList;
   final bool isLoading;
 
-  const MarketPage({super.key, required this.coinList, required this.isLoading});
+  const MarketPage({
+    super.key,
+    required this.coinList,
+    required this.isLoading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +24,14 @@ class MarketPage extends StatelessWidget {
         children: [
           const MarketHeader(),
           const MarketBanner(),
-          MarketCarousel(coinList: coinList, isLoading: isLoading),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: MarketCarousel(coinList: coinList, isLoading: isLoading),
+          ),
+
           const SizedBox(height: 10),
           const MarketRowSection(),
-          const SizedBox(height: 10),
+          const SizedBox(height: 13),
           MarketDataSection(coinList: coinList, isLoading: isLoading),
         ],
       ),

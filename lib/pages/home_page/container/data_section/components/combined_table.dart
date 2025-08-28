@@ -48,7 +48,7 @@ class CombinedTable extends StatelessWidget {
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
       child: Row(
         children: [
           _buildSortableHeader('名称', flex: 2, alignment: MainAxisAlignment.start),
@@ -97,7 +97,7 @@ class CombinedTable extends StatelessWidget {
 
   Widget _buildTableRow(CombinedCoinData item) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 12),
       child: Row(
         children: [
           _buildCoinIcon(item.icon1),
@@ -113,8 +113,8 @@ class CombinedTable extends StatelessWidget {
   Widget _buildCoinIcon(String iconUrl) {
     return Image.network(
       iconUrl,
-      width: 30,
-      height: 30,
+      width: 28,
+      height: 28,
       errorBuilder: (context, error, stackTrace) {
         return Container(
           width: 30,
@@ -152,7 +152,7 @@ class CombinedTable extends StatelessWidget {
               item.symbol,
               style: TextStyle(
                 color: textColor.withOpacity(0.6),
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
         ],

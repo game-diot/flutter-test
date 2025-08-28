@@ -9,7 +9,7 @@ class HeaderThemeToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(isLight ? Icons.dark_mode : Icons.light_mode,
-          size: 36, color: isLight ? Colors.black : Colors.white),
+          size: 28, color: isLight ? Colors.black : Colors.white),
       onPressed: () {
         final adaptiveTheme = AdaptiveTheme.of(context);
         if (isLight) {

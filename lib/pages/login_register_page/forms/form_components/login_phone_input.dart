@@ -22,7 +22,7 @@ class LoginPhoneInput extends StatelessWidget {
         hintStyle: const TextStyle(color: Colors.black54),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 14,
-          horizontal: 12,
+          horizontal: 8,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -51,10 +51,7 @@ class LoginPhoneInput extends StatelessWidget {
             ],
           ),
         ),
-        prefixIconConstraints: const BoxConstraints(
-          minWidth: 120, // 👈 给足够空间
-          minHeight: 0,
-        ),
+       
       ),
       keyboardType: TextInputType.phone,
     );

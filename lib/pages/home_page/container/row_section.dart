@@ -13,11 +13,11 @@ class RowSection extends StatelessWidget {
         children: [
           // 书本图标
           Padding(
-            padding: EdgeInsets.only(top: 2), // 向下偏移 1px
+            padding: EdgeInsets.only(top: 2,left: 16), // 向下偏移 1px
             child: SvgPicture.asset(
               'assets/images/book.svg',
-              width: 30,
-              height: 30,
+              width: 20,
+              height: 20,
               color: Color.fromRGBO(237, 176, 35, 1),
             ),
           ),

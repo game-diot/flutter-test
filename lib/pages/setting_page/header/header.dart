@@ -119,7 +119,7 @@ class SettingPageHeader extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
-                        vertical: 8,
+                        vertical: 10,
                       ),
                     ),
                     child: const Text(
@@ -131,6 +131,7 @@ class SettingPageHeader extends StatelessWidget {
               ],
             ),
           ),
+            SizedBox(height: 26),
         ],
       ),
     );

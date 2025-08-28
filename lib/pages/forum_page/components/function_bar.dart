@@ -31,6 +31,7 @@ class ForumFunctionBar extends StatelessWidget {
       onTap: () {}, // 回调
       child: Column(
         children: [
+                    const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(

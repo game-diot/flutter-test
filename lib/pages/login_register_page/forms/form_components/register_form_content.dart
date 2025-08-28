@@ -191,6 +191,7 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
             },
             child: const Text('注册', style: TextStyle(fontSize: 18)),
             style: ElevatedButton.styleFrom(
+              elevation: 0, // 去掉阴影
               backgroundColor: const Color.fromRGBO(244, 244, 245, 1),
               foregroundColor: const Color.fromARGB(255, 0, 0, 0),
               shape: RoundedRectangleBorder(

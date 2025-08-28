@@ -18,7 +18,7 @@ class SymbolCarousel extends StatefulWidget {
   final bool? isLoading;
 
   const SymbolCarousel({Key? key, this.coinList, this.isLoading})
-      : super(key: key);
+    : super(key: key);
 
   @override
   _SymbolCarouselState createState() => _SymbolCarouselState();
@@ -61,7 +61,8 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
         orElse: () => CombinedChartData.fromSymbolItem(symbolItem),
       );
 
-      final exchangeRate = _exchangeRateMap[wsSymbol] ?? _exchangeRateMap[symbolItem.symbol];
+      final exchangeRate =
+          _exchangeRateMap[wsSymbol] ?? _exchangeRateMap[symbolItem.symbol];
 
       if (exchangeRate != null) {
         // 更新实时数据并添加到历史价格中
@@ -71,9 +72,9 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
           baseSymbol: symbolItem.baseSymbol,
           alias: symbolItem.alias,
           icon1: symbolItem.icon1,
-          currentPrice: exchangeRate.price ,
-          priceChangePercent: exchangeRate.percentChange ,
-          priceChangeAmount: exchangeRate.priceChange ,
+          currentPrice: exchangeRate.price,
+          priceChangePercent: exchangeRate.percentChange,
+          priceChangeAmount: exchangeRate.priceChange,
           hasRealTimeData: true,
           miniKlinePriceList: symbolItem.miniKlinePriceList,
           historicalPrices: _updateHistoricalPrices(
@@ -91,17 +92,20 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
     setState(() {});
   }
 
-  List<double> _updateHistoricalPrices(List<double> previous, double? newPrice) {
+  List<double> _updateHistoricalPrices(
+    List<double> previous,
+    double? newPrice,
+  ) {
     if (newPrice == null) return previous;
-    
+
     final updated = List<double>.from(previous);
     updated.add(newPrice);
-    
+
     // 保持最多50个数据点
     if (updated.length > 50) {
       updated.removeAt(0);
     }
-    
+
     return updated;
   }
 
@@ -125,7 +129,6 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
 
     if (widget.isLoading == true) {
       return Container(
-        
         height: 150,
         child: const Center(child: CircularProgressIndicator()),
       );
@@ -137,16 +140,13 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
         child: Center(
           child: Text(
             '暂无数据',
-            style: TextStyle(
-              color: isLight ? Colors.black54 : Colors.white54,
-            ),
+            style: TextStyle(color: isLight ? Colors.black54 : Colors.white54),
           ),
         ),
       );
     }
 
     return Container(
-      
       height: 150,
       width: double.infinity,
       child: PageView.builder(
@@ -155,7 +155,10 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
         itemBuilder: (context, index) {
           final item = _combinedData[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: EdgeInsets.only(
+              left: index == 0 ? 0 : 8, // 第一个项目贴边，其他项目左边距8
+              right: 8, // 所有项目右边距8
+            ),
             child: SymbolCardEnhanced(item: item, isLight: isLight),
           );
         },
