@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../localization/lang.dart'; // 引入翻译包
 
 class LoginPasswordInput extends StatelessWidget {
   final TextEditingController controller;
@@ -12,14 +13,14 @@ class LoginPasswordInput extends StatelessWidget {
       obscureText: true,
       style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
-        hintText: '请输入密码',
+        hintText: Lang.t('enter_password'),
         hintStyle: const TextStyle(color: Colors.black),
         contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-       enabledBorder: OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
-            color: Color.fromRGBO(244, 244, 244, 1), // 纯淡灰色
-            width: 1, // 比较细，但能看到
+            color: Color.fromRGBO(244, 244, 244, 1),
+            width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -28,7 +29,8 @@ class LoginPasswordInput extends StatelessWidget {
             color: Color.fromRGBO(244, 244, 244, 1),
             width: 1,
           ),
-        ),)
+        ),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../localization/lang.dart';
 
 class MarketBanner extends StatelessWidget {
   const MarketBanner({super.key});
@@ -21,7 +22,7 @@ class MarketBanner extends StatelessWidget {
               color: isDark ? Colors.grey[800] : Colors.grey[300],
               child: Center(
                 child: Text(
-                  '图片加载失败',
+                  Lang.t('image_load_failed'),
                   style: TextStyle(color: isDark ? Colors.white : Colors.black),
                 ),
               ),

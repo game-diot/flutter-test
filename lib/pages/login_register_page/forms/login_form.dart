@@ -10,6 +10,7 @@ import 'form_components/login_button.dart';
 import 'form_components/login_register_button.dart';
 import 'form_components/login_agreement.dart';
 import '../../../providers/login/login.dart';
+import '../../../localization/lang.dart';
 
 class LoginForm extends StatefulWidget {
   final VoidCallback? onSwitchToRegister;
@@ -32,37 +33,89 @@ class _LoginFormState extends State<LoginForm> {
 
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (authProvider.savedUsername != null) {
+      phoneController.text = authProvider.savedUsername!;
+      emailController.text = authProvider.savedUsername!;
+    }
+    if (authProvider.savedPassword != null) {
+      passwordController.text = authProvider.savedPassword!;
+    }
+  }
+
+  @override
+  void dispose() {
+    phoneController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  /// 表单验证
+  bool _validateForm() {
+    String username = isPhoneSelected
+        ? phoneController.text.trim()
+        : emailController.text.trim() + selectedEmailSuffix;
+    String password = passwordController.text.trim();
+
+    if (username.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Lang.t("username_empty"))),
+      );
+      return false;
+    }
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Lang.t("password_empty"))),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  /// 登录逻辑闭环
   Future<void> _handleLogin() async {
     FocusScope.of(context).unfocus();
-    setState(() => _isLoading = true);
+    if (!_validateForm()) return;
 
+    setState(() => _isLoading = true);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     String username = isPhoneSelected
-        ? phoneController.text
-        : emailController.text + selectedEmailSuffix;
-    String password = passwordController.text;
+        ? phoneController.text.trim()
+        : emailController.text.trim() + selectedEmailSuffix;
+    String password = passwordController.text.trim();
 
-    // 调用 login 并获取成功状态
-    bool success = await authProvider.login(username, password);
+    try {
+      bool success = await authProvider.login(username, password);
 
-    setState(() => _isLoading = false);
+      if (!mounted) return;
+      setState(() => _isLoading = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(success
-            ? "登录成功"
-            : "登录失败，请检查用户名或密码"),
-      ),
-    );
-
-    if (success) {
-      // 登录成功跳转首页
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => HomePage()),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(success ? Lang.t("login_success") : Lang.t("login_failed")),
+        ),
       );
-      widget.onLoginSuccess?.call();
+
+      if (success) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => HomePage()),
+        );
+        widget.onLoginSuccess?.call();
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("${Lang.t("login_failed")}: $e"),
+        ),
+      );
     }
   }
 
@@ -73,7 +126,7 @@ class _LoginFormState extends State<LoginForm> {
       children: [
         SwitchButtons(
           isFirstSelected: isPhoneSelected,
-          labels: ['手机号', '邮箱'],
+          labels: [Lang.t("phone"), Lang.t("email")],
           onSwitch: (val) => setState(() => isPhoneSelected = val),
         ),
         const SizedBox(height: 16),

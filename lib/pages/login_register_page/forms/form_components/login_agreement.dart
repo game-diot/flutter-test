@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../localization/lang.dart';
 
 class LoginAgreement extends StatelessWidget {
   const LoginAgreement({Key? key}) : super(key: key);
@@ -6,27 +7,39 @@ class LoginAgreement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center, // 保证垂直居中
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text('登录即表示同意', style: TextStyle(color: Colors.black)),
-        TextButton(
-          onPressed: () {},
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.zero, // 去掉默认左右 padding
-            minimumSize: Size(0, 0), // 避免撑开
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap, // 点击区域紧凑
-          ),
-          child: const Text('使用协议', style: TextStyle(color: Color(0xFFedb023))),
+        Text(
+          Lang.t('login_agree_text'),
+          style: const TextStyle(color: Colors.black),
         ),
-        const Text('/'),
         TextButton(
           onPressed: () {},
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
-            minimumSize: Size(0, 0),
+            minimumSize: const Size(0, 0),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: const Text('隐私协议', style: TextStyle(color: Color(0xFFedb023))),
+          child: Text(
+            Lang.t('terms_of_use'),
+            style: const TextStyle(color: Color(0xFFedb023)),
+          ),
+        ),
+        Text(
+          Lang.t('slash'),
+          style: const TextStyle(color: Colors.black),
+        ),
+        TextButton(
+          onPressed: () {},
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.zero,
+            minimumSize: const Size(0, 0),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: Text(
+            Lang.t('privacy_policy'),
+            style: const TextStyle(color: Color(0xFFedb023)),
+          ),
         ),
       ],
     );

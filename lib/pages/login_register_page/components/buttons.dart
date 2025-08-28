@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../../localization/lang.dart'; // 替换为实际路径
 
 class AuthButtons extends StatelessWidget {
   final VoidCallback onLogin;
   final VoidCallback onRegister;
 
   const AuthButtons({Key? key, required this.onLogin, required this.onRegister})
-    : super(key: key);
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class AuthButtons extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('登录'),
+            child: Text(Lang.t('login')),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -34,15 +35,15 @@ class AuthButtons extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 65),
               backgroundColor: const Color(0xFFedb023),
-              foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(fontSize: 18),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
-                side: BorderSide.none, // 去掉边框
+                side: BorderSide.none,
               ),
-              elevation: 0, // 去掉阴影
+              elevation: 0,
             ),
-            child: const Text('注册'),
+            child: Text(Lang.t('register')),
           ),
         ],
       ),

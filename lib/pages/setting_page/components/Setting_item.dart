@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class SettingItem extends StatefulWidget {
   final Widget icon;
   final String title;
+  final Widget? targetPage;
   final String? subtitle;
 
   final Widget? subtitleWidget; // 新增
@@ -17,6 +18,7 @@ class SettingItem extends StatefulWidget {
     required this.title,
     this.subtitle,
     this.subtitleWidget,
+    this.targetPage,
     this.options,
     this.isArrow = false,
     this.onSelected,
@@ -47,49 +49,17 @@ class _SettingItemState extends State<SettingItem> {
   }
 
   void _handleTap() async {
-    if (widget.options != null && widget.options!.isNotEmpty) {
-      final selected = await showModalBottomSheet<String>(
-        context: context,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        builder: (context) {
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  widget.title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 16),
-                ...widget.options!.map(
-                  (option) => ListTile(
-                    title: Text(option),
-                    trailing: currentSubtitle == option
-                        ? Icon(
-                            Icons.check,
-                            color: Theme.of(context).colorScheme.primary,
-                          )
-                        : null,
-                    onTap: () => Navigator.pop(context, option),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+    // 1. 如果指定了 targetPage，优先跳转独立页面
+    if (widget.targetPage != null) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => widget.targetPage!),
       );
-
-      if (selected != null) {
-        setState(() => currentSubtitle = selected);
-        widget.onSelected?.call(selected);
-      }
-    } else {
-      widget.onTap?.call();
+      return;
     }
+
+    // 3. 否则走 onTap 回调
+    widget.onTap?.call();
   }
 
   @override

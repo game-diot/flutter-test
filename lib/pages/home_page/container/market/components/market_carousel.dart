@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../network/Get/models/home_page/home_data_section.dart';
 import '../../carousel_section/carousel_section.dart';
+import '../../../../../localization/lang.dart'; // ⬅️ 引入
 
 class MarketCarousel extends StatelessWidget {
   final List<SymbolItem> coinList;
@@ -19,7 +20,7 @@ class MarketCarousel extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            '全球指数',
+            Lang.t('global_index'), // ⬅️ 使用翻译
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,

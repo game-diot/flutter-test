@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import '../../../localization/lang.dart'; // 替换为实际路径
 import '../../add_page/add.dart';
 
 class Navbar extends StatelessWidget {
@@ -51,47 +52,45 @@ class Navbar extends StatelessWidget {
           BottomNavigationBarItem(
             icon: currentIndex == 0
                 ? Icon(Icons.show_chart)
-                : Icon(Icons.show_chart_outlined), // 未选中轮廓
-            label: '行情',
+                : Icon(Icons.show_chart_outlined),
+            label: Lang.t('market'),
           ),
           BottomNavigationBarItem(
             icon: currentIndex == 1
                 ? Icon(Icons.book)
                 : Icon(Icons.book_outlined),
-            label: '新闻',
+            label: Lang.t('news'),
           ),
           BottomNavigationBarItem(
             icon: Transform.translate(
-              offset: const Offset(0, 4), // x=0, y=2px 向下移动
+              offset: const Offset(0, 4),
               child: Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(237, 176, 35, 1), // 背景黄色
+                  color: const Color.fromRGBO(237, 176, 35, 1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.add,
                   size: 30,
-                  color: Color.fromRGBO(51, 51, 51, 1), // 图标深色
+                  color: Color.fromRGBO(51, 51, 51, 1),
                 ),
               ),
             ),
             label: '',
           ),
-
           BottomNavigationBarItem(
             icon: currentIndex == 3
-                ? Icon(Icons.chat_bubble, size: 30) // 选中实心气泡
-                : Icon(Icons.chat_bubble_outline, size: 30), // 未选中轮廓气泡
-            label: '论坛',
+                ? Icon(Icons.chat_bubble, size: 30)
+                : Icon(Icons.chat_bubble_outline, size: 30),
+            label: Lang.t('forum'),
           ),
-
           BottomNavigationBarItem(
             icon: currentIndex == 4
                 ? Icon(Icons.settings)
                 : Icon(Icons.settings_outlined),
-            label: '设置',
+            label: Lang.t('setting'),
           ),
         ],
       ),

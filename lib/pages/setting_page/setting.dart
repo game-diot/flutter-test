@@ -8,6 +8,8 @@ import 'setting_items/theme_item.dart';
 import 'setting_items/change_color_item.dart';
 import 'setting_items/feedback_item.dart';
 import 'setting_items/logout_item.dart';
+import '../my_article/my_likes_page.dart';
+import '../my_article/my_post_page.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -24,16 +26,45 @@ class SettingPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
-              children: const [
-                Expanded(child: StatButton(title: '我的帖子', count: '12', onTap: null)),
-                SizedBox(width: 16),
-                Expanded(child: StatButton(title: '我的点赞', count: '34', onTap: null)),
+              children: [
+                Expanded(
+                  child: StatButton(
+                    title: '我的帖子',
+                    count: '12',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyPostsPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: StatButton(
+                    title: '我的点赞',
+                    count: '34',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyLikesPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
 
           const SizedBox(height: 20),
-          const Padding(padding: EdgeInsets.symmetric(horizontal: 16.0), child: AdBanner()),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: AdBanner(),
+          ),
           const SizedBox(height: 20),
 
           const LanguageItem(),

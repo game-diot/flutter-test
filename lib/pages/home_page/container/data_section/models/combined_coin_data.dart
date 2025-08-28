@@ -1,8 +1,4 @@
 
-// ==========================================
-// lib/home_page/data_section/models/combined_coin_data.dart
-// ==========================================
-
 import '../../../../../network/Get/models/home_page/home_data_section.dart';
 import '../../../../../socket/home_page_data_section/models.dart';
 

@@ -23,6 +23,7 @@ dependencies:
   provider: ^6.1.5+1
   web_socket_channel: ^3.0.3
   shared_preferences: ^2.5.3
+  archive: ^4.0.7
 
 dev_dependencies:
   build_runner: ^2.3.3
@@ -48,6 +49,7 @@ flutter:
     - assets/svgs/change.svg
     - assets/svgs/email.svg
     - assets/svgs/lock.svg
+    - assets/svgs/done.svg
     - assets/svgs/red_green.svg
     - assets/svgs/green_red.svg
     - assets/svgs/setting_theme.svg
@@ -55,6 +57,8 @@ flutter:
     - assets/images/week.png
     - assets/images/topic.png
     - assets/images/fake.png
+    - assets/images/dark.png
+    - assets/images/light.png
   fonts:
     - family: CustomFont
       fonts:

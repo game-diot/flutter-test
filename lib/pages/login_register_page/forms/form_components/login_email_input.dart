@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../localization/lang.dart'; // 引入翻译包
 
 class LoginEmailInput extends StatelessWidget {
   final TextEditingController controller;
@@ -21,7 +22,7 @@ class LoginEmailInput extends StatelessWidget {
             controller: controller,
             style: const TextStyle(color: Colors.black),
             decoration: InputDecoration(
-              hintText: '请输入邮箱',
+              hintText: Lang.t('enter_email'),
               hintStyle: const TextStyle(color: Colors.black),
               contentPadding: const EdgeInsets.symmetric(
                 vertical: 14,
@@ -30,8 +31,8 @@ class LoginEmailInput extends StatelessWidget {
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(
-                  color: Color.fromRGBO(244, 244, 244, 1), // 纯淡灰色
-                  width: 1, // 比较细，但能看到
+                  color: Color.fromRGBO(244, 244, 244, 1),
+                  width: 1,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
@@ -58,7 +59,7 @@ class LoginEmailInput extends StatelessWidget {
                   (suffix) => DropdownMenuItem(
                     value: suffix,
                     child: Text(
-                      suffix,
+                      Lang.t(suffix),
                       style: const TextStyle(color: Colors.black),
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../localization/lang.dart';
 
 class LoginButton extends StatelessWidget {
   final bool isLoading;
@@ -19,9 +20,12 @@ class LoginButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         child: isLoading
             ? const CircularProgressIndicator(color: Colors.white)
-            : const Text('登录', style: TextStyle(fontSize: 18)),
+            : Text(
+                Lang.t('login_button'),
+                style: const TextStyle(fontSize: 18),
+              ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromRGBO(237, 176, 35,1),
+          backgroundColor: const Color.fromRGBO(237, 176, 35, 1),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),

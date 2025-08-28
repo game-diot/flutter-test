@@ -1,6 +1,3 @@
-// ==========================================
-// lib/home_page/symbol_carousel/symbol_carousel.dart (主文件)
-// ==========================================
 
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
@@ -52,7 +49,7 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
 
   void _updateCombinedData() {
     if (widget.coinList == null) return;
-
+print(widget.coinList);
     _combinedData = widget.coinList!.map((symbolItem) {
       final wsSymbol = symbolItem.symbol.replaceAll('_', '~');
 
@@ -135,6 +132,8 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
     }
 
     if (_combinedData.isEmpty) {
+
+      print("合并数据出错$_combinedData");
       return Container(
         height: 150,
         child: Center(

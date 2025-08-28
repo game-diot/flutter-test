@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../network/Get/models/splash_page/login_area.dart';
 import 'login_form_country_widget.dart';
+import '../../../../localization/lang.dart'; // 替换为你的实际路径
 
 class LoginPhoneInput extends StatelessWidget {
   final TextEditingController controller;
@@ -18,7 +19,7 @@ class LoginPhoneInput extends StatelessWidget {
       controller: controller,
       style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
-        hintText: '请输入手机号',
+        hintText: Lang.t('enter_phone'),
         hintStyle: const TextStyle(color: Colors.black54),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 14,
@@ -27,8 +28,8 @@ class LoginPhoneInput extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
-            color: Color.fromRGBO(244, 244, 244, 1), // 纯淡灰色
-            width: 1, // 比较细，但能看到
+            color: Color.fromRGBO(244, 244, 244, 1),
+            width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -41,7 +42,7 @@ class LoginPhoneInput extends StatelessWidget {
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 8, right: 16),
           child: Row(
-            mainAxisSize: MainAxisSize.min, // 不撑满
+            mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
                 width: 80,
@@ -51,7 +52,6 @@ class LoginPhoneInput extends StatelessWidget {
             ],
           ),
         ),
-       
       ),
       keyboardType: TextInputType.phone,
     );

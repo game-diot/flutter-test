@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/color/color.dart';
-import '../components/Setting_item.dart';
+import '../../setting_item_detail_page/change_up_down_color_page/up_down_color_page.dart';
+import '../components/setting_item.dart';
 
 class ChangeColorItem extends StatelessWidget {
   const ChangeColorItem({super.key});
@@ -15,10 +16,9 @@ class ChangeColorItem extends StatelessWidget {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         final iconColor = isDark ? Colors.white : Colors.black;
 
-        final arrowSvg =
-            colorProvider.mode == ChangeColorMode.greenUpRedDown
-                ? 'assets/svgs/green_red.svg'
-                : 'assets/svgs/red_green.svg';
+        final arrowSvg = colorProvider.mode == ChangeColorMode.greenUpRedDown
+            ? 'assets/svgs/green_red.svg'
+            : 'assets/svgs/red_green.svg';
 
         return SettingItem(
           icon: SvgPicture.asset(
@@ -33,18 +33,15 @@ class ChangeColorItem extends StatelessWidget {
             width: 28,
             height: 18,
           ),
-          options: const ['涨绿跌红', '涨红跌绿'],
+          subtitle: colorProvider.subtitle,
           isArrow: true,
-          onSelected: (selected) {
-            if (selected == '涨绿跌红' &&
-                colorProvider.mode != ChangeColorMode.greenUpRedDown) {
-              colorProvider.toggleMode();
-            } else if (selected == '涨红跌绿' &&
-                colorProvider.mode != ChangeColorMode.redUpGreenDown) {
-              colorProvider.toggleMode();
-            }
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const TrendColorDetailPage()),
+            );
           },
-          onTap: colorProvider.toggleMode,
         );
       },
     );
