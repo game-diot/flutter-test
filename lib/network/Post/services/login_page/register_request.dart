@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import '../../models/login_page/login_request.dart';
+import '../../models/login_page/register_request.dart';
 
-class AuthLoginService {
+class AuthRegisterService {
   static final Dio _dio = Dio();
-  static const String _loginUrl = "https://us14-h5.yanshi.lol/api/app-api/system/auth/login";
+  static const String _registerUrl = "https://us14-h5.yanshi.lol/api/app-api/system/auth/sms-register";
 
-  /// 登录请求
-  static Future<bool> login(LoginRequest request) async {
+  /// 注册请求
+  static Future<bool> register(RegisterRequest request) async {
     try {
       Response response = await _dio.post(
-        _loginUrl,
+        _registerUrl,
         data: jsonEncode(request.toJson()),
         options: Options(
           headers: {
@@ -25,10 +25,12 @@ class AuthLoginService {
         ),
       );
 
-      print("登录返回: ${response.data}");
+      print("注册返回: ${response.data}");
+
+      // 假设接口成功返回 code=0
       return response.statusCode == 200 && response.data['code'] == 0;
     } catch (e) {
-      print("登录异常: $e");
+      print("注册异常: $e");
       return false;
     }
   }

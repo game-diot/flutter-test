@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../providers/language/language.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HeaderLanguage extends StatelessWidget {
   const HeaderLanguage({super.key});
@@ -13,9 +14,17 @@ class HeaderLanguage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentLang = context.watch<LanguageProvider>().language;
+    // 根据主题设置图标颜色
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconColor = isDark ? Colors.white : Colors.black;
 
     return PopupMenuButton<String>(
-      icon: Icon(Icons.public, size: 28, color: Theme.of(context).iconTheme.color),
+      icon: SvgPicture.asset(
+        'assets/svgs/earth.svg',
+        width: 28,
+        height: 28,
+        colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+      ),
       initialValue: currentLang,
       onSelected: (lang) => _onLanguageSelected(context, lang),
       itemBuilder: (context) => [
@@ -26,7 +35,7 @@ class HeaderLanguage extends StatelessWidget {
               children: [
                 if (lang == currentLang) ...[
                   const Icon(Icons.check, size: 18, color: Colors.blue),
-
+                  const SizedBox(width: 4),
                 ],
                 Text(
                   lang,

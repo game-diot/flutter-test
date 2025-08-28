@@ -41,13 +41,16 @@ flutter:
     - assets/images/news_blue.png
     - assets/images/ad_banner.png
     - assets/images/book.svg
-    - assets/images/hot.svg
-    - assets/images/week.svg
-    - assets/images/topic.svg
-    - assets/images/fake.svg
+
     - assets/images/logo.png
     - assets/svgs/theme.svg
     - assets/svgs/earth.svg
+    - assets/svgs/change.svg
+    - assets/svgs/email.svg
+    - assets/svgs/lock.svg
+    - assets/svgs/red_green.svg
+    - assets/svgs/green_red.svg
+    - assets/svgs/setting_theme.svg
     - assets/images/hot.png
     - assets/images/week.png
     - assets/images/topic.png

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
 class HeaderThemeToggle extends StatelessWidget {
@@ -7,9 +8,16 @@ class HeaderThemeToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 根据主题设置颜色
+    final iconColor = isLight ? Colors.black : Colors.white;
+
     return IconButton(
-      icon: Icon(isLight ? Icons.dark_mode : Icons.light_mode,
-          size: 28, color: isLight ? Colors.black : Colors.white),
+      icon: SvgPicture.asset(
+        'assets/svgs/theme.svg', // SVG 路径
+        width: 28,
+        height: 28,
+        colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+      ),
       onPressed: () {
         final adaptiveTheme = AdaptiveTheme.of(context);
         if (isLight) {

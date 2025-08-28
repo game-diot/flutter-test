@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../network/Post/models/login_page/login_request.dart';
+import '../../network/Post/services/login_page/login_request.dart';
+import '../../network/Post/models/login_page/register_request.dart';
+import '../../network/Post/services/login_page/register_request.dart';
 class AuthProvider extends ChangeNotifier {
   bool _isLoggedIn = false;
   String? _username;
@@ -22,35 +25,64 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 返回 bool 表示登录是否成功
-  Future<bool> login(String username, String password) async {
-    // 这里加入实际的登录验证逻辑
-    bool loginSuccess = true; // 模拟成功，可替换为真实验证
+Future<bool> registerUser(String username, String password, String phone, String smsCode) async {
+  try {
+    RegisterRequest request = RegisterRequest(
+      username: username,
+      password: password,
+      phone: phone,
+      smsCode: smsCode,
+    );
 
-    if (loginSuccess) {
-      _username = username;
-      _password = password;
-      _isLoggedIn = true;
+    bool success = await AuthRegisterService.register(request);
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('username', username);
-      await prefs.setString('password', password);
-
-      notifyListeners();
+    if (success) {
+      // 注册成功可以直接登录或者提示用户登录
+      print("注册成功");
     }
 
-    return loginSuccess;
+    return success;
+  } catch (e) {
+    print("AuthProvider register异常: $e");
+    return false;
+  }
+}
+
+  /// 登录功能
+  Future<bool> login(String username, String password) async {
+    try {
+      LoginRequest request = LoginRequest(username: username, password: password);
+      bool loginSuccess = await AuthLoginService.login(request);
+
+      if (loginSuccess) {
+        _username = username;
+        _password = password;
+        _isLoggedIn = true;
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('username', username);
+        await prefs.setString('password', password);
+
+        notifyListeners();
+      }
+
+      return loginSuccess;
+    } catch (e) {
+      print("AuthProvider login异常: $e");
+      return false;
+    }
   }
 
+  /// 注销功能
   Future<void> logout() async {
     _isLoggedIn = false;
     _username = null;
     _password = null;
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await prefs.clear(); // 清空 SharedPreferences 中的登录信息
 
-    notifyListeners();
+    notifyListeners(); // 通知 UI 更新
   }
 }

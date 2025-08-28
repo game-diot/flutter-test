@@ -3,6 +3,8 @@ import 'text_field_widget.dart';
 import 'captcha_button.dart';
 import 'login_form_country_widget.dart';
 import 'switch_buttons.dart';
+import 'package:provider/provider.dart';
+import '../../../../providers/login/login.dart';
 
 class RegisterFormContent extends StatefulWidget {
   final VoidCallback? onSwitchToLogin;
@@ -24,6 +26,8 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
   String selectedPhoneSuffix = "+86";
   String selectedEmailSuffix = "@qq.com";
 
+  // 控制器
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController captchaController = TextEditingController();
@@ -31,7 +35,20 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  bool _isLoading = false; // 按钮加载状态
+
   Map<String, dynamic>? selectedCountry;
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    captchaController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +63,7 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
 
         const SizedBox(height: 16),
 
-        // 替换原来的手机号输入 Row
+        // 手机号/邮箱输入
         if (widget.isPhoneSelected)
           TextField(
             controller: phoneController,
@@ -56,7 +73,7 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
               hintStyle: const TextStyle(color: Colors.black54),
               contentPadding: const EdgeInsets.symmetric(
                 vertical: 14,
-                horizontal: 12,
+                horizontal: 8,
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -78,7 +95,7 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                      width: 100,
+                      width: 80,
                       child: CountrySelectWidget(
                         onSelected: (country) =>
                             setState(() => selectedCountry = country.toJson()),
@@ -116,15 +133,11 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
                   value: selectedEmailSuffix,
                   isExpanded: true,
                   underline: const SizedBox(),
-                  dropdownColor: Colors.white,
                   items: ["@qq.com", "@163.com", "@gmail.com"]
                       .map(
                         (suffix) => DropdownMenuItem(
                           value: suffix,
-                          child: Text(
-                            suffix,
-                            style: const TextStyle(color: Colors.black),
-                          ),
+                          child: Text(suffix),
                         ),
                       )
                       .toList(),
@@ -156,13 +169,16 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
         ),
 
         const SizedBox(height: 16),
+
         // 密码
         TextFieldWidget(
           controller: passwordController,
           hint: '请输入密码',
           obscureText: true,
         ),
+
         const SizedBox(height: 16),
+
         // 确认密码
         TextFieldWidget(
           controller: confirmPasswordController,
@@ -171,29 +187,56 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
         ),
 
         const SizedBox(height: 16),
+
+        // 注册按钮
         SizedBox(
           width: double.infinity,
           height: 48,
           child: ElevatedButton(
-            onPressed: () {
-              // 弹出提示
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('正在跳转到登录页面'),
-                  duration: Duration(seconds: 1),
-                ),
-              );
+            onPressed: _isLoading
+                ? null
+                : () async {
+                    setState(() => _isLoading = true);
 
-              // 延迟 1 秒再调用父组件传来的回调
-              Future.delayed(const Duration(seconds: 1), () {
-                widget.onSwitchToLogin?.call();
-              });
-            },
-            child: const Text('注册', style: TextStyle(fontSize: 18)),
+                    // 调用 Provider 注册
+                    final authProvider = Provider.of<AuthProvider>(
+                      context,
+                      listen: false,
+                    );
+
+                    String username = usernameController.text;
+                    String password = passwordController.text;
+                    String phone = phoneController.text;
+                    String smsCode = captchaController.text;
+
+                    bool success = await authProvider.registerUser(
+                      username,
+                      password,
+                      phone,
+                      smsCode,
+                    );
+
+                    setState(() => _isLoading = false);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(success ? '注册成功，即将跳转登录页面' : '注册失败，请检查信息'),
+                      ),
+                    );
+
+                    if (success) {
+                      Future.delayed(const Duration(seconds: 1), () {
+                        widget.onSwitchToLogin?.call();
+                      });
+                    }
+                  },
+            child: _isLoading
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text('注册', style: TextStyle(fontSize: 18)),
             style: ElevatedButton.styleFrom(
-              elevation: 0, // 去掉阴影
+              elevation: 0,
               backgroundColor: const Color.fromRGBO(244, 244, 245, 1),
-              foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+              foregroundColor: Colors.black,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

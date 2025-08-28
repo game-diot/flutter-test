@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'header/header.dart';
 import 'container/news_carousel.dart';
-import 'components/article_widget.dart';
+import 'container/article.dart';
 import 'components/article_model.dart';
+import '../../network/Get/models/news_page/news.dart';
+import '../../network/Get/services/news_page/news.dart';
 
 class NewsPage extends StatefulWidget {
   @override
@@ -11,42 +13,22 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> {
   int _selectedIndex = 0; // 当前选中的 tab
+  late Future<List<News>> _futureMessages;
 
-  // 示例文章列表
-  final List<ArticleOverviewItem> articles = [
-    ArticleOverviewItem(
-      title: 'Flutter 3.0 发布：性能提升与新特性',
-      publishDate: DateTime(2025, 8, 18),
-      imageUrl: 'assets/images/news_red.png',
-    ),
-    ArticleOverviewItem(
-      title: 'Flutter 3.0 发布：性能提升与新特性',
-      publishDate: DateTime(2025, 8, 18),
-      imageUrl: 'assets/images/news_red.png',
-    ),
-    ArticleOverviewItem(
-      title: 'Flutter 3.0 发布：性能提升与新特性',
-      publishDate: DateTime(2025, 8, 18),
-      imageUrl: 'assets/images/news_red.png',
-    ),
-    ArticleOverviewItem(
-      title: 'Flutter 3.0 发布：性能提升与新特性',
-      publishDate: DateTime(2025, 8, 18),
-      imageUrl: 'assets/images/news_red.png',
-    ),
-    ArticleOverviewItem(
-      title: '人工智能在大数据分析中的应用',
-      publishDate: DateTime(2025, 8, 17),
-      imageUrl: 'assets/images/news_blue.png',
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _futureMessages = NewsServices().fetchNewsMessages().then(
+      (resp) => resp.list,
+    ); // 获取 list
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          // 顶部 NewsHeader，传回点击的 index
+          // 顶部 NewsHeader
           NewsHeader(
             onTabSelected: (index) {
               setState(() {
@@ -57,7 +39,7 @@ class _NewsPageState extends State<NewsPage> {
 
           SizedBox(height: 32),
 
-          // 根据不同 tab 展示不同内容
+          // 内容
           Expanded(child: _buildContent()),
         ],
       ),
@@ -67,30 +49,49 @@ class _NewsPageState extends State<NewsPage> {
   /// 根据 tab 切换展示内容
   Widget _buildContent() {
     switch (_selectedIndex) {
-      case 0: // 热搜，显示完整页面
-        return Column(
-          children: [
-            // 新闻轮播
-            NewsCarousel(
-              items: [
-                NewsCarouselItem(title: "阿宋好嗲速度护额我电话iu啊是对我好对我好", hotValue: 173),
-                NewsCarouselItem(title: "阿佛塑科技打开手机打死宽度", hotValue: 150),
-                NewsCarouselItem(title: "在下面，刹那间啊睡觉哦i为i啊思考电话", hotValue: 98),
-                NewsCarouselItem(title: "在下面，刹那间啊睡觉哦i为i啊思考电话", hotValue: 98),
-                NewsCarouselItem(title: "在下面，刹那间啊睡觉哦i为i啊思考电话", hotValue: 98),
-                NewsCarouselItem(title: "在下面，刹那间啊睡觉哦i为i啊思考电话", hotValue: 98),
-                NewsCarouselItem(title: "在下面，刹那间啊睡觉哦i为i啊思考电话", hotValue: 98),
-              ],
-            ),
-            SizedBox(height: 12),
+      case 0: // 热搜
+        return FutureBuilder<List<News>>(
+          future: _futureMessages,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('加载失败: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return _buildEmpty("暂无数据");
+            }
 
-            // 文章列表（用 Expanded 包裹，撑满剩余空间）
-            Expanded(
-              child: SingleChildScrollView(
-                child: ArticleList(articles: articles),
-              ),
-            ),
-          ],
+            final messages = snapshot.data!;
+
+            // 新闻轮播数据取前 5 条
+            final carouselItems = messages.take(5).map((msg) {
+              return NewsCarouselItem(
+                title: msg.messageTitle,
+                hotValue: msg.viewVolume, // 可以用 viewVolume 或 likeCount
+              );
+            }).toList();
+
+            return Column(
+              children: [
+                NewsCarousel(items: carouselItems),
+                SizedBox(height: 12),
+                // 文章列表
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: ArticleList(
+                      articles: messages.map((msg) {
+                        return ArticleOverviewItem(
+                          title: msg.messageTitle,
+                          publishDate: msg.createTime,
+                          imageUrl: msg.imgUrl ?? msg.authorityAvatar,
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
 
       case 1:

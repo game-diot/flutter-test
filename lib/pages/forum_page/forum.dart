@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'header/header.dart';
 import 'components/function_bar.dart';
 import 'components/post_list.dart';
+import 'components/post_item_model.dart';
+import '../../network/Get/models/news_page/news.dart';
+import '../../network/Get/services/news_page/news.dart';
 
 class ForumPage extends StatefulWidget {
   const ForumPage({super.key});
@@ -13,6 +16,16 @@ class ForumPage extends StatefulWidget {
 class _ForumPageState extends State<ForumPage> {
   int _selectedFunctionIndex = 0;
   int _selectedTabIndex = 0; // ForumHeader 当前选中的 tab
+  late Future<List<News>> _futureMessages;
+
+  @override
+  void initState() {
+    super.initState();
+    // 调用后端接口获取数据
+    _futureMessages = NewsServices().fetchNewsMessages().then(
+      (resp) => resp.list,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +63,37 @@ class _ForumPageState extends State<ForumPage> {
               onSelect: (i) => setState(() => _selectedFunctionIndex = i),
             ),
             const SizedBox(height: 10),
-            const Expanded(
-              child: SingleChildScrollView(child: ForumPostList()),
+            Expanded(
+              child: FutureBuilder<List<News>>(
+                future: _futureMessages,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('加载失败: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return _buildEmpty("暂无数据");
+                  }
+
+                  final messages = snapshot.data!;
+
+                  // 转换接口数据为 ForumPostItem 列表
+                  final posts = messages.map((msg) {
+                    return ForumPostItem(
+                      author: msg.authorityName,
+                      title: msg.messageTitle,
+                      content: msg.messageContent,
+                      imageUrl: msg.imgUrl ?? msg.authorityAvatar,
+                      createTime: msg.createTime,
+                    );
+                  }).toList();
+
+                  // 动态传入 ForumPostList
+                  return SingleChildScrollView(
+                    child: ForumPostList(posts: posts),
+                  );
+                },
+              ),
             ),
           ],
         );
