@@ -1,9 +1,9 @@
-// components/items/theme_item.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/setting_item.dart';
 import '../../setting_item_detail_page/change_theme_deatil_page/theme_page.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import '../../../localization/lang.dart';
 
 class ThemeItem extends StatelessWidget {
   const ThemeItem({super.key});
@@ -19,14 +19,13 @@ class ThemeItem extends StatelessWidget {
         String themeSubtitle;
         switch (AdaptiveTheme.of(context).mode) {
           case AdaptiveThemeMode.light:
-            themeSubtitle = '明亮';
+            themeSubtitle = Lang.t('theme_light');
             break;
           case AdaptiveThemeMode.dark:
-            themeSubtitle = '暗黑';
+            themeSubtitle = Lang.t('theme_dark');
             break;
-          case AdaptiveThemeMode.system:
           default:
-            themeSubtitle = '跟随系统';
+            themeSubtitle = Lang.t('theme_system');
         }
 
         return SettingItem(
@@ -36,7 +35,7 @@ class ThemeItem extends StatelessWidget {
             height: 28,
             colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
           ),
-          title: '主题',
+          title: Lang.t('theme'),
           subtitle: themeSubtitle,
           isArrow: true,
           onTap: () {

@@ -37,7 +37,12 @@ class AuthProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-
+  //自动登录
+  Future<void> tryAutoLogin() async {
+  if (!_isLoggedIn && _savedUsername != null && _savedPassword != null) {
+    await login(_savedUsername!, _savedPassword!);
+  }
+}
   /// 保存账号密码，用于自动填充
   Future<void> _saveCredentials(String username, String password) async {
     final prefs = await SharedPreferences.getInstance();
@@ -63,7 +68,6 @@ class AuthProvider extends ChangeNotifier {
       bool success = await AuthRegisterService.register(request);
 
       if (success) {
-        print("注册成功，自动登录...");
         bool loginSuccess = await login(username, password);
         if (loginSuccess) {
           await _saveCredentials(username, password); // 保存账号密码

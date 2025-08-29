@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../providers/color/color.dart';
 import '../../../../../providers/exchange/exchange.dart';
-
+import '../../../../../localization/lang.dart';
 /// 币种表格组件
 class CoinTable extends StatelessWidget {
   final List coinList;
@@ -42,9 +42,10 @@ class CoinTable extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          _buildSortableHeader('名称', flex: 2),
-          _buildSortableHeader('价格', flex: 1, alignment: MainAxisAlignment.end),
-          _buildSortableHeader('涨幅比', flex: 1, alignment: MainAxisAlignment.end),
+        _buildSortableHeader(Lang.t('name'), flex: 2),
+_buildSortableHeader(Lang.t('price'), flex: 1, alignment: MainAxisAlignment.end),
+_buildSortableHeader(Lang.t('price_change_percent'), flex: 1, alignment: MainAxisAlignment.end)
+
         ],
       ),
     );

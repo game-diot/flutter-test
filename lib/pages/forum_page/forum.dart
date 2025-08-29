@@ -5,7 +5,7 @@ import 'components/post_list.dart';
 import 'components/post_item_model.dart';
 import '../../network/Get/models/news_page/news.dart';
 import '../../network/Get/services/news_page/news.dart';
-
+import '../../localization/lang.dart';
 class ForumPage extends StatefulWidget {
   const ForumPage({super.key});
 
@@ -52,71 +52,72 @@ class _ForumPageState extends State<ForumPage> {
     );
   }
 
-  /// 根据 ForumHeader 的 tab 切换内容
   Widget _buildContent() {
-    switch (_selectedTabIndex) {
-      case 0: // 热榜（显示功能栏 + 帖子）
-        return Column(
-          children: [
-            ForumFunctionBar(
-              selectedIndex: _selectedFunctionIndex,
-              onSelect: (i) => setState(() => _selectedFunctionIndex = i),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: FutureBuilder<List<News>>(
-                future: _futureMessages,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('加载失败: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return _buildEmpty("暂无数据");
-                  }
-
-                  final messages = snapshot.data!;
-
-                  // 转换接口数据为 ForumPostItem 列表
-                  final posts = messages.map((msg) {
-                    return ForumPostItem(
-                      author: msg.authorityName,
-                      title: msg.messageTitle,
-                      content: msg.messageContent,
-                      imageUrl: msg.imgUrl ?? msg.authorityAvatar,
-                      createTime: msg.createTime,
-                    );
-                  }).toList();
-
-                  // 动态传入 ForumPostList
-                  return SingleChildScrollView(
-                    child: ForumPostList(posts: posts),
+  switch (_selectedTabIndex) {
+    case 0:
+      return Column(
+        children: [
+          ForumFunctionBar(
+            selectedIndex: _selectedFunctionIndex,
+            onSelect: (i) => setState(() => _selectedFunctionIndex = i),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: FutureBuilder<List<News>>(
+              future: _futureMessages,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      '${Lang.t("load_failed")}: ${snapshot.error}',
+                    ),
                   );
-                },
-              ),
-            ),
-          ],
-        );
-      case 1:
-        return _buildEmpty("暂无区块链数据，请稍后查看");
-      case 2:
-        return _buildEmpty("暂无心得数据，请稍后查看");
-      case 3:
-        return _buildEmpty("暂无吐槽大会数据，请稍后查看");
-      case 4:
-        return _buildEmpty("暂无 Tab 数据，请稍后查看");
-      default:
-        return _buildEmpty("暂无数据");
-    }
-  }
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return _buildEmpty(Lang.t("no_data"));
+                }
 
-  /// 占位页
-  Widget _buildEmpty(String text) {
-    return Center(
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, color: Colors.grey),
-      ),
-    );
+                final messages = snapshot.data!;
+                final posts = messages.map((msg) {
+                  return ForumPostItem(
+                    author: msg.authorityName,
+                    title: msg.messageTitle,
+                    content: msg.messageContent,
+                    imageUrl: msg.imgUrl ?? msg.authorityAvatar,
+                    createTime: msg.createTime,
+                  );
+                }).toList();
+
+                return SingleChildScrollView(
+                  child: ForumPostList(posts: posts),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    case 1:
+      return _buildEmpty(Lang.t("no_blockchain_data"));
+    case 2:
+      return _buildEmpty(Lang.t("no_experience_data"));
+    case 3:
+      return _buildEmpty(Lang.t("no_complaint_data"));
+    case 4:
+      return _buildEmpty(Lang.t("no_tab_data"));
+    default:
+      return _buildEmpty(Lang.t("no_data"));
   }
+}
+
+/// 占位页
+Widget _buildEmpty(String text) {
+  return Center(
+    child: Text(
+      text,
+      style: const TextStyle(fontSize: 16, color: Colors.grey),
+    ),
+  );
+}
+
 }

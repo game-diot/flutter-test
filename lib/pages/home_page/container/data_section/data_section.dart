@@ -4,14 +4,12 @@ import 'package:provider/provider.dart';
 import '../../../../providers/exchange/exchange.dart';
 import '../../../../network/Get/models/home_page/home_data_section.dart';
 import '../../../../socket/home_page_data_section/models.dart';
-
+import '../../../../localization/lang.dart';
 // 导入拆分后的组件
 import 'models/combined_coin_data.dart';
 import 'services/data_section_service.dart';
 import 'components/data_section_header.dart';
 import 'components/combined_table.dart';
-import 'components/coin_table.dart';
-import 'components/exchange_table.dart';
 
 /// 主数据区域组件
 class DataSection extends StatefulWidget {
@@ -32,7 +30,6 @@ class _DataSectionState extends State<DataSection> {
   List<CombinedCoinData> _combinedData = [];
 
   Map<String, bool> _sortAscCoin = {'名称': true, '价格': true, '涨幅比': true};
-  Map<String, bool> _sortAscExchange = {'名称': true, '交易额': true, '评分': true};
 
   @override
   void initState() {
@@ -119,25 +116,25 @@ class _DataSectionState extends State<DataSection> {
     });
   }
 
-  void _onSortCoin(String key, ExchangeRateProvider provider) {
-    String sortBy = key == '名称'
-        ? 'symbol'
-        : key == '价格'
-        ? 'price'
-        : 'change';
-    provider.setSorting(sortBy, ascending: _sortAscCoin[key]!);
-    _sortAscCoin[key] = !_sortAscCoin[key]!;
-  }
+  // void _onSortCoin(String key, ExchangeRateProvider provider) {
+  //   String sortBy = key == '名称'
+  //       ? 'symbol'
+  //       : key == '价格'
+  //       ? 'price'
+  //       : 'change';
+  //   provider.setSorting(sortBy, ascending: _sortAscCoin[key]!);
+  //   _sortAscCoin[key] = !_sortAscCoin[key]!;
+  // }
 
-  void _onSortExchange(String key, ExchangeRateProvider provider) {
-    String sortBy = key == '名称'
-        ? 'symbol'
-        : key == '交易额'
-        ? 'volume'
-        : 'change';
-    provider.setSorting(sortBy, ascending: _sortAscExchange[key]!);
-    _sortAscExchange[key] = !_sortAscExchange[key]!;
-  }
+  // void _onSortExchange(String key, ExchangeRateProvider provider) {
+  //   String sortBy = key == '名称'
+  //       ? 'symbol'
+  //       : key == '交易额'
+  //       ? 'volume'
+  //       : 'change';
+  //   provider.setSorting(sortBy, ascending: _sortAscExchange[key]!);
+  //   _sortAscExchange[key] = !_sortAscExchange[key]!;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -169,36 +166,50 @@ class _DataSectionState extends State<DataSection> {
     );
   }
 
-  Widget _buildTableContent(
-    ExchangeRateProvider provider,
-    Color textColor,
-    Color? subTextColor,
-  ) {
-    // 主流币
-    if (widget.coinList != null && _selectedIndex == 0) {
-      return CombinedTable(
-        data: _combinedData,
-        isLoading: widget.isLoading == true,
-        sortAscending: _sortAscCoin,
-        onSort: _onSortCombinedData,
-        textColor: textColor,
-        subTextColor: subTextColor,
-      );
-    }
+Widget _buildTableContent(
+  ExchangeRateProvider provider,
+  Color textColor,
+  Color? subTextColor,
+) {
+  // 主流币
+  if (widget.coinList != null && _selectedIndex == 0) {
+    // 将排序 key 替换为翻译 key
+    final translatedSortKeys = {
+      Lang.t('name'): _sortAscCoin['名称']!,
+      Lang.t('price'): _sortAscCoin['价格']!,
+      Lang.t('price_change_percent'): _sortAscCoin['涨幅比']!,
+    };
 
-    // 其它标签：热门榜 / 涨幅榜 / 交易所
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('暂无数据', style: TextStyle(color: textColor, fontSize: 16)),
-          const SizedBox(height: 8),
-          Text(
-            '请切换到其他图表标签',
-            style: TextStyle(color: subTextColor, fontSize: 14),
-          ),
-        ],
-      ),
+    return CombinedTable(
+      data: _combinedData,
+      isLoading: widget.isLoading == true,
+      sortAscending: translatedSortKeys,
+      onSort: (key) {
+        // 这里 key 已经是翻译后的 key
+        final originalKeyMap = {
+          Lang.t('name'): '名称',
+          Lang.t('price'): '价格',
+          Lang.t('price_change_percent'): '涨幅比',
+        };
+        _onSortCombinedData(originalKeyMap[key]!);
+      },
+      textColor: textColor,
+      subTextColor: subTextColor,
     );
   }
-}
+
+  // 其它标签：热门榜 / 涨幅榜 / 交易所
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(Lang.t('no_data'), style: TextStyle(color: textColor, fontSize: 16)),
+        const SizedBox(height: 8),
+        Text(
+          Lang.t('switch_other_tab'),
+          style: TextStyle(color: subTextColor, fontSize: 14),
+        ),
+      ],
+    ),
+  );
+}}

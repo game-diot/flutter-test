@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../providers/color/color.dart';
 import '../models/combined_coin_data.dart';
+import '../../../../../localization/lang.dart';
 
 /// 合并数据表格组件
 class CombinedTable extends StatelessWidget {
@@ -31,35 +31,43 @@ class CombinedTable extends StatelessWidget {
 
     if (data.isEmpty) {
       return Center(
-        child: Text(
-          '暂无数据',
-          style: TextStyle(color: textColor),
-        ),
+        child: Text(Lang.t('no_data'), style: TextStyle(color: textColor)),
       );
     }
 
-    return Column(
-      children: [
-        _buildHeader(),
-        _buildContent(),
-      ],
-    );
+    return Column(children: [_buildHeader(), _buildContent()]);
   }
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: Row(
         children: [
-          _buildSortableHeader('名称', flex: 2, alignment: MainAxisAlignment.start),
-          _buildSortableHeader('价格', flex: 1, alignment: MainAxisAlignment.end),
-          _buildSortableHeader('涨幅比', flex: 1, alignment: MainAxisAlignment.end),
+          _buildSortableHeader(
+            Lang.t('name'),
+            flex: 2,
+            alignment: MainAxisAlignment.start,
+          ),
+          _buildSortableHeader(
+            Lang.t('price'),
+            flex: 1,
+            alignment: MainAxisAlignment.end,
+          ),
+          _buildSortableHeader(
+            Lang.t('price_change_percent'),
+            flex: 1,
+            alignment: MainAxisAlignment.end,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSortableHeader(String title, {int flex = 1, MainAxisAlignment? alignment}) {
+  Widget _buildSortableHeader(
+    String title, {
+    int flex = 1,
+    MainAxisAlignment? alignment,
+  }) {
     return Expanded(
       flex: flex,
       child: GestureDetector(
@@ -67,11 +75,19 @@ class CombinedTable extends StatelessWidget {
         child: Row(
           mainAxisAlignment: alignment ?? MainAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(fontWeight: FontWeight.w100, color: Color.fromRGBO(134, 144, 156,1))),
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.w100,
+                color: Color.fromRGBO(134, 144, 156, 1),
+              ),
+            ),
             Icon(
-              sortAscending[title] == true ? Icons.arrow_upward : Icons.arrow_downward,
+              sortAscending[title] == true
+                  ? Icons.arrow_upward
+                  : Icons.arrow_downward,
               size: 16,
-              color: Color.fromRGBO(134, 144, 156,1),
+              color: Color.fromRGBO(134, 144, 156, 1),
             ),
           ],
         ),
@@ -79,25 +95,24 @@ class CombinedTable extends StatelessWidget {
     );
   }
 
- Widget _buildContent() {
-  return Expanded(
-    child: Transform.translate(
-      offset: const Offset(-8, 0), // 整体向左移动4像素
-      child: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          final item = data[index];
-          return _buildTableRow(item);
-        },
+  Widget _buildContent() {
+    return Expanded(
+      child: Transform.translate(
+        offset: const Offset(-8, 0), // 整体向左移动4像素
+        child: ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            final item = data[index];
+            return _buildTableRow(item);
+          },
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildTableRow(CombinedCoinData item) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       child: Row(
         children: [
           _buildCoinIcon(item.icon1),
@@ -142,44 +157,35 @@ class CombinedTable extends StatelessWidget {
         children: [
           Text(
             item.displayName,
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.w500),
           ),
           if (item.symbol != item.baseSymbol)
             Text(
               item.symbol,
-              style: TextStyle(
-                color: textColor.withOpacity(0.6),
-                fontSize: 10,
-              ),
+              style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 10),
             ),
         ],
       ),
     );
   }
 
- Widget _buildPrice(CombinedCoinData item) {
-  return Expanded(
-    flex: 1,
-    child: Padding(
-      padding: const EdgeInsets.only(right: 2), // 右边留点空，让文本看起来左移
-      child: Align(
-        alignment: Alignment.centerRight, // 保持右对齐
-        child: item.hasRealTimeData && item.currentPrice != null
-            ? Text(
-                '¥${item.currentPrice!.toStringAsFixed(2)}',
-                style: TextStyle(color: textColor),
-              )
-            : Text(
-                '--',
-                style: TextStyle(color: textColor.withOpacity(0.5)),
-              ),
+  Widget _buildPrice(CombinedCoinData item) {
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 2), // 右边留点空，让文本看起来左移
+        child: Align(
+          alignment: Alignment.centerRight, // 保持右对齐
+          child: item.hasRealTimeData && item.currentPrice != null
+              ? Text(
+                  '¥${item.currentPrice!.toStringAsFixed(2)}',
+                  style: TextStyle(color: textColor),
+                )
+              : Text('--', style: TextStyle(color: textColor.withOpacity(0.5))),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildPriceChange(CombinedCoinData item) {
     return Expanded(

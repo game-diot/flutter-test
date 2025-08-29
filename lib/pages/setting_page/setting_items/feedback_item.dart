@@ -1,7 +1,7 @@
-// components/items/feedback_item.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/setting_item.dart';
+import '../../../localization/lang.dart';
 
 class FeedbackItem extends StatelessWidget {
   const FeedbackItem({super.key});
@@ -20,11 +20,11 @@ class FeedbackItem extends StatelessWidget {
           BlendMode.srcIn,
         ),
       ),
-      title: '意见反馈',
+      title: Lang.t('feedback'),
       isArrow: true,
       onTap: () {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('意见反馈功能待实现')),
+          SnackBar(content: Text(Lang.t('feedback_not_implemented'))),
         );
       },
     );

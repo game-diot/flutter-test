@@ -12,7 +12,6 @@ class TrendColorDetailPage extends StatelessWidget {
     final colorProvider = Provider.of<ChangeColorProvider>(context);
     final currentMode = colorProvider.mode;
     final selectedIndex = currentMode == ChangeColorMode.greenUpRedDown ? 0 : 1;
-    appBar:
     final theme = Theme.of(context);
 
     return Scaffold(

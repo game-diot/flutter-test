@@ -4,6 +4,8 @@ import 'enums/form_type.dart';
 import 'components/buttons.dart';
 import 'components/form_container.dart';
 import '../../providers/login/login.dart';
+import '../../providers/countries/countries.dart';
+import '../../providers/language/language.dart';
 import '../home_page/home.dart';
 import '../../localization/lang.dart';
 
@@ -22,12 +24,35 @@ class _SplashScreenState extends State<SplashScreen> {
   void _hideForm() => setState(() => _formType = FormType.none);
 
   @override
+  void initState() {
+    super.initState();
+
+    // 延迟到 build 完成后再调用异步加载，避免 build 阶段 setState 报错
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final authProvider = context.read<AuthProvider>();
+      final countryProvider = context.read<CountryProvider>();
+      final languageProvider = context.read<LanguageProvider>();
+
+      try {
+        await Future.wait([
+          countryProvider.loadCountries(),
+          languageProvider.loadTranslationsQuietly(languageProvider.currentCode),
+          authProvider.checkLoginStatus(), // 自动登录检查
+        ]);
+      } catch (e) {
+        print("初始化数据异常: $e");
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context);
+    final auth = context.watch<AuthProvider>();
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // 登录状态直接跳转 HomePage
     if (auth.isLoggedIn) {
-      return HomePage();
+      return const HomePage();
     }
 
     final double shiftOffset = _formType != FormType.none ? -50.0 : 0.0;
@@ -37,6 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: const Color(0xFFedb023),
       body: Stack(
         children: [
+          // Logo + App 名称
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -60,9 +86,11 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
 
+          // 登录/注册按钮
           if (_formType == FormType.none)
             AuthButtons(onLogin: _showLoginForm, onRegister: _showRegisterForm),
 
+          // 顶部返回栏
           if (_formType != FormType.none)
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
@@ -99,6 +127,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
 
+          // 表单容器
           if (_formType != FormType.none)
             Positioned.fill(
               left: 0,

@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import '../../../../../providers/exchange/exchange.dart';
+import '../../../../../localization/lang.dart';
 
 /// 交易所表格组件
 class ExchangeTable extends StatelessWidget {
@@ -28,20 +28,18 @@ class ExchangeTable extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('暂无交易所数据', style: TextStyle(color: textColor)),
+            Text(
+              Lang.t('no_exchange_data'),
+              style: TextStyle(color: textColor),
+            ),
             const SizedBox(height: 10),
-            Text('请切换到其他选项卡', style: TextStyle(color: subTextColor)),
+            Text(Lang.t('switch_tab'), style: TextStyle(color: subTextColor)),
           ],
         ),
       );
     }
 
-    return Column(
-      children: [
-        _buildHeader(),
-        _buildContent(),
-      ],
-    );
+    return Column(children: [_buildHeader(), _buildContent()]);
   }
 
   Widget _buildHeader() {
@@ -49,15 +47,27 @@ class ExchangeTable extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          _buildSortableHeader('名称', flex: 2),
-          _buildSortableHeader('交易额', flex: 1, alignment: MainAxisAlignment.end),
-          _buildSortableHeader('评分', flex: 1, alignment: MainAxisAlignment.end),
+          _buildSortableHeader(Lang.t('name'), flex: 2),
+          _buildSortableHeader(
+            Lang.t('volume'),
+            flex: 1,
+            alignment: MainAxisAlignment.end,
+          ),
+          _buildSortableHeader(
+            Lang.t('rating'),
+            flex: 1,
+            alignment: MainAxisAlignment.end,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSortableHeader(String title, {int flex = 1, MainAxisAlignment? alignment}) {
+  Widget _buildSortableHeader(
+    String title, {
+    int flex = 1,
+    MainAxisAlignment? alignment,
+  }) {
     return Expanded(
       flex: flex,
       child: GestureDetector(
@@ -65,9 +75,14 @@ class ExchangeTable extends StatelessWidget {
         child: Row(
           mainAxisAlignment: alignment ?? MainAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+            Text(
+              title,
+              style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
+            ),
             Icon(
-              sortAscending[title] == true ? Icons.arrow_upward : Icons.arrow_downward,
+              sortAscending[title] == true
+                  ? Icons.arrow_upward
+                  : Icons.arrow_downward,
               size: 16,
               color: subTextColor,
             ),
@@ -88,8 +103,11 @@ class ExchangeTable extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  flex: 2, 
-                  child: Text(item.displayName, style: TextStyle(color: textColor))
+                  flex: 2,
+                  child: Text(
+                    item.displayName,
+                    style: TextStyle(color: textColor),
+                  ),
                 ),
                 Expanded(
                   flex: 1,

@@ -3,30 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../../network/Get/models/splash_page/login_area.dart';
 import '../../../../providers/countries/countries.dart';
-class CountrySelectWidget extends StatefulWidget {
+
+class CountrySelectWidget extends StatelessWidget {
   final ValueChanged<Country> onSelected;
 
-  const CountrySelectWidget({Key? key, required this.onSelected})
-      : super(key: key);
-
-  @override
-  State<CountrySelectWidget> createState() => _CountrySelectWidgetState();
-}
-
-class _CountrySelectWidgetState extends State<CountrySelectWidget> {
-  bool _hasRequested = false;
+  const CountrySelectWidget({Key? key, required this.onSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final countryProvider = context.watch<CountryProvider>();
-
-
-    if (!_hasRequested && countryProvider.countries.isEmpty && !countryProvider.isLoading) {
-      _hasRequested = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<CountryProvider>().loadCountries();
-      });
-    }
 
     if (countryProvider.isLoading) {
       return const CircularProgressIndicator();
@@ -40,11 +25,11 @@ class _CountrySelectWidgetState extends State<CountrySelectWidget> {
       isExpanded: true,
       underline: const SizedBox(),
       dropdownColor: Colors.white,
-        icon: const SizedBox.shrink(), // 👈 去掉默认的箭头
+      icon: const SizedBox.shrink(),
       onChanged: (Country? newValue) {
         if (newValue != null) {
-          context.read<CountryProvider>().selectCountry(newValue);
-          widget.onSelected(newValue);
+          countryProvider.selectCountry(newValue);
+          onSelected(newValue);
         }
       },
       items: countries.map((country) {
@@ -69,7 +54,7 @@ class _CountrySelectWidgetState extends State<CountrySelectWidget> {
                   errorWidget: (_, __, ___) => const Icon(Icons.error, size: 20),
                 ),
               ),
-
+              const SizedBox(width: 8),
               Text('+${country.areaCode}', style: const TextStyle(color: Colors.black)),
             ],
           ),

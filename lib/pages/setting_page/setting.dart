@@ -1,4 +1,3 @@
-// pages/setting_page.dart
 import 'package:flutter/material.dart';
 import 'components/stat_button.dart';
 import 'components/ad_banner.dart';
@@ -10,6 +9,7 @@ import 'setting_items/feedback_item.dart';
 import 'setting_items/logout_item.dart';
 import '../my_article/my_likes_page.dart';
 import '../my_article/my_post_page.dart';
+import '../../../localization/lang.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -29,7 +29,7 @@ class SettingPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: StatButton(
-                    title: '我的帖子',
+                    title: Lang.t('my_posts'),
                     count: '12',
                     onTap: () {
                       Navigator.push(
@@ -44,7 +44,7 @@ class SettingPage extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: StatButton(
-                    title: '我的点赞',
+                    title: Lang.t('my_likes'),
                     count: '34',
                     onTap: () {
                       Navigator.push(

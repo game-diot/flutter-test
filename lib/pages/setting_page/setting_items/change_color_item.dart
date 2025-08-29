@@ -1,11 +1,10 @@
-// components/items/change_color_item.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/color/color.dart';
 import '../../setting_item_detail_page/change_up_down_color_page/up_down_color_page.dart';
 import '../components/setting_item.dart';
-
+import '../../../localization/lang.dart';
 class ChangeColorItem extends StatelessWidget {
   const ChangeColorItem({super.key});
 
@@ -27,7 +26,7 @@ class ChangeColorItem extends StatelessWidget {
             height: 28,
             colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
           ),
-          title: '涨跌颜色',
+          title: Lang.t('trend_color'),
           subtitleWidget: SvgPicture.asset(
             arrowSvg,
             width: 28,

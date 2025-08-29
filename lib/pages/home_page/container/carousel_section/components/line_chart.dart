@@ -1,6 +1,3 @@
-// ==========================================
-// lib/home_page/symbol_carousel/components/line_chart_enhanced.dart
-// ==========================================
 
 import 'package:flutter/material.dart';
 

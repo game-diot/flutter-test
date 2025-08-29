@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../detail_page/detail_page.dart';
+import '../../../localization/lang.dart';
 
 class ForumPostBlock extends StatelessWidget {
   final String title;
@@ -39,7 +40,7 @@ class ForumPostBlock extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final bgColor = isDark ? Colors.grey[850] : Colors.white;
-    final titleColor = isDark ? Color.fromRGBO(223, 229, 236, 1)  : Colors.black;
+    final titleColor = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black;
     final subtitleColor = isDark ? Colors.white70 : Colors.grey[600];
     final iconColor = Color.fromRGBO(237, 176, 35, 1);
 
@@ -139,7 +140,7 @@ class ForumPostBlock extends StatelessWidget {
                           SizedBox(width: 4),
 
                           Text(
-                            '点赞',
+                            Lang.t('like'),
                             style: TextStyle(
                               fontSize: 12,
                               color: subtitleColor,
@@ -163,7 +164,7 @@ class ForumPostBlock extends StatelessWidget {
                           ),
 
                           Text(
-                            '评论',
+                            Lang.t('comment'),
                             style: TextStyle(
                               fontSize: 12,
                               color: subtitleColor,
@@ -171,7 +172,6 @@ class ForumPostBlock extends StatelessWidget {
                           ),
                         ],
                       ),
-
                     ],
                   ),
                 ),

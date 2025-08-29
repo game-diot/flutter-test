@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../message_page/commons_page.dart';
 import '../../message_page/likes_page.dart';
+import '../../../localization/lang.dart';
 
 class SettingPageHeader extends StatelessWidget {
   const SettingPageHeader({Key? key}) : super(key: key);
@@ -13,20 +14,18 @@ class SettingPageHeader extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color.fromRGBO(81, 63, 41, 1), // 上方颜色
-            Color.fromRGBO(54, 40, 24, 1), // 下方颜色
+            Color.fromRGBO(81, 63, 41, 1),
+            Color.fromRGBO(54, 40, 24, 1),
           ],
         ),
       ),
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         children: [
-          // 上部
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
             child: Row(
               children: [
-                // 左侧头像
                 CircleAvatar(
                   radius: 30,
                   backgroundImage: NetworkImage(
@@ -34,7 +33,6 @@ class SettingPageHeader extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 16),
-                // 右侧账号信息
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -62,18 +60,15 @@ class SettingPageHeader extends StatelessWidget {
 
           SizedBox(height: 12),
 
-          // 下部
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: [
-                // 收藏
-                _infoItem(context, '收藏', '12'),
+                _infoItem(context, Lang.t('favorites'), '12'),
                 SizedBox(width: 24),
-                // 被点赞
                 _infoItem(
                   context,
-                  '被点赞',
+                  Lang.t('liked'),
                   '34',
                   onTap: () {
                     Navigator.push(
@@ -83,10 +78,9 @@ class SettingPageHeader extends StatelessWidget {
                   },
                 ),
                 SizedBox(width: 24),
-                // 被评论
                 _infoItem(
                   context,
-                  '被评论',
+                  Lang.t('commented'),
                   '56',
                   onTap: () {
                     Navigator.push(
@@ -111,8 +105,8 @@ class SettingPageHeader extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent, // 背景透明，显示渐变
-                      shadowColor: Colors.transparent, // 去掉按钮默认阴影
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide(color: Colors.white, width: 1),
@@ -122,8 +116,8 @@ class SettingPageHeader extends StatelessWidget {
                         vertical: 10,
                       ),
                     ),
-                    child: const Text(
-                      '编辑资料',
+                    child: Text(
+                      Lang.t('edit_profile'),
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -131,7 +125,7 @@ class SettingPageHeader extends StatelessWidget {
               ],
             ),
           ),
-            SizedBox(height: 26),
+          SizedBox(height: 26),
         ],
       ),
     );

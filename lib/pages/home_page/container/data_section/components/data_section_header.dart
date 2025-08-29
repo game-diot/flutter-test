@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import '../../../../../localization/lang.dart';
 
 /// 数据区域顶部切换栏
 class DataSectionHeader extends StatelessWidget {
@@ -28,7 +29,13 @@ class DataSectionHeader extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: List.generate(4, (index) {
-              final labels = ['主流币', '热门榜', '涨幅榜', '交易所'];
+              final labels = [
+                Lang.t('main_coins'),
+                Lang.t('hot_list'),
+                Lang.t('gainers_list'),
+                Lang.t('exchanges'),
+              ];
+
               final isSelected = selectedIndex == index;
               final labelColor = isSelected
                   ? textColor
@@ -44,7 +51,11 @@ class DataSectionHeader extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8,left:6,right: 6), // 下边距 4px
+                        padding: const EdgeInsets.only(
+                          bottom: 8,
+                          left: 6,
+                          right: 6,
+                        ), // 下边距 4px
                         child: Text(
                           labels[index],
                           style: TextStyle(

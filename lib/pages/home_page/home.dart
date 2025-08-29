@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
         _coinList = coins;
         _isLoading = false;
       });
-      print("你欧数据吗？？？$_coinList");
     } catch (e) {
       debugPrint('加载 coinList 失败: $e');
       if (!mounted) return;
@@ -59,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       ForumPage(),
       SettingPage(),
     ];
-print("66666$_coinList");
+
     return Scaffold(
       appBar: HomeAppBar(currentIndex: _currentIndex), // ⬅️ 已拆分
       body: _isLoading && _currentIndex == 0

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import '../../../../network/Get/models/home_page/home_data_section.dart';
 import '../../../../socket/home_page_data_section/models.dart';
-
+import '../../../../localization/lang.dart';
 // 导入拆分后的组件
 import 'models/chart_models.dart';
 import 'services/chart_services.dart';
@@ -136,9 +136,10 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
         height: 150,
         child: Center(
           child: Text(
-            '暂无数据',
-            style: TextStyle(color: isLight ? Colors.black54 : Colors.white54),
-          ),
+  Lang.t('no_data'),
+  style: TextStyle(color: isLight ? Colors.black54 : Colors.white54),
+),
+
         ),
       );
     }

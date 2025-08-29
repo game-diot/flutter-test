@@ -1,27 +1,35 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../providers/color/color.dart';
 import '../models/chart_models.dart';
 import 'line_chart.dart';
+import '../../../../../localization/lang.dart';
 
 class SymbolCardEnhanced extends StatelessWidget {
   final CombinedChartData item;
   final bool isLight;
 
-  const SymbolCardEnhanced({Key? key, required this.item, required this.isLight}) 
-      : super(key: key);
+  const SymbolCardEnhanced({
+    Key? key,
+    required this.item,
+    required this.isLight,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // 使用实时数据或历史数据
     final displayPrice = item.hasRealTimeData && item.currentPrice != null
         ? item.currentPrice!
-        : (item.miniKlinePriceList.isNotEmpty ? item.miniKlinePriceList.first : 0.0);
+        : (item.miniKlinePriceList.isNotEmpty
+              ? item.miniKlinePriceList.first
+              : 0.0);
 
-    final displayChange = item.hasRealTimeData && item.priceChangePercent != null
+    final displayChange =
+        item.hasRealTimeData && item.priceChangePercent != null
         ? item.priceChangePercent!
-        : (item.miniKlinePriceList.length > 1 ? item.miniKlinePriceList[1] : 0.0);
+        : (item.miniKlinePriceList.length > 1
+              ? item.miniKlinePriceList[1]
+              : 0.0);
 
     final lineData = item.chartData.take(20).toList(); // 显示最近20个数据点
 
@@ -100,23 +108,27 @@ class SymbolCardEnhanced extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            '价格：¥${displayPrice.toStringAsFixed(2)}',
+            '${Lang.t('price')}: ¥${displayPrice.toStringAsFixed(2)}',
             style: TextStyle(color: isLight ? Colors.black : Colors.white),
           ),
           Text(
-            '涨幅：${displayChange.toStringAsFixed(2)}%',
+            '${Lang.t('change')}: ${displayChange.toStringAsFixed(2)}%',
             style: TextStyle(color: changeColor),
           ),
           SizedBox(height: 8),
           Expanded(
             child: lineData.isNotEmpty
                 ? CustomPaint(
-                    painter: LineChartEnhancedPainter(lineData, isLight, changeColor),
+                    painter: LineChartEnhancedPainter(
+                      lineData,
+                      isLight,
+                      changeColor,
+                    ),
                     size: Size(double.infinity, 60),
                   )
                 : Center(
                     child: Text(
-                      '暂无图表数据',
+                      Lang.t('no_chart_data'),
                       style: TextStyle(
                         color: isLight ? Colors.black54 : Colors.white54,
                         fontSize: 12,

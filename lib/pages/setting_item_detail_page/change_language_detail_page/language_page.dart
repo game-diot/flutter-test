@@ -5,6 +5,61 @@ import 'dart:convert';
 import '../../../providers/language/language.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+/// 紧凑版重置按钮 - 适合AppBar等狭窄空间
+class CompactResetToChineseButton extends StatelessWidget {
+  final Color? iconColor;
+  final double? iconSize;
+
+  const CompactResetToChineseButton({
+    Key? key,
+    this.iconColor,
+    this.iconSize = 24.0,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<LanguageProvider>(
+      builder: (context, languageProvider, child) {
+        final isCurrentlyChinese = languageProvider.currentCode == 'zh';
+
+        return IconButton(
+          onPressed: languageProvider.isLoading
+              ? null
+              : () async {
+                  await languageProvider.resetToDefaultChinese();
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('已恢复中文'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  }
+                },
+          icon: languageProvider.isLoading
+              ? SizedBox(
+                  width: iconSize,
+                  height: iconSize,
+                  child: const CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Icon(
+                  isCurrentlyChinese ? Icons.translate : Icons.refresh,
+                  color:
+                      iconColor ??
+                      (isCurrentlyChinese ? Colors.green : Colors.orange),
+                  size: iconSize,
+                ),
+          tooltip: isCurrentlyChinese ? '当前中文' : '恢复中文',
+        );
+      },
+    );
+  }
+}
+
+/// ======================
+/// 语言选择页面
+/// ======================
+
 class LanguagePage extends StatefulWidget {
   const LanguagePage({Key? key}) : super(key: key);
 
@@ -17,7 +72,7 @@ class _LanguagePageState extends State<LanguagePage> {
   List<dynamic> _filteredLanguages = [];
   bool _loading = true;
   String _search = '';
-  String? _switchingLanguage; // 正在切换的语言code
+  String? _switchingLanguage;
 
   @override
   void initState() {
@@ -25,28 +80,41 @@ class _LanguagePageState extends State<LanguagePage> {
     _fetchLanguages();
   }
 
-  Future<void> _fetchLanguages() async {
-    try {
-      final response = await http.get(
-        Uri.parse(
-          'https://us14-h5.yanshi.lol/api/app-api/system/i18n-type/list',
-        ),
-      );
-      final result = json.decode(response.body);
-      if (result['code'] == 0) {
-        setState(() {
-          _languages = result['data'];
-          _filteredLanguages = _languages;
-          _loading = false;
-        });
-      }
-    } catch (e) {
-      setState(() => _loading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('加载语言列表失败: $e')),
-      );
+ Future<void> _fetchLanguages() async {
+  try {
+    // 1. 先尝试读取缓存
+    final cached = await Provider.of<LanguageProvider>(context, listen: false).loadLanguageListCache();
+    if (cached != null && cached.isNotEmpty) {
+      setState(() {
+        _languages = cached;
+        _filteredLanguages = _languages;
+        _loading = false;
+      });
+      print("已使用缓存的语言列表");
     }
+
+    // 2. 再请求接口更新（后台刷新）
+    final response = await http.get(
+      Uri.parse('https://us14-h5.yanshi.lol/api/app-api/system/i18n-type/list'),
+    );
+    final result = json.decode(response.body);
+    if (result['code'] == 0) {
+      final data = result['data'];
+      setState(() {
+        _languages = data;
+        _filteredLanguages = _languages;
+        _loading = false;
+      });
+
+      // 保存到缓存
+      await Provider.of<LanguageProvider>(context, listen: false).saveLanguageListCache(data);
+    }
+  } catch (e) {
+    setState(() => _loading = false);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('加载语言列表失败: $e')));
   }
+}
+
 
   void _filterLanguages(String keyword) {
     setState(() {
@@ -65,11 +133,12 @@ class _LanguagePageState extends State<LanguagePage> {
     });
   }
 
-  /// 处理语言切换
   Future<void> _handleLanguageSwitch(String code, String name) async {
-    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
-    
-    // 如果正在切换相同语言，忽略
+    final languageProvider = Provider.of<LanguageProvider>(
+      context,
+      listen: false,
+    );
+
     if (_switchingLanguage == code || languageProvider.currentCode == code) {
       return;
     }
@@ -79,7 +148,6 @@ class _LanguagePageState extends State<LanguagePage> {
     });
 
     try {
-      // 显示切换提示
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
@@ -97,10 +165,8 @@ class _LanguagePageState extends State<LanguagePage> {
         ),
       );
 
-      // 执行语言切换
       await languageProvider.setLanguage(code, name);
 
-      // 切换成功提示
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -117,9 +183,7 @@ class _LanguagePageState extends State<LanguagePage> {
           ),
         );
       }
-
     } catch (e) {
-      // 切换失败提示
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -162,64 +226,22 @@ class _LanguagePageState extends State<LanguagePage> {
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.pop(context),
             ),
-            backgroundColor: theme.appBarTheme.backgroundColor ?? 
-                           theme.scaffoldBackgroundColor,
-            foregroundColor: theme.appBarTheme.foregroundColor ??
-                           theme.textTheme.titleLarge?.color,
+            backgroundColor:
+                theme.appBarTheme.backgroundColor ??
+                theme.scaffoldBackgroundColor,
+            foregroundColor:
+                theme.appBarTheme.foregroundColor ??
+                theme.textTheme.titleLarge?.color,
             elevation: 0,
             actions: [
-              // 调试按钮（生产环境可移除）
-              IconButton(
-                icon: const Icon(Icons.info_outline),
-                onPressed: () {
-                  languageProvider.debugPrint();
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('翻译统计'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('当前语言: ${languageProvider.language} (${languageProvider.currentCode})'),
-                          const SizedBox(height: 8),
-                          Text('加载状态: ${isProviderLoading ? "加载中" : "空闲"}'),
-                          if (languageProvider.error != null) ...[
-                            const SizedBox(height: 8),
-                            Text('错误: ${languageProvider.error}', 
-                                 style: const TextStyle(color: Colors.red)),
-                          ],
-                          const SizedBox(height: 12),
-                          const Text('翻译统计:', style: TextStyle(fontWeight: FontWeight.bold)),
-                          ...languageProvider.getTranslationStats().entries.map(
-                            (e) => Text('${e.key}: ${e.value} 条'),
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('关闭'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            languageProvider.clearTranslationCache();
-                          },
-                          child: const Text('清除缓存'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              // 紧凑版重置按钮
+              const CompactResetToChineseButton(),
             ],
           ),
           body: _loading
               ? const Center(child: CircularProgressIndicator())
               : Column(
                   children: [
-                    // 全局加载状态指示器
                     if (isProviderLoading)
                       Container(
                         width: double.infinity,
@@ -233,17 +255,20 @@ class _LanguagePageState extends State<LanguagePage> {
                               height: 16,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation(theme.primaryColor),
+                                valueColor: AlwaysStoppedAnimation(
+                                  theme.primaryColor,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Text('正在加载翻译包...', 
-                                 style: TextStyle(color: theme.primaryColor)),
+                            Text(
+                              '正在加载翻译包...',
+                              style: TextStyle(color: theme.primaryColor),
+                            ),
                           ],
                         ),
                       ),
 
-                    // 错误提示
                     if (languageProvider.error != null)
                       Container(
                         width: double.infinity,
@@ -251,7 +276,11 @@ class _LanguagePageState extends State<LanguagePage> {
                         color: Colors.orange.withOpacity(0.1),
                         child: Row(
                           children: [
-                            const Icon(Icons.warning, color: Colors.orange, size: 16),
+                            const Icon(
+                              Icons.warning,
+                              color: Colors.orange,
+                              size: 16,
+                            ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -267,7 +296,6 @@ class _LanguagePageState extends State<LanguagePage> {
                         ),
                       ),
 
-                    // 搜索框
                     Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: TextField(
@@ -289,7 +317,6 @@ class _LanguagePageState extends State<LanguagePage> {
                       ),
                     ),
 
-                    // 语言列表
                     Expanded(
                       child: ListView.builder(
                         itemCount: _filteredLanguages.length,
@@ -314,7 +341,7 @@ class _LanguagePageState extends State<LanguagePage> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            subtitle: isSelected 
+                            subtitle: isSelected
                                 ? Text(
                                     '当前语言',
                                     style: TextStyle(
@@ -330,7 +357,9 @@ class _LanguagePageState extends State<LanguagePage> {
                                   const SizedBox(
                                     width: 20,
                                     height: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
                                   )
                                 else if (isSelected)
                                   SvgPicture.asset(
@@ -341,18 +370,21 @@ class _LanguagePageState extends State<LanguagePage> {
                                   ),
                               ],
                             ),
-                            onTap: isSwitching ? null : () {
-                              _handleLanguageSwitch(code, name);
-                            },
-                            // 视觉反馈
-                            tileColor: isSelected 
-                                ? theme.primaryColor.withOpacity(0.05) 
+                            onTap: isSwitching
+                                ? null
+                                : () {
+                                    _handleLanguageSwitch(code, name);
+                                  },
+                            tileColor: isSelected
+                                ? theme.primaryColor.withOpacity(0.05)
                                 : null,
                             shape: isSelected
                                 ? RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                     side: BorderSide(
-                                      color: theme.primaryColor.withOpacity(0.3),
+                                      color: theme.primaryColor.withOpacity(
+                                        0.3,
+                                      ),
                                     ),
                                   )
                                 : null,

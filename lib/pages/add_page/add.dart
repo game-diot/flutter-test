@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../localization/lang.dart'; // 假设你有语言包工具
 
 class AddPage extends StatelessWidget {
   const AddPage({super.key});
@@ -21,34 +22,33 @@ class AddPage extends StatelessWidget {
                       Navigator.pop(context);
                     },
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Center(
                       child: Text(
-                        '发布',
-                        style: TextStyle(
+                        Lang.t('publish'), // 多语言
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 48), // 占位用，保持对称
+                  const SizedBox(width: 48),
                 ],
               ),
               const SizedBox(height: 20),
 
               // 标题输入框
-              const TextField(
+              TextField(
                 maxLength: 30,
                 decoration: InputDecoration(
-                  hintText: '请输入帖子标题（30个字内）',
-                  border: UnderlineInputBorder(
+                  hintText: Lang.t('enter_post_title'), // 多语言
+                  border: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Color.fromRGBO(241, 245, 249, 0.1),
-                      width: 0.1, // 设置线宽为 0.5，更细
+                      width: 0.1,
                     ),
                   ),
-
                   counterText: '',
                 ),
               ),
@@ -61,7 +61,7 @@ class AddPage extends StatelessWidget {
                   expands: true,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    hintText: '请输入内容（选填）',
+                    hintText: '请输入内容（选填）', // 这里也可以改成 Lang.t(...)
                     border: InputBorder.none,
                   ),
                 ),
@@ -82,11 +82,11 @@ class AddPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
-                    '发布',
-                    style: TextStyle(
+                  child: Text(
+                    Lang.t('publish'), // 多语言
+                    style: const TextStyle(
                       fontSize: 16,
-                      color: Color.fromRGBO(41, 46, 56, 1), // 正确写法
+                      color: Color.fromRGBO(41, 46, 56, 1),
                     ),
                   ),
                 ),

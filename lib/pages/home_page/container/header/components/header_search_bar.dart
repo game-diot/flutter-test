@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import '../../../../../localization/lang.dart'; // 确保导入 Lang
 
 class HeaderSearchBar extends StatelessWidget {
   const HeaderSearchBar({super.key});
@@ -7,7 +8,7 @@ class HeaderSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
-    final searchBg = isLight ? const Color.fromRGBO(242, 242, 242, 1) :Color.fromRGBO(242, 242, 242, 1);
+    final searchBg = isLight ? const Color.fromRGBO(242, 242, 242, 1) : Color.fromRGBO(242, 242, 242, 1);
     final searchTextColor = isLight ? Colors.black87 : Colors.white70;
 
     return Container(
@@ -26,9 +27,9 @@ class HeaderSearchBar extends StatelessWidget {
           Expanded(
             child: TextField(
               style: TextStyle(color: searchTextColor),
-              decoration: const InputDecoration(
-                hintText: '搜索币对',
-                hintStyle: TextStyle(color: Colors.grey),
+              decoration: InputDecoration(
+                hintText: Lang.t('search_pair'),
+                hintStyle: const TextStyle(color: Colors.grey),
                 border: InputBorder.none,
               ),
             ),

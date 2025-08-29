@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../localization/lang.dart'; // 假设你有语言包工具
 
-// 数据模型
 class NewsCarouselItem {
   final String title;
   final int hotValue;
@@ -8,7 +8,6 @@ class NewsCarouselItem {
   NewsCarouselItem({required this.title, required this.hotValue});
 }
 
-// 轮播组件
 class NewsCarousel extends StatelessWidget {
   final List<NewsCarouselItem> items;
 
@@ -25,14 +24,14 @@ class NewsCarousel extends StatelessWidget {
       height: 170,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.only(left: 16), // 左边距，让第一个项目贴边
+        padding: EdgeInsets.only(left: 16),
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
           final bgImage = _backgroundImages[index % _backgroundImages.length];
 
           return Padding(
-            padding: const EdgeInsets.only(right: 8), // 右边距
+            padding: const EdgeInsets.only(right: 8),
             child: SizedBox(
               width: 170,
               height: 170,
@@ -49,7 +48,7 @@ class NewsCarousel extends StatelessWidget {
                           item.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center, // 水平居中
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -62,7 +61,7 @@ class NewsCarousel extends StatelessWidget {
                       left: 4,
                       bottom: 4,
                       child: Text(
-                        '热度值 ${item.hotValue}',
+                        '${Lang.t('hot_value')} ${item.hotValue}', // 多语言显示
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 10,

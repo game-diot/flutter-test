@@ -5,6 +5,7 @@ import 'container/article.dart';
 import 'components/article_model.dart';
 import '../../network/Get/models/news_page/news.dart';
 import '../../network/Get/services/news_page/news.dart';
+import '../../localization/lang.dart';
 
 class NewsPage extends StatefulWidget {
   @override
@@ -56,9 +57,11 @@ class _NewsPageState extends State<NewsPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('加载失败: ${snapshot.error}'));
+              return Center(
+                child: Text('${Lang.t('load_failed')}: ${snapshot.error}'),
+              );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return _buildEmpty("暂无数据");
+              return _buildEmpty(Lang.t('no_data'));
             }
 
             final messages = snapshot.data!;
@@ -95,16 +98,15 @@ class _NewsPageState extends State<NewsPage> {
         );
 
       case 1:
-        return _buildEmpty("暂无广场数据，请稍后查看");
+        return _buildEmpty(Lang.t('no_square_data'));
       case 2:
-        return _buildEmpty("暂无原创数据，请稍后查看");
+        return _buildEmpty(Lang.t('no_original_data'));
       case 3:
-        return _buildEmpty("暂无 NFT 数据，请稍后查看");
+        return _buildEmpty(Lang.t('no_nft_data'));
       case 4:
-        return _buildEmpty("暂无科普数据，请稍后查看");
-      default:
-        return _buildEmpty("暂无数据");
+        return _buildEmpty(Lang.t('no_science_data'));
     }
+    return _buildEmpty(Lang.t('no_data'));
   }
 
   /// 占位页
