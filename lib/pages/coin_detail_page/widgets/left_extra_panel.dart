@@ -6,7 +6,9 @@ class LeftExtraPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String displayValue = (currentValue == null || currentValue == 0) ? '---' : currentValue!.toStringAsFixed(0);
+    String displayValue = (currentValue == null || currentValue == 0)
+        ? '---'
+        : currentValue!.toStringAsFixed(0);
 
     return Column(
       children: [
@@ -26,9 +28,8 @@ class LeftExtraPanel extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                 
                     const Text("990109522", style: TextStyle(fontSize: 12)),
-                       Text(displayValue, style: const TextStyle(fontSize: 12)),
+                    Text(displayValue, style: const TextStyle(fontSize: 12)),
                   ],
                 ),
               ],
@@ -71,9 +72,8 @@ class LeftExtraPanel extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                  
                     const Text("990109522", style: TextStyle(fontSize: 12)),
-                      Text(displayValue, style: const TextStyle(fontSize: 12)),
+                    Text(displayValue, style: const TextStyle(fontSize: 12)),
                   ],
                 ),
               ],
