@@ -109,7 +109,6 @@ class ExchangeRateWebSocketService {
   void _onMessage(dynamic message) {
     try {
       final String messageStr = message.toString();
-      print('收到WebSocket消息: $messageStr');
 
       final Map<String, dynamic> json = jsonDecode(messageStr);
 

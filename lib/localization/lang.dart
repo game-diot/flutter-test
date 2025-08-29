@@ -29,7 +29,8 @@ class Lang {
       'email_empty': 'Email cannot be empty',
       'password_mismatch': 'Passwords do not match',
       'register_success': 'Registration successful, automatically logged in',
-      'register_failed': 'Registration failed, please check your info or try later',
+      'register_failed':
+          'Registration failed, please check your info or try later',
       'enter_captcha': 'Please enter verification code',
       'enter_password_again': 'Please enter password again',
       'have_account_login': 'Already have an account? Login',
@@ -44,10 +45,11 @@ class Lang {
       'image_load_failed': 'Image failed to load',
       'global_index': 'Global Index',
       'market_data': 'Market Data',
-            'login_button':'login_button',
+      'login_button': 'login_button',
+      'enter_password': 'enter_password',
     },
     'zh': {
-      'login_button':'登录',
+      'login_button': '登录',
       'market_data': '行情数据',
       'global_index': '全球指数',
       'image_load_failed': '图片加载失败',
@@ -87,28 +89,28 @@ class Lang {
       '@qq.com': '@qq.com',
       '@163.com': '@163.com',
       '@gmail.com': '@gmail.com',
+      'enter_password': '输入密码',
     },
   };
 
-/// 设置当前语言为默认中文（内置翻译）
-static void setDefaultTranslations() {
-  currentLang = 'zh';
-  // _translations['default'] 存储内置中文
-  _translations['default'] = Map<String, String>.from(_translations['zh']!);
-  print('已切换到默认中文（default）');
-}
+  /// 设置当前语言为默认中文（内置翻译）
+  static void setDefaultTranslations() {
+    currentLang = 'zh';
+    // _translations['default'] 存储内置中文
+    _translations['default'] = Map<String, String>.from(_translations['zh']!);
+    print('已切换到默认中文（default）');
+  }
 
-/// 获取默认翻译
-static Map<String, String> getDefaultTranslations() {
-  return Map<String, String>.from(_translations['zh']!);
-}
+  /// 获取默认翻译
+  static Map<String, String> getDefaultTranslations() {
+    return Map<String, String>.from(_translations['zh']!);
+  }
 
   /// 获取翻译文本
   static String t(String key, {Map<String, String>? params}) {
-    String text = _translations[currentLang]?[key] ?? 
-                  _translations['en']?[key] ?? 
-                  key;
-                  
+    String text =
+        _translations[currentLang]?[key] ?? _translations['en']?[key] ?? key;
+
     if (params != null) {
       params.forEach((k, v) {
         text = text.replaceAll('{$k}', v);
@@ -136,16 +138,18 @@ static Map<String, String> getDefaultTranslations() {
   static Future<bool> loadRemoteTranslations(String languageCode) async {
     try {
       print('开始加载远程翻译: $languageCode');
-      
-      final remoteTranslations = await I18nService.loadTranslations(languageCode);
-      
+
+      final remoteTranslations = await I18nService.loadTranslations(
+        languageCode,
+      );
+
       if (remoteTranslations != null && remoteTranslations.isNotEmpty) {
         // 合并远程翻译到本地
         mergeTranslations(languageCode, remoteTranslations);
-        
+
         // 更新当前语言
         currentLang = languageCode;
-        
+
         print('远程翻译加载成功: $languageCode, 共 ${remoteTranslations.length} 条');
         return true;
       } else {
@@ -163,18 +167,26 @@ static Map<String, String> getDefaultTranslations() {
   }
 
   /// 合并翻译数据
-  static void mergeTranslations(String languageCode, Map<String, String> newTranslations) {
+  static void mergeTranslations(
+    String languageCode,
+    Map<String, String> newTranslations,
+  ) {
     // 确保语言映射存在
     _translations.putIfAbsent(languageCode, () => {});
-    
+
     // 合并翻译（远程翻译会覆盖本地翻译）
     _translations[languageCode]!.addAll(newTranslations);
-    
-    print('合并翻译完成: $languageCode, 当前共有 ${_translations[languageCode]!.length} 条翻译');
+
+    print(
+      '合并翻译完成: $languageCode, 当前共有 ${_translations[languageCode]!.length} 条翻译',
+    );
   }
 
   /// 批量更新翻译
-  static void updateTranslations(String languageCode, Map<String, String> translations) {
+  static void updateTranslations(
+    String languageCode,
+    Map<String, String> translations,
+  ) {
     _translations[languageCode] = translations;
     print('更新翻译完成: $languageCode');
   }

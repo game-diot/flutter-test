@@ -51,10 +51,6 @@ class _RegisterFormContentState extends State<RegisterFormContent> {
 
   /// 前端表单校验
   bool _validateForm() {
-    if (usernameController.text.isEmpty) {
-      _showSnackBar(Lang.t('username_empty'));
-      return false;
-    }
 
     if (widget.isPhoneSelected) {
       if (phoneController.text.isEmpty) {
