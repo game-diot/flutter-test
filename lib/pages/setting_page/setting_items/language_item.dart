@@ -1,10 +1,10 @@
+// components/items/language_item.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/language/language.dart';
 import '../components/setting_item.dart';
 import '../../setting_item_detail_page/change_language_detail_page/language_page.dart'; // 引入独立语言页面
-import '../../../localization/lang.dart';
 
 class LanguageItem extends StatelessWidget {
   const LanguageItem({super.key});
@@ -23,7 +23,7 @@ class LanguageItem extends StatelessWidget {
             height: 28,
             colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
           ),
-          title: Lang.t('switch_language'),
+          title: '切换语言',
           subtitle: languageProvider.language, // 显示当前选中语言
           isArrow: true,
           targetPage: const LanguagePage(), // 跳转到独立页面

@@ -12,6 +12,7 @@ class CombinedTable extends StatelessWidget {
   final Function(String) onSort;
   final Color textColor;
   final Color? subTextColor;
+  final Function(CombinedCoinData)? onRowTap;
 
   const CombinedTable({
     Key? key,
@@ -21,6 +22,7 @@ class CombinedTable extends StatelessWidget {
     required this.onSort,
     required this.textColor,
     required this.subTextColor,
+    this.onRowTap,
   }) : super(key: key);
 
   @override
@@ -79,7 +81,7 @@ class CombinedTable extends StatelessWidget {
               title,
               style: TextStyle(
                 fontWeight: FontWeight.w100,
-                color: Color.fromRGBO(134, 144, 156, 1),
+                color: const Color.fromRGBO(134, 144, 156, 1),
               ),
             ),
             Icon(
@@ -87,7 +89,7 @@ class CombinedTable extends StatelessWidget {
                   ? Icons.arrow_upward
                   : Icons.arrow_downward,
               size: 16,
-              color: Color.fromRGBO(134, 144, 156, 1),
+              color: const Color.fromRGBO(134, 144, 156, 1),
             ),
           ],
         ),
@@ -98,29 +100,35 @@ class CombinedTable extends StatelessWidget {
   Widget _buildContent() {
     return Expanded(
       child: Transform.translate(
-        offset: const Offset(-8, 0), // 整体向左移动4像素
+        offset: const Offset(-8, 0), // 整体向左移动
         child: ListView.builder(
           itemCount: data.length,
           itemBuilder: (context, index) {
             final item = data[index];
-            return _buildTableRow(item);
+            return _buildTableRow(item, context);
           },
         ),
       ),
     );
   }
 
-  Widget _buildTableRow(CombinedCoinData item) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-      child: Row(
-        children: [
-          _buildCoinIcon(item.icon1),
-          const SizedBox(width: 8),
-          _buildCoinName(item),
-          _buildPrice(item),
-          _buildPriceChange(item),
-        ],
+  /// 修改后的 TableRow，使用 InkWell 包装
+  Widget _buildTableRow(CombinedCoinData item, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        if (onRowTap != null) onRowTap!(item);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        child: Row(
+          children: [
+            _buildCoinIcon(item.icon1),
+            const SizedBox(width: 8),
+            _buildCoinName(item),
+            _buildPrice(item),
+            _buildPriceChange(item),
+          ],
+        ),
       ),
     );
   }
@@ -173,9 +181,9 @@ class CombinedTable extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.only(right: 2), // 右边留点空，让文本看起来左移
+        padding: const EdgeInsets.only(right: 2),
         child: Align(
-          alignment: Alignment.centerRight, // 保持右对齐
+          alignment: Alignment.centerRight,
           child: item.hasRealTimeData && item.currentPrice != null
               ? Text(
                   '¥${item.currentPrice!.toStringAsFixed(2)}',
@@ -195,14 +203,12 @@ class CombinedTable extends StatelessWidget {
               builder: (context, colorProvider, _) {
                 final mode = colorProvider.mode;
                 final isUp = item.priceChangePercent! >= 0;
-
                 Color valueColor;
                 if (mode == ChangeColorMode.greenUpRedDown) {
                   valueColor = isUp ? Colors.green : Colors.red;
                 } else {
                   valueColor = isUp ? Colors.red : Colors.green;
                 }
-
                 return Text(
                   '${item.priceChangePercent!.toStringAsFixed(2)}%',
                   textAlign: TextAlign.right,
