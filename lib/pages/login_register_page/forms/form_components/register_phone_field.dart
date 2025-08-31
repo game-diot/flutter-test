@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../../network/Get/models/splash_page/login_area.dart';
 import 'country_widget.dart';
-import '../../../../localization/i18n/lang.dart'; // 替换为你的实际路径
+import '../../../../localization/i18n/lang.dart';
+import '../../../../network/Get/models/splash_page/login_area.dart';
 
-class LoginPhoneInput extends StatelessWidget {
+class RegisterPhoneField extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<Country> onCountrySelected;
 
-  const LoginPhoneInput({
+  const RegisterPhoneField({
     Key? key,
     required this.controller,
     required this.onCountrySelected,
