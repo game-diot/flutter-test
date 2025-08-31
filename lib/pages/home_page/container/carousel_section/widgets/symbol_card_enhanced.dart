@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/combined_chart_data.dart';
+import 'line_chart_enhanced.dart';
 import '../../../../../../providers/color/color.dart';
-import '../models/chart_models.dart';
-import 'line_chart.dart';
 import '../../../../../localization/i18n/lang.dart';
 
 class SymbolCardEnhanced extends StatelessWidget {
@@ -17,7 +17,6 @@ class SymbolCardEnhanced extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 使用实时数据或历史数据
     final displayPrice = item.hasRealTimeData && item.currentPrice != null
         ? item.currentPrice!
         : (item.miniKlinePriceList.isNotEmpty
@@ -31,16 +30,12 @@ class SymbolCardEnhanced extends StatelessWidget {
               ? item.miniKlinePriceList[1]
               : 0.0);
 
-    final lineData = item.chartData.take(20).toList(); // 显示最近20个数据点
+    final lineData = item.chartData.take(20).toList();
 
-    // 获取全局涨跌颜色设置
     final colorProvider = context.watch<ChangeColorProvider>();
-    Color changeColor;
-    if (colorProvider.mode == ChangeColorMode.redUpGreenDown) {
-      changeColor = displayChange >= 0 ? Colors.red : Colors.green;
-    } else {
-      changeColor = displayChange >= 0 ? Colors.green : Colors.red;
-    }
+    final changeColor = colorProvider.mode == ChangeColorMode.redUpGreenDown
+        ? (displayChange >= 0 ? Colors.red : Colors.green)
+        : (displayChange >= 0 ? Colors.green : Colors.red);
 
     return Container(
       decoration: BoxDecoration(
@@ -62,26 +57,23 @@ class SymbolCardEnhanced extends StatelessWidget {
         children: [
           Row(
             children: [
-              // 图标
               Image.network(
                 item.icon1,
                 width: 20,
                 height: 20,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(
-                      Icons.currency_bitcoin,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                  );
-                },
+                errorBuilder: (_, __, ___) => Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.currency_bitcoin,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -94,7 +86,6 @@ class SymbolCardEnhanced extends StatelessWidget {
                   ),
                 ),
               ),
-              // 实时数据指示器
               if (item.hasRealTimeData)
                 Container(
                   width: 8,
@@ -112,7 +103,7 @@ class SymbolCardEnhanced extends StatelessWidget {
             style: TextStyle(color: isLight ? Colors.black : Colors.white),
           ),
           Text(
-            '${Lang.t('change')}: ${displayChange.toStringAsFixed(2)}%',
+            '${Lang.t('price_change_percent')}: ${displayChange.toStringAsFixed(2)}%',
             style: TextStyle(color: changeColor),
           ),
           SizedBox(height: 8),

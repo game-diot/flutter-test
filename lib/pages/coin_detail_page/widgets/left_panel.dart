@@ -25,14 +25,6 @@ class _LeftPanelState extends State<LeftPanel> {
     });
   }
 
-  void _onInputChanged(String val) {
-    double parsed = double.tryParse(val) ?? 0;
-    if (parsed > 9999999999) parsed = 9999999999;
-    setState(() {
-      _currentValue = parsed;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -74,10 +66,7 @@ class _LeftPanelState extends State<LeftPanel> {
           const SizedBox(height: 10),
 
           // 数字输入框
-          NumericInputWithLabel(
-            controller: _controller,
-            suffixText: "open",
-          ),
+          NumericInputWithLabel(controller: _controller, suffixText: "open"),
 
           const SizedBox(height: 12),
 

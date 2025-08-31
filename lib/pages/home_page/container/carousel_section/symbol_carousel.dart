@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:provider/provider.dart';
+import 'models/combined_chart_data.dart';
+import 'services/chart_data_service.dart';
+import 'widgets/symbol_card_enhanced.dart';
 import '../../../../network/Get/models/home_page/home_data_section.dart';
 import '../../../../socket/home_page_data_section/models.dart';
-import '../../../../localization/i18n/lang.dart';
-// 导入拆分后的组件
-import 'models/chart_models.dart';
-import 'services/chart_services.dart';
-import 'components/card.dart';
 
-/// 主图表轮播组件
 class SymbolCarousel extends StatefulWidget {
   final List<SymbolItem>? coinList;
   final bool? isLoading;
@@ -35,10 +33,8 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
 
   void _initWebSocket() {
     _chartDataService.initWebSocket();
-
     _chartDataService.exchangeRateStream?.listen((exchangeRateMap) {
       if (!mounted) return;
-
       setState(() {
         _exchangeRateMap = exchangeRateMap;
         _updateCombinedData();
@@ -48,7 +44,7 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
 
   void _updateCombinedData() {
     if (widget.coinList == null) return;
-    print(widget.coinList);
+
     _combinedData = widget.coinList!.map((symbolItem) {
       final wsSymbol = symbolItem.symbol.replaceAll('_', '~');
 
@@ -61,8 +57,7 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
           _exchangeRateMap[wsSymbol] ?? _exchangeRateMap[symbolItem.symbol];
 
       if (exchangeRate != null) {
-        // 更新实时数据并添加到历史价格中
-        final newData = CombinedChartData(
+        return CombinedChartData(
           symbolId: symbolItem.symbolId,
           symbol: symbolItem.symbol,
           baseSymbol: symbolItem.baseSymbol,
@@ -78,9 +73,7 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
             exchangeRate.price,
           ),
         );
-        return newData;
       } else {
-        // WS 没返回数据，保留上次值
         return prevData;
       }
     }).toList();
@@ -93,24 +86,16 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
     double? newPrice,
   ) {
     if (newPrice == null) return previous;
-
     final updated = List<double>.from(previous);
     updated.add(newPrice);
-
-    // 保持最多50个数据点
-    if (updated.length > 50) {
-      updated.removeAt(0);
-    }
-
+    if (updated.length > 50) updated.removeAt(0);
     return updated;
   }
 
   @override
   void didUpdateWidget(SymbolCarousel oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.coinList != widget.coinList) {
-      _updateCombinedData();
-    }
+    if (oldWidget.coinList != widget.coinList) _updateCombinedData();
   }
 
   @override
@@ -124,26 +109,25 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
     final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
 
     if (widget.isLoading == true) {
-      return Container(
+      return SizedBox(
         height: 150,
         child: const Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_combinedData.isEmpty) {
-      print("合并数据出错$_combinedData");
-      return Container(
+      return SizedBox(
         height: 150,
         child: Center(
           child: Text(
-            Lang.t('no_data'),
+            'No data',
             style: TextStyle(color: isLight ? Colors.black54 : Colors.white54),
           ),
         ),
       );
     }
 
-    return Container(
+    return SizedBox(
       height: 150,
       width: double.infinity,
       child: PageView.builder(
@@ -152,10 +136,7 @@ class _SymbolCarouselState extends State<SymbolCarousel> {
         itemBuilder: (context, index) {
           final item = _combinedData[index];
           return Padding(
-            padding: EdgeInsets.only(
-              left: index == 0 ? 0 : 8, // 第一个项目贴边，其他项目左边距8
-              right: 8, // 所有项目右边距8
-            ),
+            padding: EdgeInsets.only(left: index == 0 ? 0 : 8, right: 8),
             child: SymbolCardEnhanced(item: item, isLight: isLight),
           );
         },

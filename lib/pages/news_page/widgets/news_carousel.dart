@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../pages/news_page/models/article_model.dart';
 import '../../../localization/i18n/lang.dart';
 
 class NewsCarouselItem {

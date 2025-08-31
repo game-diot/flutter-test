@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../network/Get/models/home_page/home_data_section.dart';
-import '../../carousel_section/carousel_section.dart';
+import '../../carousel_section/symbol_carousel.dart';
 import '../../../../../localization/i18n/lang.dart'; // ⬅️ 引入
 
 class MarketCarousel extends StatelessWidget {
