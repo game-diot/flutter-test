@@ -10,14 +10,14 @@ import 'form_components/login_button.dart';
 import 'form_components/login_register_button.dart';
 import 'form_components/login_agreement.dart';
 import '../../../providers/login/login.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
 
 class LoginForm extends StatefulWidget {
   final VoidCallback? onSwitchToRegister;
   final VoidCallback? onLoginSuccess;
 
   const LoginForm({this.onSwitchToRegister, this.onLoginSuccess, Key? key})
-      : super(key: key);
+    : super(key: key);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -62,15 +62,15 @@ class _LoginFormState extends State<LoginForm> {
     String password = passwordController.text.trim();
 
     if (username.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Lang.t("username_empty"))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(Lang.t("username_empty"))));
       return false;
     }
     if (password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Lang.t("password_empty"))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(Lang.t("password_empty"))));
       return false;
     }
     return true;
@@ -97,7 +97,9 @@ class _LoginFormState extends State<LoginForm> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(success ? Lang.t("login_success") : Lang.t("login_failed")),
+          content: Text(
+            success ? Lang.t("login_success") : Lang.t("login_failed"),
+          ),
         ),
       );
 
@@ -111,11 +113,9 @@ class _LoginFormState extends State<LoginForm> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("${Lang.t("login_failed")}: $e"),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("${Lang.t("login_failed")}: $e")));
     }
   }
 
@@ -131,11 +131,15 @@ class _LoginFormState extends State<LoginForm> {
         ),
         const SizedBox(height: 16),
         isPhoneSelected
-            ? LoginPhoneInput(controller: phoneController, onCountrySelected: (_) {})
+            ? LoginPhoneInput(
+                controller: phoneController,
+                onCountrySelected: (_) {},
+              )
             : LoginEmailInput(
                 controller: emailController,
                 selectedSuffix: selectedEmailSuffix,
-                onSuffixChanged: (val) => setState(() => selectedEmailSuffix = val),
+                onSuffixChanged: (val) =>
+                    setState(() => selectedEmailSuffix = val),
               ),
         const SizedBox(height: 16),
         LoginPasswordInput(controller: passwordController),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../localization/lang.dart';
+import '../../../../../localization/i18n/lang.dart';
 
 class MarketBanner extends StatelessWidget {
   const MarketBanner({super.key});

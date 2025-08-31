@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../../../../network/Get/models/home_page/home_data_section.dart';
-import '../../carousel_section/carousel_section.dart';
-import '../../../../../localization/lang.dart'; // ⬅️ 引入
+import '../../carousel_section/symbol_carousel.dart';
+import '../../../../../localization/i18n/lang.dart'; // ⬅️ 引入
 
 class MarketCarousel extends StatelessWidget {
   final List<SymbolItem> coinList;
   final bool isLoading;
 
-  const MarketCarousel({super.key, required this.coinList, required this.isLoading});
+  const MarketCarousel({
+    super.key,
+    required this.coinList,
+    required this.isLoading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,9 @@ class MarketCarousel extends StatelessWidget {
               ? SizedBox(
                   height: 150,
                   child: Center(
-                    child: CircularProgressIndicator(color: theme.colorScheme.primary),
+                    child: CircularProgressIndicator(
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
                 )
               : SymbolCarousel(coinList: coinList),

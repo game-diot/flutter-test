@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../localization/lang.dart';
+import '../../../../localization/i18n/lang.dart';
 
 class LoginButton extends StatelessWidget {
   final bool isLoading;
@@ -27,7 +27,9 @@ class LoginButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromRGBO(237, 176, 35, 1),
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
       ),
     );

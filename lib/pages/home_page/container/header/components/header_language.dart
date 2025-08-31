@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../setting_item_detail_page/change_language_detail_page/language_page.dart'; // 你的语言选择页路径
+import '../../../../setting_item_detail_page/change_language_page/language_page.dart'; // 你的语言选择页路径
 
 class HeaderLanguage extends StatelessWidget {
   const HeaderLanguage({super.key});
