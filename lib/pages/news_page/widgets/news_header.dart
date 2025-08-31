@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../localization/i18n/lang.dart';
 
 class NewsHeader extends StatefulWidget {
-  final ValueChanged<int>? onTabSelected; // 新增回调
+  final ValueChanged<int>? onTabSelected;
 
   const NewsHeader({Key? key, this.onTabSelected}) : super(key: key);
 
@@ -19,26 +19,21 @@ class _NewsHeaderState extends State<NewsHeader> {
     Lang.t('nft'),
     Lang.t('science'),
   ];
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    final bgColor = isDark
-        ? Color.fromARGB(255, 18, 18, 18)
-        : Color.fromRGBO(237, 176, 35, 1);
-    final textColor = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black;
-    final searchBgColor = isDark ? Color(0xFF424242) : Colors.white;
-    final searchTextColor = isDark ? Color(0xFF9D9D9D) : Colors.black87;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121212) : const Color(0xFFEDB023);
+    final textColor = isDark ? const Color(0xFFEFEFEF) : Colors.black;
+    final searchBgColor = isDark ? const Color(0xFF424242) : Colors.white;
+    final searchTextColor = isDark ? const Color(0xFF9D9D9D) : Colors.black87;
 
     return Container(
       color: bgColor,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 搜索框
           Container(
             height: 50,
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -48,20 +43,12 @@ class _NewsHeaderState extends State<NewsHeader> {
             ),
             child: Row(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: Icon(
-                    Icons.search_rounded, // 圆角放大镜
-                    color: Colors.grey,
-                    size: 28, // 调大整体大小
-                  ),
-                ),
+                const Icon(Icons.search_rounded, color: Colors.grey, size: 28),
                 Expanded(
                   child: TextField(
                     style: TextStyle(color: searchTextColor),
                     decoration: const InputDecoration(
                       hintText: '搜索新闻',
-                      hintStyle: TextStyle(color: Colors.grey),
                       border: InputBorder.none,
                     ),
                   ),
@@ -69,23 +56,18 @@ class _NewsHeaderState extends State<NewsHeader> {
               ],
             ),
           ),
-          SizedBox(height: 20),
-
-          // Tab 按钮
-          // 包裹整个 Row 的固定宽度容器
+          const SizedBox(height: 20),
           SizedBox(
-            width: 350, // 总宽度固定 150
+            width: 350,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // 在 150px 内平分
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(_labels.length, (index) {
-                bool isSelected = _selectedIndex == index;
+                final isSelected = _selectedIndex == index;
                 return SizedBox(
-                  width: 350 / _labels.length, // 每个按钮占 30px
+                  width: 350 / _labels.length,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _selectedIndex = index;
-                      });
+                      setState(() => _selectedIndex = index);
                       widget.onTabSelected?.call(index);
                     },
                     child: Column(
@@ -95,7 +77,6 @@ class _NewsHeaderState extends State<NewsHeader> {
                           _labels[index],
                           style: TextStyle(
                             color: textColor,
-                            fontSize: 16,
                             fontWeight: isSelected
                                 ? FontWeight.bold
                                 : FontWeight.normal,

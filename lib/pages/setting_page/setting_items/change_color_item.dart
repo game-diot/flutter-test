@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/color/color.dart';
-import '../../setting_item_detail_page/change_up_down_color_page/up_down_color_page.dart';
+import '../../setting_item_detail_page/trend_color_Detail_page/trend_color_detail_page.dart';
 import '../components/setting_item.dart';
 import '../../../localization/i18n/lang.dart';
 

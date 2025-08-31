@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'container/navbar.dart';
-import '../news_page/news.dart';
+import '../news_page/news_page.dart';
 import '../add_page/add_page.dart';
-import '../forum_page/forum.dart';
+import '../forum_page/论坛页面整体.dart';
 import '../setting_page/setting.dart';
 import 'container/market/market_page.dart';
 import 'container/appbar.dart';

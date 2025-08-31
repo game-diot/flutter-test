@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../pages/login_register_page/forms/login_form.dart';
 import '../pages/login_register_page/forms/register_form.dart';
 import '../pages/add_page/add_page.dart';
-import '../pages/forum_page/forum.dart';
+import '../pages/forum_page/forum_page.dart';
 import '../pages/home_page/home.dart';
 import '../pages/login_register_page/splash_screen.dart';
 import '../pages/message_page/commons_page.dart';
 import '../pages/message_page/likes_page.dart';
 import '../pages/my_article/my_likes_page.dart';
 import '../pages/my_article/my_post_page.dart';
-import '../pages/news_page/news.dart';
+import '../pages/news_page/news_page.dart';
 import '../pages/setting_page/setting.dart';
 
 class AppRoutes {

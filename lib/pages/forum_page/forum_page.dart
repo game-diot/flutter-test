@@ -1,8 +1,9 @@
+// forum_page.dart
 import 'package:flutter/material.dart';
-import 'header/header.dart';
-import 'components/function_bar.dart';
-import 'components/post_list.dart';
-import 'components/post_item_model.dart';
+import 'widgets/forum_header.dart';
+import 'widgets/forum_function_bar.dart';
+import 'widgets/forum_post_list.dart';
+import 'models/forum_post_item.dart';
 import '../../network/Get/models/news_page/news.dart';
 import '../../network/Get/services/news_page/news.dart';
 import '../../localization/i18n/lang.dart';
@@ -16,13 +17,12 @@ class ForumPage extends StatefulWidget {
 
 class _ForumPageState extends State<ForumPage> {
   int _selectedFunctionIndex = 0;
-  int _selectedTabIndex = 0; // ForumHeader 当前选中的 tab
+  int _selectedTabIndex = 0;
   late Future<List<News>> _futureMessages;
 
   @override
   void initState() {
     super.initState();
-    // 调用后端接口获取数据
     _futureMessages = NewsServices().fetchNewsMessages().then(
       (resp) => resp.list,
     );
@@ -34,7 +34,6 @@ class _ForumPageState extends State<ForumPage> {
       body: SafeArea(
         child: Column(
           children: [
-            /// Header
             Container(
               color: Theme.of(context).brightness == Brightness.dark
                   ? const Color.fromRGBO(18, 18, 18, 1)
@@ -44,8 +43,6 @@ class _ForumPageState extends State<ForumPage> {
               ),
             ),
             const SizedBox(height: 10),
-
-            /// 根据 tab 显示内容
             Expanded(child: _buildContent()),
           ],
         ),
@@ -111,7 +108,6 @@ class _ForumPageState extends State<ForumPage> {
     }
   }
 
-  /// 占位页
   Widget _buildEmpty(String text) {
     return Center(
       child: Text(

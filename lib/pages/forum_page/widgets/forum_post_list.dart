@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../container/forumpostblock.dart';
-import 'post_item_model.dart';
+import 'forum_post_block.dart';
+import '../models/forum_post_item.dart';
 
 class ForumPostList extends StatelessWidget {
-  final List<ForumPostItem> posts; // 从父级传入
+  final List<ForumPostItem> posts;
 
   const ForumPostList({Key? key, required this.posts}) : super(key: key);
 

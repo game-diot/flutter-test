@@ -3,7 +3,6 @@ import '../../../localization/i18n/lang.dart';
 
 class ForumHeader extends StatefulWidget {
   final ValueChanged<int>? onTabSelected;
-
   const ForumHeader({super.key, this.onTabSelected});
 
   @override
@@ -12,13 +11,11 @@ class ForumHeader extends StatefulWidget {
 
 class _ForumHeaderState extends State<ForumHeader> {
   int _selectedIndex = 0;
-
   late List<String> _labels;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // 获取当前语言下的 Tab 名称
     _labels = [
       Lang.t('hot_list'),
       Lang.t('blockchain'),
@@ -40,8 +37,8 @@ class _ForumHeaderState extends State<ForumHeader> {
     Color textColor = isDark
         ? Colors.white.withOpacity(isSelected ? 1.0 : 0.7)
         : (isSelected
-              ? Color.fromRGBO(41, 46, 56, 1)
-              : Color.fromRGBO(46, 46, 46, 1));
+              ? const Color.fromRGBO(41, 46, 56, 1)
+              : const Color.fromRGBO(46, 46, 46, 1));
     Color borderColor = const Color.fromARGB(255, 0, 0, 0);
 
     return GestureDetector(
@@ -50,7 +47,7 @@ class _ForumHeaderState extends State<ForumHeader> {
         children: [
           const SizedBox(height: 10),
           Text(
-            _labels[index], // 使用多语言文字
+            _labels[index],
             style: TextStyle(
               color: textColor,
               fontSize: 16,
@@ -80,7 +77,6 @@ class _ForumHeaderState extends State<ForumHeader> {
 
     return Column(
       children: [
-        // 搜索框
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 13),
           child: Container(
@@ -93,7 +89,7 @@ class _ForumHeaderState extends State<ForumHeader> {
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: searchIconColor),
-                hintText: Lang.t("search_forum"), // 多语言 hint
+                hintText: Lang.t("search_forum"),
                 hintStyle: TextStyle(color: searchIconColor),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
@@ -104,8 +100,6 @@ class _ForumHeaderState extends State<ForumHeader> {
             ),
           ),
         ),
-
-        // Tab 部分
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(

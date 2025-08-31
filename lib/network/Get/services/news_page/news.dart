@@ -7,7 +7,7 @@ class NewsServices {
   static const String baseUrl =
       'https://us14-h5.yanshi.lol/api/app-api/notice/forum-message/page';
 
-  Future<NewsResponse> fetchNewsMessages({ 
+  Future<NewsResponse> fetchNewsMessages({
     int pageNo = 1,
     int pageSize = 50,
   }) async {

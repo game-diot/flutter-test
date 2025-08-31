@@ -1,55 +1,17 @@
-// components/setting_item_detail_page/change_color_detail_page/trend_color_detail_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import '../../../providers/color/color.dart';
+import '../../../../providers/color/color.dart';
+import 'mini_block.dart';
 
-class TrendColorDetailPage extends StatelessWidget {
-  const TrendColorDetailPage({super.key});
+class DetailBlock extends StatelessWidget {
+  final int index;
+  final bool isSelected;
+
+  const DetailBlock({super.key, required this.index, required this.isSelected});
 
   @override
   Widget build(BuildContext context) {
-    final colorProvider = Provider.of<ChangeColorProvider>(context);
-    final currentMode = colorProvider.mode;
-    final selectedIndex = currentMode == ChangeColorMode.greenUpRedDown ? 0 : 1;
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('涨跌色设置'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor:
-            theme.appBarTheme.backgroundColor ?? theme.scaffoldBackgroundColor,
-        foregroundColor:
-            theme.appBarTheme.foregroundColor ??
-            theme.textTheme.titleLarge?.color,
-        elevation: 0,
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              '调整市场行情显示的涨跌颜色，直观区分涨跌情况',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 24),
-            _buildDetailBlock(context, 0, selectedIndex == 0),
-            const SizedBox(height: 16),
-            _buildDetailBlock(context, 1, selectedIndex == 1),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDetailBlock(BuildContext context, int index, bool isSelected) {
     final colorProvider = Provider.of<ChangeColorProvider>(context);
     final isGreenUp = index == 0;
 
@@ -118,9 +80,9 @@ class TrendColorDetailPage extends StatelessWidget {
                 runSpacing: 8,
                 children: miniBlocks
                     .map(
-                      (block) => _buildMiniBlock(
-                        block['color'] as Color,
-                        block['text'] as String,
+                      (block) => MiniBlock(
+                        color: block['color'] as Color,
+                        text: block['text'] as String,
                       ),
                     )
                     .toList(),
@@ -128,23 +90,6 @@ class TrendColorDetailPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildMiniBlock(Color color, String text) {
-    return Container(
-      width: 80,
-      height: 40,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color, width: 1),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(color: color, fontWeight: FontWeight.bold),
       ),
     );
   }

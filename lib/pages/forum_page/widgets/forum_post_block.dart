@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../detail_page/detail_page.dart';
 import '../../../localization/i18n/lang.dart';
+import '../../detail_page/detail_page.dart';
 
 class ForumPostBlock extends StatelessWidget {
   final String title;
@@ -8,7 +8,7 @@ class ForumPostBlock extends StatelessWidget {
   final String content;
   final int likes;
   final int comments;
-  final int? rank; // 排行榜编号，可选
+  final int? rank;
 
   const ForumPostBlock({
     Key? key,
@@ -38,11 +38,12 @@ class ForumPostBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
     final bgColor = isDark ? Colors.grey[850] : Colors.white;
-    final titleColor = isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black;
+    final titleColor = isDark
+        ? const Color.fromRGBO(223, 229, 236, 1)
+        : Colors.black;
     final subtitleColor = isDark ? Colors.white70 : Colors.grey[600];
-    final iconColor = Color.fromRGBO(237, 176, 35, 1);
+    final iconColor = const Color.fromRGBO(237, 176, 35, 1);
 
     return GestureDetector(
       onTap: () {
@@ -65,29 +66,26 @@ class ForumPostBlock extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            padding: EdgeInsets.all(12),
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: bgColor,
               borderRadius: BorderRadius.circular(10),
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.black.withOpacity(0.05), // 很淡的黑色
-                  width: 1, // 线宽
+                  color: Colors.black.withOpacity(0.05),
+                  width: 1,
                 ),
               ),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 左侧标
-                SizedBox(width: 18),
-                // 右侧内容
+                const SizedBox(width: 18),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 标题
                       Text(
                         title,
                         style: TextStyle(
@@ -98,8 +96,7 @@ class ForumPostBlock extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 8),
-                      // 作者信息
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Icon(
@@ -107,7 +104,7 @@ class ForumPostBlock extends StatelessWidget {
                             size: 30,
                             color: iconColor,
                           ),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           Text(
                             author,
                             style: TextStyle(
@@ -117,18 +114,15 @@ class ForumPostBlock extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
-                      // 内容摘要
+                      const SizedBox(height: 10),
                       Text(
                         content,
                         style: TextStyle(fontSize: 12, color: subtitleColor),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 8),
-                      // 点赞与评论
+                      const SizedBox(height: 8),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             '$likes',
@@ -137,8 +131,7 @@ class ForumPostBlock extends StatelessWidget {
                               color: subtitleColor,
                             ),
                           ),
-                          SizedBox(width: 4),
-
+                          const SizedBox(width: 4),
                           Text(
                             Lang.t('like'),
                             style: TextStyle(
@@ -146,15 +139,12 @@ class ForumPostBlock extends StatelessWidget {
                               color: subtitleColor,
                             ),
                           ),
-                          SizedBox(width: 6),
-                          Text(
+                          const SizedBox(width: 6),
+                          const Text(
                             '/',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: subtitleColor,
-                            ),
+                            style: TextStyle(fontSize: 20, color: Colors.grey),
                           ),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           Text(
                             '$comments',
                             style: TextStyle(
@@ -162,7 +152,6 @@ class ForumPostBlock extends StatelessWidget {
                               color: subtitleColor,
                             ),
                           ),
-
                           Text(
                             Lang.t('comment'),
                             style: TextStyle(
@@ -178,21 +167,22 @@ class ForumPostBlock extends StatelessWidget {
               ],
             ),
           ),
-          // 排行榜徽章
-          // 排行榜徽章
           if (rank != null)
             Positioned(
-              left: 16, // 左侧内边距，紧贴帖子左边缘
-              top: 20, // 上方间距
+              left: 16,
+              top: 20,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1.5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 1.5,
+                ),
                 decoration: BoxDecoration(
                   color: getRankColor(rank!),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(
                   '$rank',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/language/language.dart';
 import '../components/setting_item.dart';
-import '../../setting_item_detail_page/change_language_detail_page/language_page.dart'; // 引入独立语言页面
+import '../../setting_item_detail_page/change_language_page/language_page.dart'; // 引入独立语言页面
 import '../../../localization/i18n/lang.dart';
 
 class LanguageItem extends StatelessWidget {

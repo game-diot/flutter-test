@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'theme_option.dart';
 
 class ThemePage extends StatefulWidget {
   const ThemePage({super.key});
@@ -68,13 +69,13 @@ class _ThemePageState extends State<ThemePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildThemeOption(
+                ThemeOption(
                   index: 0,
                   imagePath: 'assets/images/light.png',
                   isSelected: selectedIndex == 0,
                   onTap: () => _setTheme(0),
                 ),
-                _buildThemeOption(
+                ThemeOption(
                   index: 1,
                   imagePath: 'assets/images/dark.png',
                   isSelected: selectedIndex == 1,
@@ -84,30 +85,6 @@ class _ThemePageState extends State<ThemePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildThemeOption({
-    required int index,
-    required String imagePath,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 180,
-        height: 180,
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: isSelected ? Colors.blue : Colors.transparent,
-            width: 3,
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Image.asset(imagePath, fit: BoxFit.cover),
       ),
     );
   }
