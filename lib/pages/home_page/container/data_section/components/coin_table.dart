@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../providers/color/color.dart';
 import '../../../../../providers/exchange/exchange.dart';
-import '../../../../../localization/lang.dart';
+import '../../../../../localization/i18n/lang.dart';
 
 /// 币种表格组件
 class CoinTable extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../network/Get/models/splash_page/login_area.dart';
 import 'login_form_country_widget.dart';
-import '../../../../localization/lang.dart'; // 替换为你的实际路径
+import '../../../../localization/i18n/lang.dart'; // 替换为你的实际路径
 
 class LoginPhoneInput extends StatelessWidget {
   final TextEditingController controller;
@@ -21,10 +21,7 @@ class LoginPhoneInput extends StatelessWidget {
       decoration: InputDecoration(
         hintText: Lang.t('enter_phone'),
         hintStyle: const TextStyle(color: Colors.black54),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 14,
-          horizontal: 8,
-        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(

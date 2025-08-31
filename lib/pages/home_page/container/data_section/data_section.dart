@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../providers/exchange/exchange.dart';
 import '../../../../network/Get/models/home_page/home_data_section.dart';
 import '../../../../socket/home_page_data_section/models.dart';
-import '../../../../localization/lang.dart';
+import '../../../../localization/i18n/lang.dart';
 
 // 导入拆分后的组件
 import 'models/combined_coin_data.dart';
@@ -19,7 +19,7 @@ class DataSection extends StatefulWidget {
   final bool? isLoading;
 
   const DataSection({Key? key, this.coinList, this.isLoading})
-      : super(key: key);
+    : super(key: key);
 
   @override
   _DataSectionState createState() => _DataSectionState();
@@ -91,7 +91,11 @@ class _DataSectionState extends State<DataSection> {
 
     // **重新应用排序**
     if (_currentSortKey.isNotEmpty) {
-      _dataSectionService.sortCombinedData(_combinedData, _currentSortKey, _currentSortAsc);
+      _dataSectionService.sortCombinedData(
+        _combinedData,
+        _currentSortKey,
+        _currentSortAsc,
+      );
     }
 
     setState(() {});
@@ -189,9 +193,7 @@ class _DataSectionState extends State<DataSection> {
         onRowTap: (coin) {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => SocketBindPage(coin: coin),
-            ),
+            MaterialPageRoute(builder: (_) => SocketBindPage(coin: coin)),
           );
         },
       );
@@ -201,7 +203,10 @@ class _DataSectionState extends State<DataSection> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(Lang.t('no_data'), style: TextStyle(color: textColor, fontSize: 16)),
+          Text(
+            Lang.t('no_data'),
+            style: TextStyle(color: textColor, fontSize: 16),
+          ),
           const SizedBox(height: 8),
           Text(
             Lang.t('switch_other_tab'),

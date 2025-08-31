@@ -1,7 +1,6 @@
-// lib/forum/widgets/comment_section.dart
 import 'package:flutter/material.dart';
-import 'comment_model.dart';
 import 'comment_item.dart';
+import 'comment_model.dart';
 
 class CommentSection extends StatelessWidget {
   const CommentSection({super.key});
@@ -9,12 +8,11 @@ class CommentSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<CommentModel> comments = [
-      // 这里模拟数据
       CommentModel(
         id: '1',
         avatarUrl: 'https://i.pravatar.cc/150?img=1',
         username: '小王',
-        content: '给外公外公我不玩...',
+        content: '给外公外公我不玩，不完全圆粉圆，不闻不问去不是我。外公去',
         time: '12:02',
         likeCount: 7,
         replies: [
@@ -22,13 +20,12 @@ class CommentSection extends StatelessWidget {
             id: '1-1',
             avatarUrl: 'https://i.pravatar.cc/150?img=2',
             username: '星星之火',
-            content: '给外公外公我不玩...',
+            content: '给外公外公我不玩，不完全圆粉圆，不闻不问去不是我。外公去',
             time: '12:02',
             likeCount: 5,
           ),
         ],
       ),
-      // 可以添加更多
     ];
 
     return Column(

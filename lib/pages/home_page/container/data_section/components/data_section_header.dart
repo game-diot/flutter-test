@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import '../../../../../localization/lang.dart';
+import '../../../../../localization/i18n/lang.dart';
 
 /// 数据区域顶部切换栏
 class DataSectionHeader extends StatelessWidget {

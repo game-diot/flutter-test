@@ -1,4 +1,3 @@
-// lib/forum/models/comment_model.dart
 class CommentModel {
   final String id;
   final String avatarUrl;

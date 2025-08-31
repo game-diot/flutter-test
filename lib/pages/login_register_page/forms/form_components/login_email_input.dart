@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../localization/lang.dart'; // 引入翻译包
+import '../../../../localization/i18n/lang.dart'; // 引入翻译包
 
 class LoginEmailInput extends StatelessWidget {
   final TextEditingController controller;

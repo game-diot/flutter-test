@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/login/login.dart';
 import '../../login_register_page/splash_screen.dart';
 import '../components/setting_item.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
 
 class LogoutItem extends StatelessWidget {
   const LogoutItem({super.key});
@@ -26,8 +26,7 @@ class LogoutItem extends StatelessWidget {
       title: Lang.t('logout_account'),
       isArrow: true,
       onTap: () async {
-        final authProvider =
-            Provider.of<AuthProvider>(context, listen: false);
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
         await authProvider.logout();
         Navigator.pushAndRemoveUntil(
           context,

@@ -9,7 +9,7 @@ import 'setting_items/feedback_item.dart';
 import 'setting_items/logout_item.dart';
 import '../my_article/my_likes_page.dart';
 import '../my_article/my_post_page.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});

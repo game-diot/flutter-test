@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../localization/lang.dart';
+import '../../localization/i18n/lang.dart';
 
 class LanguageProvider extends ChangeNotifier {
   static const String _keyLanguageCode = 'selected_language_code';
@@ -9,9 +9,11 @@ class LanguageProvider extends ChangeNotifier {
 
   // 🔹 新增缓存 key
   static const String _keyLanguageList = 'cached_language_list';
-  static const String _keyLanguageListTimestamp = 'cached_language_list_timestamp';
+  static const String _keyLanguageListTimestamp =
+      'cached_language_list_timestamp';
   static const String _keyRemoteTranslations = 'cached_remote_translations';
-  static const String _keyRemoteTranslationsTimestamp = 'cached_remote_translations_timestamp';
+  static const String _keyRemoteTranslationsTimestamp =
+      'cached_remote_translations_timestamp';
 
   String _language = "中文";
   String _code = "zh";
@@ -78,11 +80,16 @@ class LanguageProvider extends ChangeNotifier {
   Future<void> saveLanguageListCache(List<dynamic> languages) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyLanguageList, jsonEncode(languages));
-    await prefs.setInt(_keyLanguageListTimestamp, DateTime.now().millisecondsSinceEpoch);
+    await prefs.setInt(
+      _keyLanguageListTimestamp,
+      DateTime.now().millisecondsSinceEpoch,
+    );
     print("语言列表已缓存，共 ${languages.length} 个语言");
   }
 
-  Future<List<dynamic>?> loadLanguageListCache({Duration maxAge = const Duration(days: 1)}) async {
+  Future<List<dynamic>?> loadLanguageListCache({
+    Duration maxAge = const Duration(days: 1),
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     final cacheData = prefs.getString(_keyLanguageList);
     final timestamp = prefs.getInt(_keyLanguageListTimestamp);
@@ -98,7 +105,10 @@ class LanguageProvider extends ChangeNotifier {
   // ===============================
   // 🔹 远程翻译缓存
   // ===============================
-  Future<void> saveRemoteTranslationsCache(String code, Map<String, String> translations) async {
+  Future<void> saveRemoteTranslationsCache(
+    String code,
+    Map<String, String> translations,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final key = "$_keyRemoteTranslations\_$code";
     final keyTime = "$_keyRemoteTranslationsTimestamp\_$code";
@@ -107,7 +117,10 @@ class LanguageProvider extends ChangeNotifier {
     print("已缓存 $code 翻译，共 ${translations.length} 条");
   }
 
-  Future<Map<String, String>?> loadRemoteTranslationsCache(String code, {Duration maxAge = const Duration(days: 1)}) async {
+  Future<Map<String, String>?> loadRemoteTranslationsCache(
+    String code, {
+    Duration maxAge = const Duration(days: 1),
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     final key = "$_keyRemoteTranslations\_$code";
     final keyTime = "$_keyRemoteTranslationsTimestamp\_$code";
@@ -122,29 +135,29 @@ class LanguageProvider extends ChangeNotifier {
     }
     return null;
   }
+
   /// 重置到默认中文
   Future<void> resetToDefaultChinese() async {
     print('=== 重置到默认中文 ===');
-    
+
     _setLoading(true);
     _clearError();
 
     try {
       // 1. 重置Lang类到默认中文
       Lang.resetToDefaultChinese();
-      
+
       // 2. 更新Provider状态
       _language = "中文";
       _code = "zh";
-      
+
       // 3. 保存到本地
       await _saveLanguage();
-      
+
       // 4. 通知UI更新
       notifyListeners();
-      
+
       print('已重置到默认中文状态');
-      
     } catch (e, stackTrace) {
       print('重置到默认中文失败: $e');
       print('异常堆栈: $stackTrace');
@@ -157,11 +170,11 @@ class LanguageProvider extends ChangeNotifier {
   /// 静默加载翻译（不显示loading）
   Future<void> loadTranslationsQuietly(String code) async {
     print('静默加载翻译: $code');
-    
+
     try {
       await Lang.loadRemoteTranslations(code);
       print('静默加载翻译完成: $code');
-      
+
       // 静默加载完成后通知UI刷新
       notifyListeners();
     } catch (e) {
@@ -173,7 +186,7 @@ class LanguageProvider extends ChangeNotifier {
   Future<void> preloadCommonLanguages() async {
     print('=== 预加载常用语言 ===');
     final commonLanguages = ['zh', 'en', 'pt', 'es', 'fr', 'de', 'ja', 'ko'];
-    
+
     _setLoading(true);
     try {
       await Lang.preloadLanguages(commonLanguages);
@@ -189,15 +202,15 @@ class LanguageProvider extends ChangeNotifier {
   /// 保存语言设置到本地
   Future<void> _saveLanguage() async {
     print('--- 保存语言设置到本地 ---');
-    
+
     try {
       final prefs = await SharedPreferences.getInstance();
       final success1 = await prefs.setString(_keyLanguageCode, _code);
       final success2 = await prefs.setString(_keyLanguageName, _language);
-      
+
       print('保存结果: 代码=$success1, 名称=$success2');
       print('保存内容: $_language ($_code)');
-      
+
       if (success1 && success2) {
         print('语言设置保存成功');
       } else {
@@ -212,35 +225,35 @@ class LanguageProvider extends ChangeNotifier {
   /// 从本地加载语言设置
   Future<void> _loadLanguage() async {
     print('--- 从本地加载语言设置 ---');
-    
+
     try {
       final prefs = await SharedPreferences.getInstance();
       final savedCode = prefs.getString(_keyLanguageCode);
       final savedName = prefs.getString(_keyLanguageName);
-      
+
       print('本地保存的语言代码: $savedCode');
       print('本地保存的语言名称: $savedName');
-      
+
       if (savedCode != null && savedCode.isNotEmpty) {
         _code = savedCode;
         _language = savedName ?? _getLanguageDisplayName(savedCode);
-        
+
         print('从本地加载语言设置成功: $_language ($_code)');
-        
+
         // 异步加载翻译数据（不阻塞UI）
         _loadTranslationsInBackground();
-        
+
         notifyListeners();
       } else {
         print('无本地语言设置，使用默认中文');
-        
+
         // 确保默认中文翻译已初始化
         Lang.resetToDefaultChinese();
       }
     } catch (e, stackTrace) {
       print('加载语言设置异常: $e');
       print('异常堆栈: $stackTrace');
-      
+
       // 异常时使用默认中文
       Lang.resetToDefaultChinese();
     }
@@ -249,14 +262,14 @@ class LanguageProvider extends ChangeNotifier {
   /// 后台加载翻译数据
   void _loadTranslationsInBackground() async {
     print('后台加载翻译数据: $_code');
-    
+
     try {
       final success = await Lang.loadRemoteTranslations(_code);
       print('后台翻译加载结果: $success');
-      
+
       // 翻译加载完成后刷新UI
       notifyListeners();
-      
+
       if (!success) {
         _setError('后台翻译加载失败，使用默认翻译');
       }
@@ -288,7 +301,7 @@ class LanguageProvider extends ChangeNotifier {
       'th': 'ไทย',
       'hi': 'हिन्दी',
     };
-    
+
     final displayName = names[code] ?? code.toUpperCase();
     print('语言代码 $code 的显示名称: $displayName');
     return displayName;
@@ -330,7 +343,7 @@ class LanguageProvider extends ChangeNotifier {
   /// 清除翻译缓存
   Future<void> clearTranslationCache([String? languageCode]) async {
     print('=== 清除翻译缓存 ===');
-    
+
     _setLoading(true);
     try {
       if (languageCode != null) {
@@ -340,7 +353,7 @@ class LanguageProvider extends ChangeNotifier {
         await Lang.clearAllCache();
         print('已清除所有翻译缓存');
       }
-      
+
       _clearError();
     } catch (e) {
       print('清除缓存异常: $e');
@@ -370,13 +383,13 @@ class LanguageProvider extends ChangeNotifier {
     print('加载状态: $_isLoading');
     print('错误信息: $_error');
     print('UI通知状态: ${hasListeners ? "有监听者" : "无监听者"}');
-    
+
     // 调用Lang类的调试信息
     Lang.debugPrintStats();
-    
+
     // 验证翻译完整性
     Lang.validateTranslations();
-    
+
     print('======================================================');
   }
 
@@ -384,7 +397,7 @@ class LanguageProvider extends ChangeNotifier {
   bool hasTranslations([String? languageCode]) {
     final code = languageCode ?? _code;
     final hasValid = Lang.hasValidTranslations(code);
-    
+
     print('检查翻译数据: $code -> $hasValid');
     return hasValid;
   }
@@ -399,7 +412,7 @@ class LanguageProvider extends ChangeNotifier {
   /// 验证当前状态
   Map<String, dynamic> validateCurrentState() {
     print('验证当前Provider状态');
-    
+
     final state = {
       'currentCode': _code,
       'currentLanguage': _language,
@@ -410,7 +423,7 @@ class LanguageProvider extends ChangeNotifier {
       'supportedLanguages': getSupportedLanguages(),
       'translationStats': getTranslationStats(),
     };
-    
+
     print('Provider状态验证结果: $state');
     return state;
   }
@@ -418,24 +431,24 @@ class LanguageProvider extends ChangeNotifier {
   /// 强制刷新翻译
   Future<void> forceRefreshTranslations() async {
     print('=== 强制刷新翻译 ===');
-    
+
     _setLoading(true);
     _clearError();
-    
+
     try {
       // 清除当前语言缓存
       await Lang.clearCache(_code);
-      
+
       // 重新加载翻译
       final success = await Lang.loadRemoteTranslations(_code);
-      
+
       if (success) {
         print('强制刷新翻译成功');
       } else {
         print('强制刷新翻译失败，使用默认翻译');
         _setError('刷新失败，使用默认翻译');
       }
-      
+
       notifyListeners();
     } catch (e, stackTrace) {
       print('强制刷新翻译异常: $e');

@@ -15,20 +15,14 @@ class DetailUserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage("https://i.pravatar.cc/150?img=2"),
-            radius: 18,
-          ),
+          CircleAvatar(backgroundImage: NetworkImage(avatarUrl), radius: 18),
           const SizedBox(width: 8),
           Text(nickname),
           const Spacer(),
-          Text(
-            time,
-            style: const TextStyle(color: Colors.grey),
-          )
+          Text(time, style: const TextStyle(color: Colors.grey)),
         ],
       ),
     );

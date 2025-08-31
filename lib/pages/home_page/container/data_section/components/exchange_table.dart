@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../providers/exchange/exchange.dart';
-import '../../../../../localization/lang.dart';
+import '../../../../../localization/i18n/lang.dart';
 
 /// 交易所表格组件
 class ExchangeTable extends StatelessWidget {

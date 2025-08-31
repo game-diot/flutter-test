@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
 
 class ForumHeader extends StatefulWidget {
   final ValueChanged<int>? onTabSelected;
@@ -40,8 +40,8 @@ class _ForumHeaderState extends State<ForumHeader> {
     Color textColor = isDark
         ? Colors.white.withOpacity(isSelected ? 1.0 : 0.7)
         : (isSelected
-            ? Color.fromRGBO(41, 46, 56, 1)
-            : Color.fromRGBO(46, 46, 46, 1));
+              ? Color.fromRGBO(41, 46, 56, 1)
+              : Color.fromRGBO(46, 46, 46, 1));
     Color borderColor = const Color.fromARGB(255, 0, 0, 0);
 
     return GestureDetector(
@@ -111,10 +111,7 @@ class _ForumHeaderState extends State<ForumHeader> {
           decoration: BoxDecoration(
             color: bgColor,
             border: Border(
-              bottom: BorderSide(
-                color: Colors.grey.withOpacity(0.3),
-                width: 1,
-              ),
+              bottom: BorderSide(color: Colors.grey.withOpacity(0.3), width: 1),
             ),
           ),
           child: Row(

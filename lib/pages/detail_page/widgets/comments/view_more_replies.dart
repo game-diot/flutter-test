@@ -1,4 +1,3 @@
-// lib/forum/widgets/view_more_replies.dart
 import 'package:flutter/material.dart';
 import 'comment_item.dart';
 import 'comment_model.dart';
@@ -15,11 +14,27 @@ class ViewMoreReplies extends StatelessWidget {
         onTap: () => _showMoreReplies(context),
         child: Row(
           children: [
-            const Text('展开', style: TextStyle(fontSize: 12, color: Color.fromRGBO(237, 176, 35, 1))),
+            const Text(
+              '展开',
+              style: TextStyle(
+                fontSize: 12,
+                color: Color.fromRGBO(237, 176, 35, 1),
+              ),
+            ),
             const SizedBox(width: 4),
-            Text('${comment.hiddenRepliesCount} 条回复', style: const TextStyle(fontSize: 12, color: Color.fromRGBO(237, 176, 35, 1))),
+            Text(
+              '${comment.hiddenRepliesCount} 条回复',
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color.fromRGBO(237, 176, 35, 1),
+              ),
+            ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down, size: 14, color: Color.fromRGBO(237, 176, 35, 1)),
+            const Icon(
+              Icons.keyboard_arrow_down,
+              size: 14,
+              color: Color.fromRGBO(237, 176, 35, 1),
+            ),
           ],
         ),
       ),
@@ -38,22 +53,30 @@ class ViewMoreReplies extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              const Text('全部回复', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text(
+                '全部回复',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               const Divider(),
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
-                  itemCount: comment.hiddenRepliesCount + comment.replies.length,
+                  itemCount:
+                      comment.hiddenRepliesCount + comment.replies.length,
                   itemBuilder: (context, index) {
                     if (index < comment.replies.length) {
-                      return CommentItem(comment: comment.replies[index], isReply: true);
+                      return CommentItem(
+                        comment: comment.replies[index],
+                        isReply: true,
+                      );
                     } else {
                       return Padding(
                         padding: const EdgeInsets.all(16),
                         child: CommentItem(
                           comment: CommentModel(
                             id: 'more-${index}',
-                            avatarUrl: 'https://i.pravatar.cc/150?img=${index + 10}',
+                            avatarUrl:
+                                'https://i.pravatar.cc/150?img=${index + 10}',
                             username: '用户${index}',
                             content: '这是更多的回复内容...',
                             time: '12:0${index}',

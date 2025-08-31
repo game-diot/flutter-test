@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../detail_page/detail_page.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
 
 class ForumPostBlock extends StatelessWidget {
   final String title;

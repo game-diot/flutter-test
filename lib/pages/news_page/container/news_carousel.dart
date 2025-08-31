@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../localization/lang.dart'; // 假设你有语言包工具
+import '../../../localization/i18n/lang.dart'; // 假设你有语言包工具
 
 class NewsCarouselItem {
   final String title;
@@ -62,10 +62,7 @@ class NewsCarousel extends StatelessWidget {
                       bottom: 4,
                       child: Text(
                         '${Lang.t('hot_value')} ${item.hotValue}', // 多语言显示
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 10,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 10),
                       ),
                     ),
                   ],

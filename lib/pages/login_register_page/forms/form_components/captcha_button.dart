@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../../network/Get/services/splash_page/register_send_verification_code.dart';
-import '../../../../localization/lang.dart';
+import '../../../../localization/i18n/lang.dart';
 
 class CaptchaButton extends StatefulWidget {
   final TextEditingController controller;
@@ -49,9 +49,9 @@ class _CaptchaButtonState extends State<CaptchaButton> {
   void _sendCaptcha() async {
     final phone = widget.controller.text.trim();
     if (phone.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Lang.t("enter_phone"))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(Lang.t("enter_phone"))));
       return;
     }
 
@@ -65,17 +65,21 @@ class _CaptchaButtonState extends State<CaptchaButton> {
 
       if (response != null && response.code == 0) {
         _startCountdown();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(Lang.t("captcha_sent"))),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(Lang.t("captcha_sent"))));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response?.msg ?? Lang.t("captcha_send_failed"))),
+          SnackBar(
+            content: Text(response?.msg ?? Lang.t("captcha_send_failed")),
+          ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Lang.t("network_error", params: {"error": "$e"}))),
+        SnackBar(
+          content: Text(Lang.t("network_error", params: {"error": "$e"})),
+        ),
       );
     }
   }
@@ -97,9 +101,11 @@ class _CaptchaButtonState extends State<CaptchaButton> {
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        child: Text(_isSending
-            ? Lang.t("seconds", params: {"count": "$_countdown"})
-            : Lang.t("send_captcha")),
+        child: Text(
+          _isSending
+              ? Lang.t("seconds", params: {"count": "$_countdown"})
+              : Lang.t("send_captcha"),
+        ),
       ),
     );
   }

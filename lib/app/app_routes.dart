@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import '../pages/login_register_page/forms/login_form.dart';
 import '../pages/login_register_page/forms/register_form.dart';
-import '../pages/add_page/add.dart';
+import '../pages/add_page/add_page.dart';
 import '../pages/forum_page/forum.dart';
 import '../pages/home_page/home.dart';
 import '../pages/login_register_page/splash_screen.dart';
@@ -18,16 +18,16 @@ class AppRoutes {
 
   static final Map<String, WidgetBuilder> routes = {
     '/': (_) => SplashScreen(),
-    '/login': (_) =>  LoginForm(),
-    '/register': (_) =>  RegisterForm(),
-    '/home': (_) =>  HomePage(),
-    '/add': (_) =>  AddPage(),
-    '/forum': (_) =>  ForumPage(),
-    '/setting': (_) =>  SettingPage(),
-    '/news':(_) => NewsPage(),
-    '/myarticle/mylikes':(_)=>MyLikesPage(),
-    '/myarticle/myposts':(_)=>MyPostsPage(),
-    '/message/commented':(_) => CommentedPage(),
-    '/message/liked':(_)=>LikedPage()
+    '/login': (_) => LoginForm(),
+    '/register': (_) => RegisterForm(),
+    '/home': (_) => HomePage(),
+    '/add': (_) => AddPage(),
+    '/forum': (_) => ForumPage(),
+    '/setting': (_) => SettingPage(),
+    '/news': (_) => NewsPage(),
+    '/myarticle/mylikes': (_) => MyLikesPage(),
+    '/myarticle/myposts': (_) => MyPostsPage(),
+    '/message/commented': (_) => CommentedPage(),
+    '/message/liked': (_) => LikedPage(),
   };
 }

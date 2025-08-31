@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../providers/color/color.dart';
 import '../models/combined_coin_data.dart';
-import '../../../../../localization/lang.dart';
+import '../../../../../localization/i18n/lang.dart';
 
 /// 合并数据表格组件
 class CombinedTable extends StatelessWidget {

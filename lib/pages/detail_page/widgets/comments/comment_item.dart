@@ -1,4 +1,3 @@
-// lib/forum/widgets/comment_item.dart
 import 'package:flutter/material.dart';
 import 'comment_model.dart';
 import 'view_more_replies.dart';
@@ -14,12 +13,15 @@ class CommentItem extends StatelessWidget {
     return Column(
       children: [
         _buildCommentContent(context),
-        // 回复列表
+        // 子回复
         if (comment.replies.isNotEmpty)
-          ...comment.replies.map((reply) => Padding(
-                padding: const EdgeInsets.only(left: 50),
-                child: CommentItem(comment: reply, isReply: true),
-              )),
+          ...comment.replies.map(
+            (reply) => Padding(
+              padding: const EdgeInsets.only(left: 50),
+              child: CommentItem(comment: reply, isReply: true),
+            ),
+          ),
+        // 展示更多回复
         if (comment.hasMoreReplies) ViewMoreReplies(comment: comment),
       ],
     );
@@ -88,7 +90,10 @@ class CommentItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              Text('${comment.likeCount}', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+              Text(
+                '${comment.likeCount}',
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
             ],
           ),
         ],
@@ -104,7 +109,10 @@ class CommentItem extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text('回复评论', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text(
+              '回复评论',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
             Expanded(
               child: TextField(
@@ -112,7 +120,9 @@ class CommentItem extends StatelessWidget {
                 expands: true,
                 decoration: InputDecoration(
                   hintText: '回复 ${comment.username}...',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
             ),
@@ -120,7 +130,10 @@ class CommentItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(onPressed: () => Navigator.pop(context), child: const Text('取消')),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('取消'),
+                ),
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context),

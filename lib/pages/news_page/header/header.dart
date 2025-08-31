@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
+
 class NewsHeader extends StatefulWidget {
   final ValueChanged<int>? onTabSelected; // 新增回调
 
@@ -11,13 +12,13 @@ class NewsHeader extends StatefulWidget {
 
 class _NewsHeaderState extends State<NewsHeader> {
   int _selectedIndex = 0;
-final List<String> _labels = [
-  Lang.t('hot_rank'),
-  Lang.t('square'),
-  Lang.t('original'),
-  Lang.t('nft'),
-  Lang.t('science')
-];
+  final List<String> _labels = [
+    Lang.t('hot_rank'),
+    Lang.t('square'),
+    Lang.t('original'),
+    Lang.t('nft'),
+    Lang.t('science'),
+  ];
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

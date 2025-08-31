@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../../../../providers/color/color.dart';
 import '../models/chart_models.dart';
 import 'line_chart.dart';
-import '../../../../../localization/lang.dart';
+import '../../../../../localization/i18n/lang.dart';
 
 class SymbolCardEnhanced extends StatelessWidget {
   final CombinedChartData item;

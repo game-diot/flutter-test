@@ -5,7 +5,7 @@ import 'container/article.dart';
 import 'components/article_model.dart';
 import '../../network/Get/models/news_page/news.dart';
 import '../../network/Get/services/news_page/news.dart';
-import '../../localization/lang.dart';
+import '../../localization/i18n/lang.dart';
 
 class NewsPage extends StatefulWidget {
   @override

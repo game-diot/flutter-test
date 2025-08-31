@@ -20,10 +20,7 @@ class DetailBottomBar extends StatelessWidget {
       children: [
         Icon(icon, size: 20, color: color),
         const SizedBox(height: 2),
-        Text(
-          '$count',
-          style: TextStyle(fontSize: 10, color: color),
-        ),
+        Text('$count', style: TextStyle(fontSize: 10, color: color)),
       ],
     );
   }
@@ -32,43 +29,48 @@ class DetailBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? Colors.grey[900] : Colors.white;
-    final inputBgColor = isDark ? Colors.grey[800] : Color(0xFFF0F0F0);
+    final inputBgColor = isDark ? Colors.grey[800] : const Color(0xFFF0F0F0);
     final textColor = isDark ? Colors.white70 : Colors.grey;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: isDark ? Colors.grey[700]! : Color(0xFFEEEEEE))),
+        border: Border(
+          top: BorderSide(
+            color: isDark ? Colors.grey[700]! : const Color(0xFFEEEEEE),
+          ),
+        ),
         color: bgColor,
       ),
       height: 100,
       child: Row(
         children: [
-          // 左侧输入框点击区域
           Expanded(
             child: GestureDetector(
               onTap: onCommentTap,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: inputBgColor,
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: Text(
-                  '我来评论',
-                  style: TextStyle(color: textColor),
-                ),
+                child: Text('我来评论', style: TextStyle(color: textColor)),
               ),
             ),
           ),
           const SizedBox(width: 12),
-
-          // 右侧图标栏
           _buildIconWithText(Icons.star_border, starCount, textColor),
           const SizedBox(width: 16),
           _buildIconWithText(Icons.thumb_up_off_alt, likeCount, textColor),
           const SizedBox(width: 16),
-          _buildIconWithText(Icons.chat_bubble_outline, commentCount, textColor),
+          _buildIconWithText(
+            Icons.chat_bubble_outline,
+            commentCount,
+            textColor,
+          ),
         ],
       ),
     );

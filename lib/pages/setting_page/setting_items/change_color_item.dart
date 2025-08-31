@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../providers/color/color.dart';
 import '../../setting_item_detail_page/change_up_down_color_page/up_down_color_page.dart';
 import '../components/setting_item.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
+
 class ChangeColorItem extends StatelessWidget {
   const ChangeColorItem({super.key});
 
@@ -27,18 +28,13 @@ class ChangeColorItem extends StatelessWidget {
             colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
           ),
           title: Lang.t('trend_color'),
-          subtitleWidget: SvgPicture.asset(
-            arrowSvg,
-            width: 28,
-            height: 18,
-          ),
+          subtitleWidget: SvgPicture.asset(arrowSvg, width: 28, height: 18),
           subtitle: colorProvider.subtitle,
           isArrow: true,
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (_) => const TrendColorDetailPage()),
+              MaterialPageRoute(builder: (_) => const TrendColorDetailPage()),
             );
           },
         );
