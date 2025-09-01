@@ -31,12 +31,12 @@ class DepthDataService {
 
   /// 可选方法：订阅指定交易对深度
   void subscribeSymbol(String symbol) {
-    _webSocketService?.subscribeToSymbol(symbol);
+    _webSocketService?.subscribeToDepth(symbol);
   }
 
   /// 可选方法：取消订阅
   void unsubscribeSymbol(String symbol) {
-    _webSocketService?.unsubscribeFromSymbol(symbol);
+    _webSocketService?.unsubscribeFromDepth(symbol);
   }
 
   /// 获取当前缓存的深度数据

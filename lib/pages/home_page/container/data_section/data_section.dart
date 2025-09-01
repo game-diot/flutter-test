@@ -117,7 +117,7 @@ class _DataSectionState extends State<DataSection> {
         onRowTap: (coin) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => SocketBindPage(coin: coin)),
+            MaterialPageRoute(builder: (_) => SocketBindPage(coinList: widget.coinList!)),
           );
         },
       );

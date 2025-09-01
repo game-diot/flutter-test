@@ -4,7 +4,7 @@ import '../../models/login_page/register_request.dart';
 
 class AuthRegisterService {
   static final Dio _dio = Dio();
-  static const String _registerUrl = "https://us14-h5.yanshi.lol/api/app-api/system/auth/sms-register";
+  static const String _registerUrl = "https://us15-h5.yanshi.lol/api/app-api/system/auth/sms-register";
 
   /// 注册请求
   static Future<bool> register(RegisterRequest request) async {
@@ -16,8 +16,8 @@ class AuthRegisterService {
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json, text/plain, */*",
-            "Origin": "https://us14-h5.yanshi.lol",
-            "Referer": "https://us14-h5.yanshi.lol/home",
+            "Origin": "https://us15-h5.yanshi.lol",
+            "Referer": "https://us15-h5.yanshi.lol/home",
             "User-Agent":
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                 "(KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",

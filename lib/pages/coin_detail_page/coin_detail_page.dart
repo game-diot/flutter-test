@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../home_page/container/data_section/models/combined_coin_data.dart';
+import '../../network/Get/models/home_page/home_data_section.dart';
+// import '../../socket/home_page_data_section/services.dart';
 import 'models/model.dart'; // CoinDetail 模型
 import 'widgets/top_tab_bar.dart';
 import 'widgets/header_info.dart';
@@ -7,12 +9,11 @@ import 'widgets/left_panel.dart';
 import 'widgets/right_panel.dart';
 import 'widgets/bottom_tab_content.dart';
 import 'services/api_service.dart';
-import 'socket/controller.dart';
-import 'services/api_service.dart';
+// import 'socket/controller.dart';
 
 class SocketBindPage extends StatefulWidget {
-  final CombinedCoinData coin;
-  const SocketBindPage({Key? key, required this.coin}) : super(key: key);
+  final List<SymbolItem> coinList;
+  const SocketBindPage({Key? key, required this.coinList}) : super(key: key);
 
   @override
   State<SocketBindPage> createState() => _SocketBindPageState();
@@ -29,23 +30,35 @@ class _SocketBindPageState extends State<SocketBindPage> {
   String? _errorMessage;
   final ApiService _apiService = ApiService();
   // 新增：深度数据 controller
-  late DepthDataController _depthController;
+  // late DepthDataController _depthController;
+  // late ExchangeWebSocketService _webSocketService;
 
   @override
   void initState() {
     super.initState();
     _fetchCoinDetail();
-
-    // 初始化深度数据 controller
-    _depthController = DepthDataController();
-    _depthController.init(widget.coin.symbol);
-    _depthController.addListener(_onDepthChange);
-    _depthController.subscribe(widget.coin.symbol.replaceAll('_', '~'));
   }
+    // // 🔧 修改初始化顺序
+    // _webSocketService = ExchangeWebSocketService();
+    // _depthController = DepthDataController(_webSocketService);
+
+    // // 先连接 WebSocket
+    // _webSocketService.connect();
+
+  //   // 初始化盘口数据订阅
+  //   final symbol = widget.coin.symbol.replaceAll('_', '~');
+  //   _depthController.init(symbol);
+  // }
+
+  // @override
+  // void dispose() {
+  //   _depthController.dispose();
+  //   _webSocketService.dispose();
+  //   super.dispose();
+  // }
 
   Future<void> _fetchCoinDetail() async {
-    final symbol = widget.coin.symbol.replaceAll('_', '~');
-
+    final symbol = widget.coinList[0].symbol;
     // 更新 loading 状态
     setState(() {
       _isLoading = true;
@@ -54,7 +67,6 @@ class _SocketBindPageState extends State<SocketBindPage> {
 
     try {
       final result = await ApiService.fetchCoinDetail(symbol);
-
       if (mounted) {
         setState(() {
           _coinDetail = result;
@@ -69,6 +81,8 @@ class _SocketBindPageState extends State<SocketBindPage> {
         });
       }
     }
+
+
   }
 
   Widget _buildErrorWidget() {
@@ -97,16 +111,10 @@ class _SocketBindPageState extends State<SocketBindPage> {
     }
   }
 
-  @override
-  void dispose() {
-    _depthController.removeListener(_onDepthChange);
-    _depthController.unsubscribe(widget.coin.symbol.replaceAll('_', '~'));
-    _depthController.dispose();
-    super.dispose();
-  }
+
 
   String _getDisplayName() {
-    if (_coinDetail == null) return widget.coin.displayName; // 这里使用父组件数据
+    if (_coinDetail == null) return widget.coinList[0].displayName; // 这里使用父组件数据
 
     String alias = _coinDetail!.alias; // 如果 CoinDetail 已经有数据，就用 API 返回的数据
     if (alias.endsWith('USDT')) {
@@ -159,52 +167,52 @@ class _SocketBindPageState extends State<SocketBindPage> {
           tabs: const ["永续合约", "极速合约"],
           onTabChanged: (index) => setState(() => _selectedTopTab = index),
         ),
-        HeaderInfo(
-          coin: widget.coin, // 父组件数据
-          coinDetail: _coinDetail!, // API 或 socket 返回的详细数据
-          exchangeDepth: _depthController.currentDepth, // socket 深度数据
-          switchValue: _switchValue,
-          onSwitchChanged: (val) => setState(() => _switchValue = val),
-          isFullPosition: _isFullPosition,
-          onFullPositionChanged: (val) => setState(() => _isFullPosition = val),
-          sliderStepPercent: _sliderStepPercent,
-          onSliderStepChanged: (val) =>
-              setState(() => _sliderStepPercent = val),
-        ),
+        // HeaderInfo(
+        //   coin: widget.coin, // 父组件数据
+        //   coinDetail: _coinDetail!, // API 或 socket 返回的详细数据
+        //   exchangeDepth: _depthController.currentDepth, // socket 深度数据
+        //   switchValue: _switchValue,
+        //   onSwitchChanged: (val) => setState(() => _switchValue = val),
+        //   isFullPosition: _isFullPosition,
+        //   onFullPositionChanged: (val) => setState(() => _isFullPosition = val),
+        //   sliderStepPercent: _sliderStepPercent,
+        //   onSliderStepChanged: (val) =>
+        //       setState(() => _sliderStepPercent = val),
+        // ),
 
-        Expanded(
-          flex: 2,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: LeftPanel(
-                  coinDetail: _coinDetail!,
-                  sliderStepPercent: _sliderStepPercent,
-                  isFullPosition: _isFullPosition,
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: RightPanel(
-                  coinDetail: _coinDetail!,
-                  exchangeDepth: _depthController.currentDepth, // 传入实时深度数据
-                ),
-              ),
-            ],
-          ),
-        ),
-        DraggableScrollableSheet(
-          initialChildSize: 0.30,
-          minChildSize: 0.30,
-          maxChildSize: 1.0,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: const BoxDecoration(color: Colors.white),
-              child: BottomTabContent(scrollController: scrollController),
-            );
-          },
-        ),
+        // Expanded(
+        //   flex: 2,
+        //   child: Row(
+        //     children: [
+        //       Expanded(
+        //         flex: 1,
+        //         child: LeftPanel(
+        //           coinDetail: _coinDetail!,
+        //           sliderStepPercent: _sliderStepPercent,
+        //           isFullPosition: _isFullPosition,
+        //         ),
+        //       ),
+        //       Expanded(
+        //         flex: 1,
+        //         child: RightPanel(
+        //           coinDetail: _coinDetail!,
+        //           exchangeDepth: _depthController.currentDepth, // 传入实时深度数据
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // DraggableScrollableSheet(
+        //   initialChildSize: 0.30,
+        //   minChildSize: 0.30,
+        //   maxChildSize: 1.0,
+        //   builder: (context, scrollController) {
+        //     return Container(
+        //       decoration: const BoxDecoration(color: Colors.white),
+        //       child: BottomTabContent(scrollController: scrollController),
+        //     );
+        //   },
+        // ),
       ],
     );
   }

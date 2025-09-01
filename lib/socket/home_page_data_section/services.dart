@@ -8,7 +8,7 @@ import 'exchange_depth_model.dart';
 
 class ExchangeWebSocketService {
   static const String _wsUrl =
-      'wss://us14-h5.yanshi.lol/app-websocket?Authorization=db3aa6c8667b4295b4a7c0f5ea270933&version=v1';
+      'wss://us15-h5.yanshi.lol/app-websocket?Authorization=87fcde66607c4e319f4e757a61fc6081&version=v1';
 
   WebSocketChannel? _channel;
   Timer? _reconnectTimer;
@@ -91,12 +91,30 @@ class ExchangeWebSocketService {
       ],
     });
   }
+/// 订阅单个交易对的盘口数据
+  void subscribeToDepth(String symbol) {
+    // print('🔧 [WebSocket] Subscribing to depth for: $symbol');
+    sendMessage({
+      'type': 'SUB_DEPTH',
+      'data': symbol  // 注意：这里是字符串，不是数组
+    });
+  }
+  
+  /// 取消订阅盘口数据
+  void unsubscribeFromDepth(String symbol) {
+    // print('🔧 [WebSocket] Unsubscribing from depth for: $symbol');
+    sendMessage({
+      'type': 'UNSUB_DEPTH',
+      'data': symbol
+    });
+  }
 
-  /// 接收消息回调
+  /// 接收消息回调 - 需要处理 EXCHANGE_DEPTH
   void _onMessage(dynamic message) {
+    // print('📨 [WebSocket] Raw message: $message');
     try {
       final Map<String, dynamic> json = jsonDecode(message.toString());
-
+      // print('📨 [WebSocket] Message type: ${json['type']}');
       final type = json['type'] ?? '';
       final data = json['data'];
 
@@ -107,20 +125,38 @@ class ExchangeWebSocketService {
         if (rates.isNotEmpty) {
           _rateController.add(ExchangeRateResponse(type: type, data: rates));
         }
-      } else if (type == 'EXCHANGE_DEPTH' && data is List) {
-        final depths = data
-            .map((item) => ExchangeDepth.fromJson(item as Map<String, dynamic>))
-            .toList();
-        if (depths.isNotEmpty) {
-          _depthController.add(depths);
-        }
+      } else if (type == 'EXCHANGE_DEPTH') {
+        // 🔧 处理盘口数据
+        // print('✅ [WebSocket] Received depth data');
+        _processDepthData(data);
       }
     } catch (e) {
       print('解析消息失败: $e');
       _errorController.add('数据解析错误: $e');
     }
   }
-
+void _processDepthData(dynamic data) {
+    try {
+      List<ExchangeDepth> depths = [];
+      
+      if (data is Map<String, dynamic>) {
+        // 单个盘口数据
+        depths.add(ExchangeDepth.fromJson(data));
+      } else if (data is List) {
+        // 多个盘口数据
+        depths = data
+            .map((item) => ExchangeDepth.fromJson(item as Map<String, dynamic>))
+            .toList();
+      }
+      
+      if (depths.isNotEmpty) {
+        _depthController.add(depths);
+        print('✅ [WebSocket] Processed ${depths.length} depth items');
+      }
+    } catch (e) {
+      print('❌ [WebSocket] Process depth error: $e');
+    }
+  }
   /// 错误处理
   void _onError(dynamic error) {
     print('WebSocket错误: $error');
@@ -170,15 +206,7 @@ class ExchangeWebSocketService {
     }
   }
 
-  /// 订阅交易对
-  void subscribeToSymbol(String symbol) {
-    sendMessage({'type': 'subscribe', 'symbol': symbol});
-  }
 
-  /// 取消订阅
-  void unsubscribeFromSymbol(String symbol) {
-    sendMessage({'type': 'unsubscribe', 'symbol': symbol});
-  }
 
   /// 断开连接
   void disconnect() {

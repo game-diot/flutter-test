@@ -1,51 +1,85 @@
-// controllers/depth_data_controller.dart
 import 'package:flutter/material.dart';
-import '../models/model.dart'; // CoinDetail 模型
-import '../../../../../socket/home_page_data_section/exchange_depth_model.dart';
-import '../../../../../socket/home_page_data_section/services.dart';
-import 'service.dart';
+import '../../../socket/home_page_data_section/services.dart';
+import '../../../../socket/home_page_data_section/exchange_depth_model.dart';
+import 'dart:async';
 
 class DepthDataController extends ChangeNotifier {
-  final DepthDataService _depthService = DepthDataService();
-
-  // 当前交易对深度数据
+  final ExchangeWebSocketService _webSocketService;
+  StreamSubscription? _depthSubscription;
   ExchangeDepth? _currentDepth;
+  String? _currentSymbol;
+
+  DepthDataController(this._webSocketService);
 
   ExchangeDepth? get currentDepth => _currentDepth;
+  bool get hasData => _currentDepth != null;
 
-  // 初始化 WebSocket 并监听深度数据
+  /// 初始化并订阅指定交易对
   void init(String symbol) {
-    _depthService.initWebSocket();
+    print('🔧 [Depth Controller] Initializing for symbol: $symbol');
 
-    _depthService.exchangeDepthStream?.listen((depthMap) {
-      final normalizedSymbol = symbol.replaceAll('_', '~');
-      final depth = depthMap[normalizedSymbol] ?? depthMap[symbol];
+    // 如果已经订阅了其他交易对，先取消订阅
+    if (_currentSymbol != null && _currentSymbol != symbol) {
+      _webSocketService.unsubscribeFromDepth(_currentSymbol!);
+    }
+
+    _currentSymbol = symbol;
+
+    // 订阅盘口数据流
+    _depthSubscription?.cancel();
+    _depthSubscription = _webSocketService.depthStream.listen((depthList) {
+      print(
+        '🔧 [Depth Controller] Received depth list: ${depthList.length} items',
+      );
+
+      // 查找当前交易对的数据
+      final depth = depthList.cast<ExchangeDepth?>().firstWhere(
+        (d) => d?.symbol == symbol,
+      );
 
       if (depth != null) {
+        print('✅ [Depth Controller] Found depth data for ${depth.symbol}');
         _currentDepth = depth;
-        notifyListeners(); // 通知 UI 更新
+        notifyListeners();
+      } else {
+        print('❌ [Depth Controller] No depth data found for $symbol');
       }
     });
+
+    // 确保 WebSocket 连接后再订阅
+    if (_webSocketService.isConnected) {
+      _subscribeToCurrentSymbol();
+    } else {
+      // 监听连接状态，连接成功后订阅
+      _webSocketService.connectionStream.listen((isConnected) {
+        if (isConnected && _currentSymbol != null) {
+          Future.delayed(Duration(milliseconds: 500), () {
+            _subscribeToCurrentSymbol();
+          });
+        }
+      });
+    }
   }
 
-  // 可选：订阅指定交易对
-  void subscribe(String symbol) {
-    _depthService.subscribeSymbol(symbol);
+  void _subscribeToCurrentSymbol() {
+    if (_currentSymbol != null) {
+      _webSocketService.subscribeToDepth(_currentSymbol!);
+    }
   }
 
-  // 可选：取消订阅
-  void unsubscribe(String symbol) {
-    _depthService.unsubscribeSymbol(symbol);
+  /// 切换到新的交易对
+  void switchSymbol(String newSymbol) {
+    if (_currentSymbol != newSymbol) {
+      init(newSymbol);
+    }
   }
 
-  // 获取当前缓存的深度
-  ExchangeDepth? getDepth(String symbol) {
-    return _depthService.getDepthBySymbol(symbol);
-  }
-
-  // 断开 WebSocket
+  @override
   void dispose() {
-    _depthService.dispose();
+    if (_currentSymbol != null) {
+      _webSocketService.unsubscribeFromDepth(_currentSymbol!);
+    }
+    _depthSubscription?.cancel();
     super.dispose();
   }
 }

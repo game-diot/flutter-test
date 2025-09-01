@@ -45,7 +45,7 @@ class _LanguagePageState extends State<LanguagePage> {
 
       final response = await http.get(
         Uri.parse(
-          'https://us14-h5.yanshi.lol/api/app-api/system/i18n-type/list',
+          'https://us15-h5.yanshi.lol/api/app-api/system/i18n-type/list',
         ),
       );
       final result = json.decode(response.body);

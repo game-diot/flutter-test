@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'compression_service.dart';
 
 class I18nService {
-  static const _baseUrl = 'https://us14-h5.yanshi.lol';
+  static const _baseUrl = 'https://us15-h5.yanshi.lol';
   static const _cacheKeyPrefix = 'translations_';
   static const _lastUpdatePrefix = 'last_update_';
   static const _cacheExpireHours = 24;

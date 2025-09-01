@@ -74,7 +74,7 @@ class CompressionService {
 
 /// ----------------- i18n 服务（远程+缓存） -----------------
 class I18nService {
-  static const String _baseUrl = 'https://us14-h5.yanshi.lol';
+  static const String _baseUrl = 'https://us15-h5.yanshi.lol';
   static const String _cacheKeyPrefix = 'translations_';
   static const String _lastUpdatePrefix = 'last_update_';
   static const int _cacheExpireHours = 24;

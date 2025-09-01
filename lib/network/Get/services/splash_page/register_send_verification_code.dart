@@ -11,7 +11,7 @@ class RegisterSendVerificationCodeService {
     required String sendType,
     required String areaCode,
   }) async {
-    const String baseUrl = 'https://us14-h5.yanshi.lol/api/app-api/system/auth/send-captcha';
+    const String baseUrl = 'https://us15-h5.yanshi.lol/api/app-api/system/auth/send-captcha';
 
     try {
       final response = await _dio.get(baseUrl, queryParameters: {

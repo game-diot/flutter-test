@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/model.dart'; // 你的 CoinDetail model 路径
-import '../../home_page/container/data_section/models/combined_coin_data.dart';
 
 class ApiService {
   static const String baseUrl =
-      "https://us12-h5.yanshi.lol/api/app-api/pay/symbol/search";
+      "https://us15-h5.yanshi.lol/api/app-api/pay/symbol/search";
 
   /// 请求并返回 CoinDetail 对象
   static Future<CoinDetail?> fetchCoinDetail(String symbol) async {
@@ -59,7 +58,7 @@ class ApiService {
                 try {
                   final coinDetail = CoinDetail.fromJson(list[0]);
                   print("✅ [API Success] CoinDetail created successfully");
-                  print("✅ [API Success] Symbol: ${coinDetail.symbol}, Name: ${coinDetail.name}");
+                  print("✅ [API Success] Symbol: ${coinDetail.symbol}, Name: ${coinDetail.symbolName}");
                   return coinDetail;
                 } catch (parseError) {
                   print("❌ [Parse Error] Failed to parse CoinDetail: $parseError");

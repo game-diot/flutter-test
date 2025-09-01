@@ -4,7 +4,7 @@ import '../../models/login_page/login_request.dart';
 
 class AuthLoginService {
   static final Dio _dio = Dio();
-  static const String _loginUrl = "https://us14-h5.yanshi.lol/api/app-api/system/auth/login";
+  static const String _loginUrl = "https://us15-h5.yanshi.lol/api/app-api/system/auth/login";
 
   /// 登录请求
   static Future<bool> login(LoginRequest request) async {
@@ -16,8 +16,8 @@ class AuthLoginService {
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json, text/plain, */*",
-            "Origin": "https://us14-h5.yanshi.lol",
-            "Referer": "https://us14-h5.yanshi.lol/home",
+            "Origin": "https://us15-h5.yanshi.lol",
+            "Referer": "https://us15-h5.yanshi.lol/home",
             "User-Agent":
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                 "(KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
