@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class BottomTabContent extends StatefulWidget {
-  const BottomTabContent({Key? key}) : super(key: key);
+  final ScrollController scrollController; // ✅ 新增
+
+  const BottomTabContent({Key? key, required this.scrollController})
+      : super(key: key);
 
   @override
   State<BottomTabContent> createState() => _BottomTabContentState();
@@ -11,11 +14,12 @@ class _BottomTabContentState extends State<BottomTabContent> {
   int _selectedTab = 0;
   bool _checkboxValue = false;
 
-  final List<String> _tabs = ["永续合约", "极速合约", "期权合约"];
+  final List<String> _tabs = ["持仓中", "委托中", "历史订单"];
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
+      controller: widget.scrollController, // ✅ 使用外部传入的 scrollController
       children: [
         // Tab Row
         Container(
@@ -35,14 +39,15 @@ class _BottomTabContentState extends State<BottomTabContent> {
                         _tabs[index],
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
                           color: isSelected ? Colors.black : Colors.grey,
                         ),
                       ),
                     ),
                     Container(
-                      height: 2,
-                      width: 40,
+                      height: 4,
+                      width: 20,
                       color: isSelected ? Colors.blue : Colors.transparent,
                     ),
                   ],
@@ -64,14 +69,15 @@ class _BottomTabContentState extends State<BottomTabContent> {
                 children: [
                   Checkbox(
                     value: _checkboxValue,
-                    onChanged: (val) => setState(() => _checkboxValue = val ?? false),
+                    onChanged: (val) =>
+                        setState(() => _checkboxValue = val ?? false),
                   ),
-                  const Text("启用选项"),
+                  const Text("显示所有仓位"),
                 ],
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text("操作按钮"),
+                child: const Text("只平当前"),
               ),
             ],
           ),
@@ -80,14 +86,13 @@ class _BottomTabContentState extends State<BottomTabContent> {
         const Divider(height: 1, thickness: 1),
 
         // 内容展示区
-        Expanded(
-          child: Container(
-            color: Colors.grey[100],
-            child: Center(
-              child: Text(
-                "当前Tab内容：${_tabs[_selectedTab]}",
-                style: const TextStyle(fontSize: 18),
-              ),
+        Container(
+          height: 400, // ✅ 模拟较大内容，确保能滚动
+          color: Colors.grey[100],
+          child: Center(
+            child: Text(
+              "当前Tab内容：${_tabs[_selectedTab]}",
+              style: const TextStyle(fontSize: 18),
             ),
           ),
         ),

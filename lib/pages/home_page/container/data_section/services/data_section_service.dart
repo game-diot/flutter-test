@@ -1,13 +1,13 @@
 import '../models/combined_coin_data.dart';
-import '../../../../../socket/home_page_data_section/models.dart';
+import '../../../../../socket/home_page_data_section/exchange_rate_model.dart';
 import '../../../../../socket/home_page_data_section/services.dart';
 
 class DataSectionService {
-  ExchangeRateWebSocketService? _webSocketService;
+  ExchangeWebSocketService? _webSocketService;
   Map<String, ExchangeRateData> _exchangeRateMap = {};
 
   Stream<Map<String, ExchangeRateData>>? get exchangeRateStream =>
-      _webSocketService?.dataStream.map((response) {
+      _webSocketService?.rateStream.map((response) {
         _exchangeRateMap.clear();
         for (final rate in response.data) {
           _exchangeRateMap[rate.symbol] = rate;
@@ -16,7 +16,7 @@ class DataSectionService {
       });
 
   void initWebSocket() {
-    _webSocketService = ExchangeRateWebSocketService();
+    _webSocketService = ExchangeWebSocketService();
     _webSocketService?.connect();
   }
 

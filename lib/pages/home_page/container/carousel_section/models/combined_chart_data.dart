@@ -1,5 +1,5 @@
 import '../../../../../network/Get/models/home_page/home_data_section.dart';
-import '../../../../../socket/home_page_data_section/models.dart';
+import '../../../../../socket/home_page_data_section/exchange_rate_model.dart';
 
 class CombinedChartData {
   final String symbolId;

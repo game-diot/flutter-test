@@ -1,21 +1,22 @@
-// services/exchange_rate_websocket_service.dart
+// services/exchange_websocket_service.dart
 import 'dart:async';
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
-import 'models.dart';
+import 'exchange_rate_model.dart';
+import 'exchange_depth_model.dart';
 
-class ExchangeRateWebSocketService {
+class ExchangeWebSocketService {
   static const String _wsUrl =
       'wss://us14-h5.yanshi.lol/app-websocket?Authorization=db3aa6c8667b4295b4a7c0f5ea270933&version=v1';
 
   WebSocketChannel? _channel;
   Timer? _reconnectTimer;
-  Timer? _heartbeatTimer;
 
   // 流控制器
   final _connectionController = StreamController<bool>.broadcast();
-  final _dataController = StreamController<ExchangeRateResponse>.broadcast();
+  final _rateController = StreamController<ExchangeRateResponse>.broadcast();
+  final _depthController = StreamController<List<ExchangeDepth>>.broadcast();
   final _errorController = StreamController<String>.broadcast();
 
   // 连接状态
@@ -25,62 +26,48 @@ class ExchangeRateWebSocketService {
   static const int _maxReconnectAttempts = 10;
   static const Duration _reconnectDelay = Duration(seconds: 5);
 
-  // 流getters
+  // 流 getters
   Stream<bool> get connectionStream => _connectionController.stream;
-  Stream<ExchangeRateResponse> get dataStream => _dataController.stream;
+  Stream<ExchangeRateResponse> get rateStream => _rateController.stream;
+  Stream<List<ExchangeDepth>> get depthStream => _depthController.stream;
   Stream<String> get errorStream => _errorController.stream;
-
   bool get isConnected => _isConnected;
 
-  // 连接WebSocket
+  /// 连接 WebSocket
   Future<void> connect() async {
     if (_isConnected) return;
-
     _shouldReconnect = true;
     await _connectInternal();
   }
 
-  // 内部连接方法
+  /// 内部连接方法
   Future<void> _connectInternal() async {
     try {
-      print('尝试连接WebSocket: $_wsUrl');
+      print('尝试连接 WebSocket: $_wsUrl');
 
-      _channel = IOWebSocketChannel.connect(
-        Uri.parse(_wsUrl),
-        protocols: ['websocket'],
-      );
+      _channel = IOWebSocketChannel.connect(Uri.parse(_wsUrl));
 
-      // 监听连接状态
-      _channel!.ready
-          .then((_) {
-            _onConnected();
-          })
-          .catchError((error) {
-            _onError('连接失败: $error');
-          });
-
-      // 监听消息
       _channel!.stream.listen(
         _onMessage,
         onError: _onError,
         onDone: _onDisconnected,
         cancelOnError: false,
       );
+
+      _onConnected();
     } catch (e) {
       _onError('WebSocket连接异常: $e');
     }
   }
 
-  // 连接成功回调
+  /// 连接成功回调
   void _onConnected() {
-    print('WebSocket连接成功');
+    print('WebSocket 连接成功');
     _isConnected = true;
     _reconnectAttempts = 0;
     _connectionController.add(true);
 
-    // 开始心跳检测
-    // _startHeartbeat();
-
+    // 默认订阅交易对
     sendMessage({
       "type": "SUB",
       "data": [
@@ -105,26 +92,27 @@ class ExchangeRateWebSocketService {
     });
   }
 
-  // 消息接收回调
+  /// 接收消息回调
   void _onMessage(dynamic message) {
     try {
-      final String messageStr = message.toString();
+      final Map<String, dynamic> json = jsonDecode(message.toString());
 
-      final Map<String, dynamic> json = jsonDecode(messageStr);
+      final type = json['type'] ?? '';
+      final data = json['data'];
 
-      if ("EXCHANGE_RATE" == json["type"]) {
-        List<ExchangeRateData> list =
-            (json["data"] as List<dynamic>?)
-                ?.map(
-                  (item) =>
-                      ExchangeRateData.fromJson(item as Map<String, dynamic>),
-                )
-                .toList() ??
-            [];
-        if (list.isNotEmpty) {
-          _dataController.add(
-            ExchangeRateResponse(type: json["type"], data: list),
-          );
+      if (type == 'EXCHANGE_RATE' && data is List) {
+        final rates = data
+            .map((item) => ExchangeRateData.fromJson(item as Map<String, dynamic>))
+            .toList();
+        if (rates.isNotEmpty) {
+          _rateController.add(ExchangeRateResponse(type: type, data: rates));
+        }
+      } else if (type == 'EXCHANGE_DEPTH' && data is List) {
+        final depths = data
+            .map((item) => ExchangeDepth.fromJson(item as Map<String, dynamic>))
+            .toList();
+        if (depths.isNotEmpty) {
+          _depthController.add(depths);
         }
       }
     } catch (e) {
@@ -133,7 +121,7 @@ class ExchangeRateWebSocketService {
     }
   }
 
-  // 错误处理回调
+  /// 错误处理
   void _onError(dynamic error) {
     print('WebSocket错误: $error');
     _errorController.add(error.toString());
@@ -143,16 +131,12 @@ class ExchangeRateWebSocketService {
     }
   }
 
-  // 连接断开回调
+  /// 连接断开
   void _onDisconnected() {
     print('WebSocket连接断开');
     _isConnected = false;
     _connectionController.add(false);
 
-    // 停止心跳
-    _stopHeartbeat();
-
-    // 尝试重连
     if (_shouldReconnect && _reconnectAttempts < _maxReconnectAttempts) {
       _scheduleReconnect();
     } else if (_reconnectAttempts >= _maxReconnectAttempts) {
@@ -160,39 +144,24 @@ class ExchangeRateWebSocketService {
     }
   }
 
-  // 计划重连
+  /// 计划重连
   void _scheduleReconnect() {
     _reconnectAttempts++;
     print(
       '计划重连 ($_reconnectAttempts/$_maxReconnectAttempts) 在 ${_reconnectDelay.inSeconds} 秒后',
     );
-
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(_reconnectDelay, () {
-      if (_shouldReconnect) {
-        _connectInternal();
-      }
+      if (_shouldReconnect) _connectInternal();
     });
   }
 
-
-
-  // 停止心跳检测
-  void _stopHeartbeat() {
-    _heartbeatTimer?.cancel();
-    _heartbeatTimer = null;
-  }
-
-
-
-
-  // 发送消息
+  /// 发送消息
   void sendMessage(Map<String, dynamic> message) {
     if (_isConnected && _channel != null) {
       try {
-        final messageStr = jsonEncode(message);
-        _channel!.sink.add(messageStr);
-        print('发送消息: $messageStr');
+        _channel!.sink.add(jsonEncode(message));
+        print('发送消息: $message');
       } catch (e) {
         _errorController.add('发送消息失败: $e');
       }
@@ -201,26 +170,22 @@ class ExchangeRateWebSocketService {
     }
   }
 
-  // 订阅特定交易对
+  /// 订阅交易对
   void subscribeToSymbol(String symbol) {
     sendMessage({'type': 'subscribe', 'symbol': symbol});
   }
 
-  // 取消订阅特定交易对
+  /// 取消订阅
   void unsubscribeFromSymbol(String symbol) {
     sendMessage({'type': 'unsubscribe', 'symbol': symbol});
   }
 
-  // 断开连接
+  /// 断开连接
   void disconnect() {
-    print('断开WebSocket连接');
+    print('断开 WebSocket 连接');
     _shouldReconnect = false;
-
-    // 取消定时器
     _reconnectTimer?.cancel();
-    _stopHeartbeat();
 
-    // 关闭连接
     if (_channel != null) {
       _channel!.sink.close();
       _channel = null;
@@ -232,23 +197,22 @@ class ExchangeRateWebSocketService {
     }
   }
 
-  // 重置连接状态
+  /// 重置
   void reset() {
     disconnect();
     _reconnectAttempts = 0;
   }
 
-  // 释放资源
+  /// 释放资源
   void dispose() {
     disconnect();
-
-    // 关闭流控制器
     _connectionController.close();
-    _dataController.close();
+    _rateController.close();
+    _depthController.close();
     _errorController.close();
   }
 
-  // 获取连接统计信息
+  /// 连接状态统计
   Map<String, dynamic> getConnectionStats() {
     return {
       'isConnected': _isConnected,

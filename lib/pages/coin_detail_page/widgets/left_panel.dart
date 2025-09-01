@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
-import '../../home_page/container/data_section/models/combined_coin_data.dart';
+import '../models/model.dart';
 import 'left_slider.dart';
 import 'left_extra_panel.dart';
 import 'left_input.dart';
 import 'left_dropdown_button.dart';
 
 class LeftPanel extends StatefulWidget {
-  final CombinedCoinData coin;
+  final CoinDetail coinDetail;
+  final double sliderStepPercent; // 滑块步进比例
+  final bool isFullPosition; // 全仓状态
 
-  const LeftPanel({Key? key, required this.coin}) : super(key: key);
+  const LeftPanel({
+    Key? key,
+    required this.coinDetail,
+    required this.sliderStepPercent,
+    required this.isFullPosition,
+  }) : super(key: key);
 
   @override
   State<LeftPanel> createState() => _LeftPanelState();
@@ -25,13 +32,21 @@ class _LeftPanelState extends State<LeftPanel> {
     });
   }
 
+  void _onInputChanged(double val) {
+    setState(() {
+      _currentValue = val;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(6),
       child: ListView(
         children: [
-          // 上方可用信息
+          const SizedBox(height: 12),
+
+          // 上方可用信息（保持原有的）
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -66,15 +81,20 @@ class _LeftPanelState extends State<LeftPanel> {
           const SizedBox(height: 10),
 
           // 数字输入框
-          NumericInputWithLabel(controller: _controller, suffixText: "open"),
+          NumericInputWithLabel(
+            controller: _controller,
+            suffixText: "open",
+            onChanged: _onInputChanged,
+          ),
 
           const SizedBox(height: 12),
 
-          // 自定义滑块
+          // 自定义滑块（现在使用步进比例）
           CustomSliderDemo(
             value: _currentValue,
             max: 9999999999,
             onChanged: _onSliderChanged,
+            stepPercent: widget.sliderStepPercent, // 传递步进比例
           ),
 
           const SizedBox(height: 12),

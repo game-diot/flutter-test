@@ -1,9 +1,9 @@
 // providers/exchange_rate_provider.dart
 import 'package:flutter/material.dart';
-import '../../socket/home_page_data_section/models.dart';
+import '../../socket/home_page_data_section/exchange_rate_model.dart';
 import '../../socket/home_page_data_section/services.dart';
 class ExchangeRateProvider extends ChangeNotifier {
-  final ExchangeRateWebSocketService _wsService = ExchangeRateWebSocketService();
+  final ExchangeWebSocketService _wsService = ExchangeWebSocketService();
 
   List<ExchangeRateData> _data = [];
   Map<String, ExchangeRateData> _exchangeRateMap = {}; // 🔹 新增映射
@@ -16,7 +16,7 @@ class ExchangeRateProvider extends ChangeNotifier {
 
   ExchangeRateProvider() {
     // 监听 WebSocket 数据
-    _wsService.dataStream.listen((response) {
+    _wsService.rateStream.listen((response) {
       _updateData(response.data);
     });
     _wsService.connect();

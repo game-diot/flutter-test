@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../network/Get/models/home_page/home_data_section.dart';
-import '../../../../../socket/home_page_data_section/models.dart';
+import '../../../../../socket/home_page_data_section/exchange_rate_model.dart';
 import '../services/data_section_service.dart';
 import '../models/combined_coin_data.dart';
 

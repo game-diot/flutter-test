@@ -53,6 +53,7 @@ flutter:
     - assets/svgs/red_green.svg
     - assets/svgs/green_red.svg
     - assets/svgs/setting_theme.svg
+    - assets/svgs/coin_detail.svg
     - assets/images/hot.png
     - assets/images/week.png
     - assets/images/topic.png

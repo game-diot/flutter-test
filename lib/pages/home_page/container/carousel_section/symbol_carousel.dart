@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:provider/provider.dart';
 import 'models/combined_chart_data.dart';
 import 'services/chart_data_service.dart';
 import 'widgets/symbol_card_enhanced.dart';
 import '../../../../network/Get/models/home_page/home_data_section.dart';
-import '../../../../socket/home_page_data_section/models.dart';
+import '../../../../socket/home_page_data_section/exchange_rate_model.dart';
 
 class SymbolCarousel extends StatefulWidget {
   final List<SymbolItem>? coinList;
