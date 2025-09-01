@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../localization/lang.dart';
+import '../../../../localization/i18n/lang.dart';
 
 class LoginAgreement extends StatelessWidget {
   const LoginAgreement({Key? key}) : super(key: key);
@@ -25,10 +25,7 @@ class LoginAgreement extends StatelessWidget {
             style: const TextStyle(color: Color(0xFFedb023)),
           ),
         ),
-        Text(
-          Lang.t('slash'),
-          style: const TextStyle(color: Colors.black),
-        ),
+        Text(Lang.t('slash'), style: const TextStyle(color: Colors.black)),
         TextButton(
           onPressed: () {},
           style: TextButton.styleFrom(

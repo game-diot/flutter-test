@@ -6,7 +6,11 @@ class MarketDataSection extends StatelessWidget {
   final List<SymbolItem> coinList;
   final bool isLoading;
 
-  const MarketDataSection({super.key, required this.coinList, required this.isLoading});
+  const MarketDataSection({
+    super.key,
+    required this.coinList,
+    required this.isLoading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,9 @@ class MarketDataSection extends StatelessWidget {
           ? SizedBox(
               height: 400,
               child: Center(
-                child: CircularProgressIndicator(color: theme.colorScheme.primary),
+                child: CircularProgressIndicator(
+                  color: theme.colorScheme.primary,
+                ),
               ),
             )
           : DataSection(coinList: coinList),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/setting_item.dart';
-import '../../setting_item_detail_page/change_theme_deatil_page/theme_page.dart';
+import '../../setting_item_detail_page/theme_page/theme_page.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
 
 class ThemeItem extends StatelessWidget {
   const ThemeItem({super.key});

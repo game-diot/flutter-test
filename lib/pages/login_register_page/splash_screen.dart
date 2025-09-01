@@ -7,7 +7,7 @@ import '../../providers/login/login.dart';
 import '../../providers/countries/countries.dart';
 import '../../providers/language/language.dart';
 import '../home_page/home.dart';
-import '../../localization/lang.dart';
+import '../../localization/i18n/lang.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -36,7 +36,9 @@ class _SplashScreenState extends State<SplashScreen> {
       try {
         await Future.wait([
           countryProvider.loadCountries(),
-          languageProvider.loadTranslationsQuietly(languageProvider.currentCode),
+          languageProvider.loadTranslationsQuietly(
+            languageProvider.currentCode,
+          ),
           authProvider.checkLoginStatus(), // 自动登录检查
         ]);
       } catch (e) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../localization/lang.dart'; // 替换成实际路径
+import '../../../localization/i18n/lang.dart'; // 替换成实际路径
 
 class RowSection extends StatelessWidget {
   const RowSection({super.key});

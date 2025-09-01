@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'components/detail_title.dart';
-import 'components/detail_user_info.dart';
-import 'components/detail_content.dart';
-import 'components/detail_divider_item.dart';
-import 'components/detail_bottom_bar.dart';
-import 'components/comment_section.dart';
-import '../my_article/components/common_header.dart';
+import 'detail_page_controller.dart';
+import 'widgets/common_header.dart';
+import 'widgets/detail_title.dart';
+import 'widgets/detail_user_info.dart';
+import 'widgets/detail_content.dart';
+import 'widgets/detail_divider.dart';
+import 'widgets/detail_bottom_bar.dart';
+import 'widgets/comments/comment_section.dart';
+
 class DetailPage extends StatelessWidget {
   final String title;
   final String avatarUrl;
@@ -30,31 +32,17 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final controller = DetailPageController();
 
     return Scaffold(
-      backgroundColor: isDark ? Colors.grey[900] : Colors.white,
+      backgroundColor: controller.isDarkMode(context)
+          ? Colors.grey[900]
+          : Colors.white,
       bottomNavigationBar: DetailBottomBar(
         starCount: starCount,
         likeCount: likeCount,
         commentCount: commentCount,
-        onCommentTap: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (_) => Container(
-              height: 200,
-              padding: const EdgeInsets.all(16),
-              color: isDark ? Colors.grey[850] : Colors.white,
-              child: Center(
-                child: Text(
-                  '评论输入框...',
-                  style: TextStyle(
-                      color: isDark ? Color.fromRGBO(223, 229, 236, 1) : Colors.black),
-                ),
-              ),
-            ),
-          );
-        },
+        onCommentTap: () => controller.showCommentInput(context),
       ),
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
@@ -63,7 +51,6 @@ class DetailPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-        
             DetailTitle(title: title),
             DetailUserInfo(
               avatarUrl: avatarUrl,
@@ -76,7 +63,7 @@ class DetailPage extends StatelessWidget {
                   children: [
                     DetailContent(content: content),
                     const DetailDivider(),
-                    CommentSection(),
+                    const CommentSection(),
                   ],
                 ),
               ),

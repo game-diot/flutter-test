@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../message_page/commons_page.dart';
 import '../../message_page/likes_page.dart';
-import '../../../localization/lang.dart';
+import '../../../localization/i18n/lang.dart';
 
 class SettingPageHeader extends StatelessWidget {
   const SettingPageHeader({Key? key}) : super(key: key);

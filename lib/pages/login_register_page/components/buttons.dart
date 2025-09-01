@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../localization/lang.dart'; // 替换为实际路径
+import '../../../localization/i18n/lang.dart'; // 替换为实际路径
 
 class AuthButtons extends StatelessWidget {
   final VoidCallback onLogin;
   final VoidCallback onRegister;
 
   const AuthButtons({Key? key, required this.onLogin, required this.onRegister})
-      : super(key: key);
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {

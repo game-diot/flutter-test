@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import '../../../localization/lang.dart'; // 替换为实际路径
-import '../../add_page/add.dart';
+import '../../../localization/i18n/lang.dart'; // 替换为实际路径
+import '../../add_page/add_page.dart';
 
 class Navbar extends StatelessWidget {
   final ValueChanged<int> onTabSelected;

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../../localization/lang.dart'; // 引入翻译包
+import '../../../../localization/i18n/lang.dart'; // 引入翻译包
 
 class LoginPasswordInput extends StatelessWidget {
   final TextEditingController controller;
 
-  const LoginPasswordInput({Key? key, required this.controller}) : super(key: key);
+  const LoginPasswordInput({Key? key, required this.controller})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,10 @@ class LoginPasswordInput extends StatelessWidget {
       decoration: InputDecoration(
         hintText: Lang.t('enter_password'),
         hintStyle: const TextStyle(color: Colors.black),
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 14,
+          horizontal: 12,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import '../../../../../localization/lang.dart'; // 确保导入 Lang
+import '../../../../../localization/i18n/lang.dart'; // 确保导入 Lang
 
 class HeaderSearchBar extends StatelessWidget {
   const HeaderSearchBar({super.key});
@@ -8,7 +8,9 @@ class HeaderSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLight = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light;
-    final searchBg = isLight ? const Color.fromRGBO(242, 242, 242, 1) : Color.fromRGBO(242, 242, 242, 1);
+    final searchBg = isLight
+        ? const Color.fromRGBO(242, 242, 242, 1)
+        : Color.fromRGBO(242, 242, 242, 1);
     final searchTextColor = isLight ? Colors.black87 : Colors.white70;
 
     return Container(
